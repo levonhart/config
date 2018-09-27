@@ -1,0 +1,18 @@
+[user]
+	name = Leonardo de Abreu
+	email = leonardomkflush@gmail.com
+[color]
+	ui = auto
+[core]
+	editor = vim
+[gui]
+	recentrepo = D:/Development/abreu-arq
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[github]
+	user = levonhart
+[credential]
+	helper = cache --timeout 3600

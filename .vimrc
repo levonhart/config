@@ -1,3 +1,5 @@
+" vim: foldmethod=marker
+" Geral {{{ "
 set backspace=2
 set nocompatible
 set history=500
@@ -7,61 +9,113 @@ set hlsearch
 set incsearch
 set autowrite
 set tabstop=4
+set shiftwidth=4
 set noswapfile
-
+set updatetime=100
 
 " Persistent undo
 set undodir=~/.vim/undo/
 set undofile
 set undolevels=1000
 set undoreload=10000
+" }}} Geral "
 
-"KeyBindings
+" KeyBindings {{{ "
 nnoremap <C-t> :tabnew<CR>:Startify<CR>
 inoremap <C-t> <Esc>:tabnew<CR>
 nnoremap <C-z> :nohlsearch<CR>
+map <C-j> 10<Down>
+map <C-k> 10<Up>
+" }}} KeyBindings "
+
+" Vundle {{{ "
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+Plugin 'rking/ag.vim'
+Plugin 'chriskempson/base16-vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'tpope/vim-repeat'
+Plugin 'mhinz/vim-startify'
+Plugin 'tpope/vim-surround'
 
 
-"pathogen
-execute pathogen#infect()
-syntax on
-filetype plugin indent on
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+" }}} Vundle "
 
-"NERDTree
+" NERDTree {{{ "
 map <C-n> :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
+" }}} NERDTree "
 
-"CtrlP.vim
+" NERDcommenter {{{ "
+let g:NERDSpaceDelims = 1				" Add spaces after comment delimiters by defaul
+let g:NERDCompactSexyComs = 1			" Use compact syntax for prettified multi-line comments
+let g:NERDDefaultAlign = 'left'			" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDAltDelims_java = 1			" Set a language to use its alternate delimiters by default
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }	" Add your own custom formats or override the defaults
+let g:NERDCommentEmptyLines = 1			" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDTrimTrailingWhitespace = 1	" Enable trimming of trailing whitespace when uncommenting
+let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all selected lines is commented or not 
+" }}} NERDcommenter "
+
+" CtrlP {{{ "
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+" }}} CtrlP "
 
-"Csupport
-let g:C_ObjExtension = '.obj'
-let g:C_ExeExtension = '.exe'
-
-" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-if executable('ag')
-  " Use Ag over Ack
-  let g:ackprg = 'ag --vimgrep'
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  "let g:ctrlp_user_command = 'ag -Q -l -g "" %s'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  "let g:ctrlp_use_caching = 0
-endif
-
+" Ag.vim {{{ "
+let g:ag_working_path_mode="r" "procura a partir da raiz do projeto
 " bind K to search word under cursor
-nnoremap K :Ack "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap K :Ag <C-R><C-W><CR>
+" }}} Ag.vim "
 
-
-"Polyglot
+" Polyglot {{{ "
 " desativar highlights ---  let g:polyglot_disabled = ['css']
+" }}} Polyglot "
 
+" Syntastic {{{ "
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
@@ -69,8 +123,39 @@ set statusline+=\ %=%#warningmsg#
 set statusline+=\ %=%{SyntasticStatuslineFlag()}
 set statusline+=\ %=%*
 
+    let g:syntastic_mode_map = {
+        \ "mode": "active",
+        \ "active_filetypes": [],
+		\ "passive_filetypes": [] }
+" }}} Syntastic "
 
-"------------------------------------------------------------------------------
+" Emmet {{{ "
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
+" }}} Emmet "
+
+" Ultisnips {{{ "
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsEditSplit="vertical"
+let g:snips_author="ABREU, Leonardo C. de."
+" }}} Ultisnips "
+
+" vim-multiple-cursor {{{ "
+let g:multi_cursor_use_default_mapping=0
+
+let g:multi_cursor_start_word_key      = '<C-d>'
+let g:multi_cursor_select_all_word_key = '<A-d>'
+let g:multi_cursor_start_key           = 'g<C-d>'
+let g:multi_cursor_select_all_key      = 'g<A-d>'
+let g:multi_cursor_next_key            = '<C-d>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+" }}} vim-multiple-cursor "
+
+" Colors {{{ "
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
 "(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
@@ -86,28 +171,35 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
+" }}} Colors "
 
+" GitGutter {{{ "
+let g:gitgutter_max_signs = 500  " default value
+" }}} GitGutter "
 
-
-"Themes
+" Themes {{{ "
 set t_Co=256
 syntax enable
 set background=dark
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+colorscheme base16-circus
 
-colorscheme base16-onedark
+"Airline let g:airline_theme='onedark'
+" }}} Themes "
 
-"Airline
-let g:airline_theme='onedark'
-
-"Devicons"
+" Devicons {{{ "
 let g:airline_powerline_fonts = 1
 set encoding=utf8
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsDefaultFolderOpenSymbol = ''
+" }}} Devicons "
 
-
-"Startify
+" Startify {{{ "
 let g:ascii=[
 						\ ' ',
 						\ '                          ._____________.',
@@ -137,3 +229,4 @@ let g:startify_list_order = [
             \ 'commands',
             \ ]
 let g:startify_bookmarks = ['/d/Development/', '~/Onedrive/Documentos/Code', '~/Onedrive/Documentos/Matemática\ Industrial'] 
+" }}} Startify "
