@@ -15,4 +15,4 @@
 [github]
 	user = levonhart
 [credential]
-	helper = cache --timeout 3600
+	helper = /usr/share/git/credential/libsecret/git-credential-libsecret
