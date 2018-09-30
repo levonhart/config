@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/leona/.oh-my-zsh"
+  export ZSH="/home/leon/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -10,6 +10,7 @@
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="bashlikezsh"
 ZSH_THEME="norm-custom"
+bindkey -v
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -66,6 +67,7 @@ ZSH_THEME="norm-custom"
 plugins=(
   git
   tmux
+  vi-mode
 )
 
 [[ $TMUX = "" ]] && export TERM="xterm-256color"
@@ -100,11 +102,17 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias devdir='cd /d/Development'
-alias midir='cd ~/OneDrive/Documentos/Matemática\ Industrial'
-
 # Base16 Shell
 BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
         eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+
+alias devdir='cd /run/media/leon/Files/Development'
+alias midir='cd /run/media/leon/OS/Users/leona/OneDrive/Documentos/Matemática\ Industrial'
+
+# BASE16_SHELL="$HOME/.config/base16-shell/"
+# [ -n "$PS1" ] && \
+#     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#         eval "$("$BASE16_SHELL/profile_helper.sh")"
