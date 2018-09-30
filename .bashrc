@@ -11,7 +11,7 @@ function color_my_prompt {
 color_my_prompt
 
 alias ls='ls --color=auto'
-alias ll='ls -l'
+#alias ll='ls -l'
 alias ag='ag --color-path "0;36" --color-line-number "0;33" --color-match "30;46"'
 
 dircolors=$HOME/.dircolors-$(tput colors)
