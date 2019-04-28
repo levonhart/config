@@ -62,6 +62,7 @@ Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-repeat'
 Plugin 'mhinz/vim-startify'
 Plugin 'tpope/vim-surround'
+Plugin 'lervag/vimtex'
 
 
 " All of your Plugins must be added before the following line
