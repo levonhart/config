@@ -111,6 +111,10 @@ nnoremap K :Ag <C-R><C-W><CR>
 
 " Polyglot {{{ "
 " desativar highlights ---  let g:polyglot_disabled = ['css']
+
+"Latex-Box
+let g:LatexBox_latexmk_preview_continuously=1 "Run latexmk in continuous mode
+
 " }}} Polyglot "
 
 " Syntastic {{{ "
