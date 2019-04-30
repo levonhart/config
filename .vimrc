@@ -62,7 +62,6 @@ Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-repeat'
 Plugin 'mhinz/vim-startify'
 Plugin 'tpope/vim-surround'
-Plugin 'lervag/vimtex'
 
 
 " All of your Plugins must be added before the following line
@@ -141,7 +140,7 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 let g:snips_author="ABREU, Leonardo C. de."
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/bundle/vim-snippets/UltiSnips']
 " }}} Ultisnips "
 
 " vim-multiple-cursor {{{ "
