@@ -13,4 +13,3 @@ FontIsBold=no
 CursorType=underscore
 BellType=0
 BellTaskbar=no
-ThemeFile=base16-circus.minttyrc
