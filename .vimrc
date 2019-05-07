@@ -179,6 +179,7 @@ endif
 " }}} Colors "
 
 " GitGutter {{{ "
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:gitgutter_max_signs = 500  " default value
 " }}} GitGutter "
 
