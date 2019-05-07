@@ -100,7 +100,7 @@ let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all sel
 " }}} NERDcommenter "
 
 " CtrlP {{{ "
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_working_path_mode = 'ra'
 " }}} CtrlP "
 
 " Ag.vim {{{ "
