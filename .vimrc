@@ -57,7 +57,6 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'terryma/vim-multiple-cursors'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-repeat'
 Plugin 'mhinz/vim-startify'
@@ -146,19 +145,6 @@ let g:UltiSnipsEditSplit="vertical"
 let g:snips_author="ABREU, Leonardo C. de."
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/bundle/vim-snippets/UltiSnips']
 " }}} Ultisnips "
-
-" vim-multiple-cursor {{{ "
-let g:multi_cursor_use_default_mapping=0
-
-let g:multi_cursor_start_word_key      = '<C-d>'
-let g:multi_cursor_select_all_word_key = '<A-d>'
-let g:multi_cursor_start_key           = 'g<C-d>'
-let g:multi_cursor_select_all_key      = 'g<A-d>'
-let g:multi_cursor_next_key            = '<C-d>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
-" }}} vim-multiple-cursor "
 
 " Colors {{{ "
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
