@@ -12,6 +12,7 @@ set tabstop=4
 set shiftwidth=4
 set noswapfile
 set updatetime=100
+set wildmenu
 if has('win32')
 	set path+=$HOMEDRIVE/Program\\\ Files\\\ (x86)/Microsoft\\\ Visual\\\ Studio/2019/BuildTools/VC/Tools/MSVC/14.22.27905/include
 	set path+=$HOMEDRIVE/Program\\\ Files\\\ (x86)/Windows\\\ Kits/10/Include/10.0.18362.0/**
