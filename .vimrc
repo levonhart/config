@@ -1,7 +1,7 @@
 " vim: foldmethod=marker
 " Geral {{{ "
+set encoding=utf8
 set backspace=2
-set nocompatible
 set history=500
 set number
 set numberwidth=5
@@ -12,9 +12,16 @@ set tabstop=4
 set shiftwidth=4
 set noswapfile
 set updatetime=100
+if has('win32')
+	set path+=$HOMEDRIVE/Program\\\ Files\\\ (x86)/Microsoft\\\ Visual\\\ Studio/2019/BuildTools/VC/Tools/MSVC/14.22.27905/include
+	set path+=$HOMEDRIVE/Program\\\ Files\\\ (x86)/Windows\\\ Kits/10/Include/10.0.18362.0/**
+endif
 
 " Persistent undo
 set undodir=~/.vim/undo/
+if has('win32')
+	set undodir=$HOME/vimfiles/undo/
+endif
 set undofile
 set undolevels=1000
 set undoreload=10000
@@ -33,8 +40,13 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if has('win32')
+	set rtp+=$HOME/vimfiles/bundle/Vundle.vim
+	call vundle#begin('$HOME/vimfiles/bundle')
+else
+	set rtp+=~/.vim/bundle/Vundle.vim
+	call vundle#begin()
+endif
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
@@ -92,7 +104,7 @@ let g:NERDSpaceDelims = 1				" Add spaces after comment delimiters by defaul
 let g:NERDCompactSexyComs = 1			" Use compact syntax for prettified multi-line comments
 let g:NERDDefaultAlign = 'left'			" Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDAltDelims_java = 1			" Set a language to use its alternate delimiters by default
-let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }	" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = {}			" Add your own custom formats or override the defaults
 let g:NERDCommentEmptyLines = 1			" Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDTrimTrailingWhitespace = 1	" Enable trimming of trailing whitespace when uncommenting
 let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all selected lines is commented or not 
@@ -144,6 +156,9 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 let g:snips_author="ABREU, Leonardo C. de."
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/bundle/vim-snippets/UltiSnips']
+if has('win32')
+	let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips', $HOME.'/vimfiles/bundle/vim-snippets/UltiSnips']
+endif
 " }}} Ultisnips "
 
 " Colors {{{ "
@@ -165,7 +180,11 @@ endif
 " }}} Colors "
 
 " GitGutter {{{ "
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+if has('win32')
+	set runtimepath^=$HOME/vimfiles/bundle/ctrlp.vim
+else
+	set runtimepath^=~/.vim/bundle/ctrlp.vim
+endif
 let g:gitgutter_max_signs = 500  " default value
 " }}} GitGutter "
 
@@ -185,7 +204,6 @@ colorscheme base16-circus
 
 " Devicons {{{ "
 let g:airline_powerline_fonts = 1
-set encoding=utf8
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsDefaultFolderOpenSymbol = ''
@@ -220,5 +238,5 @@ let g:startify_list_order = [
             \ ['   Commands:'],
             \ 'commands',
             \ ]
-let g:startify_bookmarks = ['/d/Development/', '~/Onedrive/Documentos/Code', '~/Onedrive/Documentos/Matemática\ Industrial'] 
+let g:startify_bookmarks = ['~/Onedrive/Documentos/Matemática\ Industrial'] 
 " }}} Startify "
