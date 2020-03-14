@@ -3,7 +3,7 @@
 set encoding=utf8
 set backspace=2
 set history=500
-set number
+set relativenumber		" or set number
 set numberwidth=5
 set hlsearch
 set incsearch
@@ -13,11 +13,16 @@ set shiftwidth=4
 set noswapfile
 set updatetime=100
 set wildmenu
-if has('win32')
-	set path+=$HOMEDRIVE/Program\\\ Files\\\ (x86)/Microsoft\\\ Visual\\\ Studio/2019/BuildTools/VC/Tools/MSVC/14.22.27905/include
-	set path+=$HOMEDRIVE/Program\\\ Files\\\ (x86)/Windows\\\ Kits/10/Include/10.0.18362.0/**
-endif
+highlight HighlightTrailing ctermbg=red guibg=red
+highlight MaxLineWidth ctermbg=red guibg=red
+match HighlightTrailing /\s\+\%#\@<!$/
+match MaxLineWidth /\%>124c.$/
 
+if has('win32')
+	set path=.,./include,../include
+	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Microsoft\\\ Visual\\\ Studio\/2019\/BuildTools\/VC\/Tools\/MSVC\/*\/include
+	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Windows\\\ Kits\/10\/Include\/*\/**
+endif
 " Persistent undo
 set undodir=~/.vim/undo/
 if has('win32')
@@ -113,6 +118,11 @@ let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all sel
 
 " CtrlP {{{ "
 let g:ctrlp_working_path_mode = 'ra'
+if has('win32')
+	set runtimepath^=$HOME/vimfiles/bundle/ctrlp.vim
+else
+	set runtimepath^=~/.vim/bundle/ctrlp.vim
+endif
 " }}} CtrlP "
 
 " Ag.vim {{{ "
@@ -160,6 +170,7 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/bundle/
 if has('win32')
 	let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips', $HOME.'/vimfiles/bundle/vim-snippets/UltiSnips']
 endif
+nmap <C-Tab> <Esc>:call UltiSnips#ListSnippets()<CR>
 " }}} Ultisnips "
 
 " Colors {{{ "
@@ -182,11 +193,9 @@ endif
 
 " GitGutter {{{ "
 if has('win32')
-	set runtimepath^=$HOME/vimfiles/bundle/ctrlp.vim
-else
-	set runtimepath^=~/.vim/bundle/ctrlp.vim
+	let g:gitgutter_git_executable = $HOME.'/scoop/shims/git.exe'
 endif
-let g:gitgutter_max_signs = 500  " default value
+let g:gitgutter_max_signs = 500  " default value 500
 " }}} GitGutter "
 
 " Themes {{{ "
@@ -198,35 +207,53 @@ if exists('+termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-colorscheme base16-circus
-
-"Airline let g:airline_theme='onedark'
+colorscheme base16-monokai
 " }}} Themes "
 
-" Devicons {{{ "
+" Airline {{{ "
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#alt_sep = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'default'
 let g:airline_powerline_fonts = 1
+"Airline let g:airline_theme='onedark'
+" }}} Airline "
+
+" Devicons {{{ "
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsDefaultFolderOpenSymbol = ''
 " }}} Devicons "
 
 " Startify {{{ "
-let g:ascii=[
-						\ ' ',
-						\ '                          ._____________.',
-						\ '       MM.         .MM    |             |',
-						\ '       "MM._______.MM"    |  私は平和を |',
-						\ '       /             \    | 愛するパンダ|',
-						\ '     /   dMMb   dMMb   \  |      !!     |',
-						\ '    /  dM"""Mb dM"""Mb  \ |_____________|',
-						\ '   |   MMMMM"/O\"MMMMM   |      ||o',
-						\ '   |   "MMM"/   \"MMM"   |   .dMMM 8',
-						\ '   |                     dMMMMMMMM',
-						\ '   \      \       /     dMMMMMMMP',
-						\ ' AMMMMMMMMM\_____/MMMMMMMMMMMM"'
-						\ ]
+let g:ascii=[ 
+			\ '                                             _______________________',
+			\ '   _______________________-------------------                       `\',
+			\ ' /:--__                                                              |',
+			\ '||< > |                                   ___________________________/',
+			\ '| \__/_________________-------------------                         |',
+			\ '|                                                                  |',
+			\ ' |                       THE LORD OF THE RINGS                      |',
+			\ ' |                                                                  |',
+			\ ' |      "Three Rings for the Elven-kings under the sky,             |',
+			\ '  |        Seven for the Dwarf-lords in their halls of stone,        |',
+			\ '  |      Nine for Mortal Men doomed to die,                          |',
+			\ '  |        One for the Dark Lord on his dark throne                  |',
+			\ '  |      In the Land of Mordor where the Shadows lie.                 |',
+			\ '   |       One Ring to rule them all, One Ring to find them,          |',
+			\ '   |       One Ring to bring them all and in the darkness bind them   |',
+			\ '   |     In the Land of Mordor where the Shadows lie.                |',
+			\ '  |                                              ____________________|_',
+			\ '  |  ___________________-------------------------                      `\',
+			\ '  |/`--_                                                                 |',
+			\ '  ||[ ]||                                            ___________________/',
+			\ '   \===/___________________--------------------------'
+			\ ]
+
 let g:startify_custom_header =
-						\ 'map(startify#fortune#boxed() + g:ascii, "\"   \".v:val")'
+						\ 'map(g:ascii, "\"   \".v:val")'
+						" \ 'map(startify#fortune#boxed() + g:ascii, "\"   \".v:val")'
 let g:startify_list_order = [
             \ ['   Bookmarks:'],
             \ 'bookmarks',
