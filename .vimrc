@@ -13,14 +13,23 @@ set shiftwidth=4
 set noswapfile
 set updatetime=100
 set wildmenu
-highlight HighlightTrailing ctermbg=red guibg=red
-highlight MaxLineWidth ctermbg=red guibg=red
-match HighlightTrailing /\s\+\%#\@<!$/
-match MaxLineWidth /\%>124c.$/
+
+highlight CodeFormating ctermbg=red guibg=red
+autocmd ColorScheme * highlight CodeFormating ctermbg=red guibg=red
+match CodeFormating  /\s\+$\|\%>124c.\+$/
+
+augroup CodeFormatingGroup
+	autocmd!
+	autocmd BufCreate,BufWinEnter * match CodeFormating /\s\+$\|\%>124c.\+$/
+	autocmd InsertEnter * match CodeFormating /\s\+\%#\@<!$\|\%>124c.\+$/
+	autocmd InsertLeave * match CodeFormating  /\s\+$\|\%>124c.\+$/
+	autocmd WinLeave * call clearmatches()
+	autocmd BufWinLeave * call clearmatches()
+augroup END
 
 if has('win32')
 	set path=.,./include,../include
-	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Microsoft\\\ Visual\\\ Studio\/2019\/BuildTools\/VC\/Tools\/MSVC\/*\/include
+	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Microsoft\\\ Visual\\\ Studio\/*\/BuildTools\/VC\/Tools\/MSVC\/*\/include
 	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Windows\\\ Kits\/10\/Include\/*\/**
 endif
 " Persistent undo
