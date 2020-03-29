@@ -11,7 +11,7 @@ set autowrite
 set tabstop=4
 set shiftwidth=4
 set noswapfile
-set updatetime=4000
+set updatetime=100
 set wildmenu
 
 highlight CodeFormating ctermbg=red guibg=red
