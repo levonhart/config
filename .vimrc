@@ -4,33 +4,33 @@ set encoding=utf8
 set backspace=2
 set history=500
 set relativenumber		" or set number
-set numberwidth=5
+set numberwidth=3
 set hlsearch
 set incsearch
 set autowrite
 set tabstop=4
 set shiftwidth=4
 set noswapfile
-set updatetime=100
+set updatetime=4000
 set wildmenu
 
 highlight CodeFormating ctermbg=red guibg=red
-autocmd ColorScheme * highlight CodeFormating ctermbg=red guibg=red
 match CodeFormating  /\s\+$\|\%>124c.\+$/
 
 augroup CodeFormatingGroup
 	autocmd!
-	autocmd BufCreate,BufWinEnter * match CodeFormating /\s\+$\|\%>124c.\+$/
-	autocmd InsertEnter * match CodeFormating /\s\+\%#\@<!$\|\%>124c.\+$/
-	autocmd InsertLeave * match CodeFormating  /\s\+$\|\%>124c.\+$/
-	autocmd WinLeave * call clearmatches()
-	autocmd BufWinLeave * call clearmatches()
+	autocmd ColorScheme * highlight CodeFormating ctermbg=red guibg=red
+	autocmd BufCreate,BufWinEnter *.{c,cpp,h,hpp,py,java,js,ts} match CodeFormating /\s\+$\|\%>124c.\+$/
+	autocmd InsertEnter *.{c,cpp,h,hpp,py,java,js,ts} match CodeFormating /\s\+\%#\@<!$\|\%>124c.\+$/
+	autocmd InsertLeave *.{c,cpp,h,hpp,py,java,js,ts} match CodeFormating  /\s\+$\|\%>124c.\+$/
+	autocmd WinLeave *.{c,cpp,h,hpp,py,java,js,ts} call clearmatches()
+	autocmd BufWinLeave *.{c,cpp,h,hpp,py,java,js,ts} call clearmatches()
 augroup END
 
 if has('win32')
 	set path=.,./include,../include
 	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Microsoft\\\ Visual\\\ Studio\/*\/BuildTools\/VC\/Tools\/MSVC\/*\/include
-	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Windows\\\ Kits\/10\/Include\/*\/**
+	set path+=$HOMEDRIVE\/Program\\\ Files\\\ (x86)\/Windows\\\ Kits\/10\/Include\/*\/ucrt
 endif
 " Persistent undo
 set undodir=~/.vim/undo/
@@ -48,6 +48,7 @@ inoremap <C-t> <Esc>:tabnew<CR>
 nnoremap <C-z> :nohlsearch<CR>
 map <C-j> 10<Down>
 map <C-k> 10<Up>
+nmap <C-Tab> <Esc>:call UltiSnips#ListSnippets()<CR>
 " }}} KeyBindings "
 
 " Vundle {{{ "
@@ -122,7 +123,7 @@ let g:NERDAltDelims_java = 1			" Set a language to use its alternate delimiters 
 let g:NERDCustomDelimiters = {}			" Add your own custom formats or override the defaults
 let g:NERDCommentEmptyLines = 1			" Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDTrimTrailingWhitespace = 1	" Enable trimming of trailing whitespace when uncommenting
-let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all selected lines is commented or not
 " }}} NERDcommenter "
 
 " CtrlP {{{ "
@@ -179,7 +180,6 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/bundle/
 if has('win32')
 	let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips', $HOME.'/vimfiles/bundle/vim-snippets/UltiSnips']
 endif
-nmap <C-Tab> <Esc>:call UltiSnips#ListSnippets()<CR>
 " }}} Ultisnips "
 
 " Colors {{{ "
@@ -236,7 +236,7 @@ let g:DevIconsDefaultFolderOpenSymbol = ''
 " }}} Devicons "
 
 " Startify {{{ "
-let g:ascii=[ 
+let g:ascii=[
 			\ '                                             _______________________',
 			\ '   _______________________-------------------                       `\',
 			\ ' /:--__                                                              |',
@@ -261,8 +261,8 @@ let g:ascii=[
 			\ ]
 
 let g:startify_custom_header =
-						\ 'map(g:ascii, "\"   \".v:val")'
-						" \ 'map(startify#fortune#boxed() + g:ascii, "\"   \".v:val")'
+			\ 'map(g:ascii, "\"   \".v:val")'
+			" \ 'map(startify#fortune#boxed() + g:ascii, "\"   \".v:val")'
 let g:startify_list_order = [
             \ ['   Bookmarks:'],
             \ 'bookmarks',
@@ -275,5 +275,5 @@ let g:startify_list_order = [
             \ ['   Commands:'],
             \ 'commands',
             \ ]
-let g:startify_bookmarks = ['~/Onedrive/Documentos/Matemática\ Industrial'] 
+let g:startify_bookmarks = ['~/Onedrive/Documentos/Matemática\ Industrial']
 " }}} Startify "
