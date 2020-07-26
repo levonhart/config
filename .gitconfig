@@ -1,20 +1,26 @@
 [user]
+	email = leonardo.abreu@lia.ufc.br
 	name = Leonardo de Abreu
-	email = leonardomkflush@gmail.com
-[color]
-	ui = auto
-[core]
-	editor = vim
-[gui]
-	recentrepo = D:/Development/abreu-arq
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-[github]
-	user = levonhart
-[credential]
-	helper = /usr/share/git/credential/libsecret/git-credential-libsecret.exe
 [merge]
-	tool = vimdiff
+	tool = vimdiff3
+[credential]
+	helper = manager
+[core]
+	editor = nvim
+[color]
+	ui = true
+[mergetool "vimdiff3"]
+	cmd = nvim -f -d -c \"Gdiff\" \"$MERGED\"
+
+[alias]
+	logm = log --color --pretty=medium
+    lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+    lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+[pretty]
+	workspace = format:%C(blue)%h%C(reset)  %C(green)(%ad)%C(reset) %C(white)%s%C(reset) %C(auto)%d%C(reset)%n         %C(cyan)%an %C(reset) %C(magenta)<%ae>%C(reset)  %C(bold black)%H%C(reset)
+
+[format]
+	pretty = workspace
+[log]
+	date = human
