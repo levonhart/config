@@ -2,7 +2,6 @@
 Import-Module posh-git
 Import-Module oh-my-posh
 Import-Module DirColors
-Import-Module ZLocation
 
 Set-Theme robbyrussell
 Update-DirColors ~\_dircolors-256
@@ -19,6 +18,11 @@ Set-Alias greep ag
 Set-Alias nvq nvim-qt.exe
 Set-Alias vi vim.exe
 Set-Alias python37 C:\\Python37\\python.exe
+Set-PSReadlineKeyHandler -Chord Ctrl+UpArrow -Function HistorySearchBackward
+Set-PSReadlineKeyHandler -Chord Ctrl+DownArrow -Function HistorySearchForward
+Set-PSReadlineKeyHandler -Chord Ctrl+k -Function HistorySearchBackward -ViMode Insert
+Set-PSReadlineKeyHandler -Chord Ctrl+j -Function HistorySearchForward -ViMode Insert
+Set-PSReadlineKeyHandler -Chord Ctrl+n -Function MenuComplete -ViMode Insert
 
 # Chocolatey profile
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
