@@ -10,7 +10,7 @@
 [color]
 	ui = true
 [mergetool "vimdiff3"]
-	cmd = nvim -f -d -c \"Gdiff\" \"$MERGED\"
+	cmd = nvim -d $MERGED $LOCAL
 
 [alias]
 	logm = log --color --pretty=medium
