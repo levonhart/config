@@ -71,7 +71,7 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 Plugin 'rking/ag.vim'
-Plugin 'chriskempson/base16-vim'
+" Plugin 'chriskempson/base16-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdcommenter'
@@ -93,6 +93,9 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 " Plugin 'jupyter-vim/jupyter-vim'
 " Plugin 'goerz/jupytext.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'rrethy/vim-hexokinase'
+Plugin 'lervag/vimtex'
 
 
 " All of your Plugins must be added before the following line
@@ -147,11 +150,12 @@ nnoremap K :Ag <C-R><C-W><CR>
 
 " Polyglot {{{ "
 " desativar highlights ---  let g:polyglot_disabled = ['css']
-
-"Latex-Box
-let g:LatexBox_latexmk_preview_continuously=1 "Run latexmk in continuous mode
-
 " }}} Polyglot "
+
+" Vimtex {{{ "
+let g:vimtex_quickfix_mode=2
+let g:vimtex_quickfix_open_on_warning=0
+" }}} Vimtex "
 
 " Syntastic {{{ "
 let g:syntastic_always_populate_loc_list = 1
@@ -212,6 +216,11 @@ endif
 let g:gitgutter_max_signs = 500  " default value 500
 " }}} GitGutter "
 
+" Hexokinase {{{ "
+" Color code colored
+let g:Hexokinase_highlighters = [ 'virtual', 'foreground' ]
+" }}} Hexokinase "
+
 " Themes {{{ "
 set t_Co=256
 syntax enable
@@ -221,7 +230,7 @@ if exists('+termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-colorscheme base16-monokai
+colorscheme behelit
 " }}} Themes "
 
 " Airline {{{ "
@@ -231,7 +240,7 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#formatter = 'default'
 let g:airline_powerline_fonts = 1
-"Airline let g:airline_theme='onedark'
+let g:airline_theme='behelit'
 " }}} Airline "
 
 " Devicons {{{ "
