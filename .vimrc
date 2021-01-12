@@ -3,7 +3,7 @@
 set encoding=utf8
 set backspace=2
 set history=500
-set number relativenumber		" or set number
+set number
 set numberwidth=3
 set hlsearch
 set incsearch
@@ -13,6 +13,7 @@ set shiftwidth=4
 set noswapfile
 set updatetime=100
 set wildmenu
+set mouse=nvi
 
 highlight CodeFormating ctermbg=red guibg=red
 
@@ -43,11 +44,16 @@ set undoreload=10000
 
 " KeyBindings {{{ "
 nnoremap <C-t> :tabnew<CR>:Startify<CR>
-inoremap <C-t> <Esc>:tabnew<CR>
+inoremap <C-t> :<C-u>tabnew<CR>
 nnoremap <C-z> :nohlsearch<CR>
-map <C-j> 10<Down>
-map <C-k> 10<Up>
-nmap <C-Tab> <Esc>:call UltiSnips#ListSnippets()<CR>
+noremap <C-j> 10j
+noremap <C-k> 10k
+nnoremap <A-h> <C-w><C-h>
+nnoremap <A-j> <C-w><C-j>
+nnoremap <A-k> <C-w><C-k>
+nnoremap <A-l> <C-w><C-l>
+nnoremap <C-l> :<C-u>call UltiSnips#ListSnippets()<CR>
+inoremap <C-l> <Esc>:call UltiSnips#ListSnippets()<CR>
 " }}} KeyBindings "
 
 " Vundle {{{ "
