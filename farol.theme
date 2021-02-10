@@ -1,0 +1,14 @@
+[Scheme]
+Name=Farol
+ColorCursor=#FFFF70
+ColorCursorForeground=#FF4D00
+ColorForeground=#70ff70
+ColorBackground=#18191E
+ColorBold=#FFFF70
+ColorPalette=#18191E;#FC2929;#44B273;#E25600;#1D918B;#D16BB7;#00BFA4;#CCCCCC;#21252D;#FC5050;#50C16E;#ED722E;#47A7A1;#D68EB2;#5AD1AA;#FFFADE
+ScrollingBar=TERMINAL_SCROLLBAR_NONE
+ColorCursorUseDefault=FALSE
+ColorBoldUseDefault=FALSE
+ColorSelectionUseDefault=FALSE
+ColorSelection=#FF4D00
+ColorSelectionBackground=#090B26

@@ -99,7 +99,8 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 " Plugin 'jupyter-vim/jupyter-vim'
 " Plugin 'goerz/jupytext.vim'
-Plugin 'flazz/vim-colorschemes'
+" Plugin 'flazz/vim-colorschemes'
+Plugin 'ayu-theme/ayu-vim'
 Plugin 'rrethy/vim-hexokinase'
 Plugin 'lervag/vimtex'
 
@@ -168,6 +169,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_stl_format = "[Syntax: line:%fe (%e:%w)]"
 
 set statusline+=\ %=%#warningmsg#
 set statusline+=\ %=%{SyntasticStatuslineFlag()}
@@ -236,17 +238,19 @@ if exists('+termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-colorscheme behelit
+let ayucolor="dark"
+colorscheme ayu
 " }}} Themes "
 
 " Airline {{{ "
+let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#alt_sep = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#formatter = 'default'
 let g:airline_powerline_fonts = 1
-let g:airline_theme='behelit'
+let g:airline_theme='ayu'
 " }}} Airline "
 
 " Devicons {{{ "
