@@ -1,0 +1,58 @@
+add_newline = false
+
+[directory]
+truncation_length = 1
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+
+[character]
+vicmd_symbol = "[❯](bold purple)"
+
+[gcloud]
+disabled = true
+
+[aws]
+disabled = true
+
+[python]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[go]
+symbol = " "
+
+[php]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[docker]
+symbol = " "
+
+[pyenv]
+symbol = " "
+
+[dotnet]
+symbol = " "
+
+[ember]
+symbol = " "
+
+[kubernetes]
+symbol = "☸️ "
+
+[line_break]
+disabled = true
