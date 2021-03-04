@@ -6,8 +6,14 @@ truncation_length = 1
 [git_branch]
 format = "[$symbol$branch]($style) "
 
+[git_status]
+format = '([$all_status$ahead_behind]($style)[·](purple) )'
+
 [character]
 vicmd_symbol = "[❯](bold purple)"
+
+[cmd_duration]
+format = "[$duration]($style) "
 
 [gcloud]
 disabled = true
@@ -17,30 +23,75 @@ disabled = true
 
 [python]
 symbol = " "
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'
+
+[nodejs]
+symbol =" "
+format = "[$symbol($version )]($style)"
+
+[java]
+symbol = " "
+format = "[$symbol($version )]($style)"
 
 [ruby]
 symbol = " "
+format = "[$symbol($version )]($style)"
+
+[rust]
+symbol = " "
+format = "[$symbol($version )]($style)"
+
+[swift]
+format = "[$symbol($version )]($style)"
+
+[time]
+format = "[﨟 $time]($style) "
 
 [dart]
 symbol = " "
+format = "[$symbol($version )]($style)"
 
 [elm]
 symbol = " "
+format = "[$symbol($version )]($style)"
 
 [elixir]
 symbol = " "
+format = "[$symbol($version )]($style)"
 
-[go]
+[erlang]
+format = "[$symbol($version )]($style)"
+
+[golang]
 symbol = " "
+format = "[$symbol($version )]($style)"
 
 [php]
 symbol = " "
+format = "[$symbol($version )]($style)"
+
+[perl]
+symbol = " "
+format = "[$symbol($version )]($style)"
+
+[purescript]
+format = "[$symbol($version )]($style)"
+
 
 [julia]
 symbol = " "
+format = "[$symbol($version )]($style)"
+
+[lua]
+symbol = " "
+format = "[$symbol($version )]($style)"
+
+[kotlin]
+format = "[$symbol($version )]($style)"
 
 [docker]
 symbol = " "
+format = "[$symbol$context]($style) "
 
 [pyenv]
 symbol = " "
@@ -53,6 +104,34 @@ symbol = " "
 
 [kubernetes]
 symbol = "☸️ "
+
+[cmake]
+format = "[$symbol($version )]($style)"
+
+[conda]
+format = "[$symbol$environment]($style) "
+
+[crystal]
+format = "[$symbol($version )]($style)"
+
+[helm]
+format = "[$symbol($version )]($style)"
+
+[nim]
+format = "[$symbol($version )]($style)"
+
+[ocaml]
+format = "[$symbol($version )]($style)"
+
+[vragant]
+format = "[$symbol($version )]($style)"
+
+[package]
+format = "[$symbol$version]($style) "
+
+[memory_usage]
+format = "$symbol [${ram}( | ${swap})]($style) "
+symbol = " "
 
 [line_break]
 disabled = true
