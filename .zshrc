@@ -5,8 +5,16 @@ export PATH=$PATH:$HOME/.local/bin
 # previne C-S de bloquear entrada de caracteres
 unsetopt flow_control
 
-HISTSIZE=10000
-HISTFILE=~/.histfile
+HISTSIZE=500000
+SAVESIZE=100000
+HISTFILE="$HOME/.zsh_history"
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+
 # }}} Geral #
 
 # zplug {{{ #
@@ -69,8 +77,22 @@ autoload -U +X bashcompinit && bashcompinit
 bindkey -v
 bindkey -M vicmd '^?' backward-delete-char
 bindkey -M vicmd "${terminfo[kdch1]}" delete-char
-bindkey -M menuselect '^o' accept-and-infer-next-history
 
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey -M vicmd '^p' up-line-or-beginning-search
+bindkey -M viins '^p' up-line-or-beginning-search
+bindkey -M vicmd '^n' down-line-or-beginning-search
+bindkey -M viins '^n' down-line-or-beginning-search
+
+bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
+bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
+bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-beginning-search
+bindkey -M viins "${terminfo[kcud1]}" down-line-or-beginning-search
+
+bindkey -M menuselect '^o' accept-and-infer-next-history
 bindkey -M menuselect '^j' vi-down-line-or-history
 bindkey -M menuselect '^k' vi-up-line-or-history
 
