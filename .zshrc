@@ -6,7 +6,7 @@ export PATH=$PATH:$HOME/.local/bin
 unsetopt flow_control
 
 HISTSIZE=500000
-SAVESIZE=100000
+SAVEHIST=100000
 HISTFILE="$HOME/.zsh_history"
 setopt extended_history       # record timestamp of command in HISTFILE
 setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
