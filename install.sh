@@ -16,16 +16,16 @@ function validate() {
 }
 
 function install() {
-	local use_nvim
-	# local use_starship
-	local use_zsh
-	local use_gitcfg
-	local use_vifm
+	local use_nvim=0
+	# local use_starship=0
+	local use_zsh=0
+	local use_gitcfg=0
+	local use_vifm=0
 
 	read -r -p "This will overwrite files in your home directory. Do it anyway? (y/N/a) " -n 1 ans
 	
 	if [[ -z $ans ]] || [[ "$ans" = [Nn] ]] ; then
-		printf 'Installation aborted.' >&2
+		printf '\nInstallation aborted.' >&2
 		exit 1
 	fi
 
@@ -116,4 +116,4 @@ function install() {
 install
 echo ''
 
-nvim --headless -c ":PluginInstall" & echo 'Done!\n'
+nvim --headless --listen /tmp/nvimsocket -c ":PlugInstall" & echo 'Done!\n'
