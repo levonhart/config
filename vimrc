@@ -108,6 +108,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'ayu-theme/ayu-vim'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'lervag/vimtex'
+Plug 'godlygeek/tabular'
 Plug 'neoclide/coc.nvim', {'branch': 'release',
 			\ 'do': ':CocInstall coc-clangd coc-cmake coc-fzf-preview coc-jedi coc-json coc-tsserver'}
 " Plug 'hugolgst/vimsence'
