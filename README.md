@@ -8,10 +8,11 @@ Some of them are not really used.
 
 ## Requirements
 
-- Curl
+- Curl - Command line tool and library for transferring data with URLs.
 - [Neovim](https://neovim.io/) - Hyperextensible Vim-based text editor.
 - [pynvim](https://github.com/neovim/pynvim) - Python client to neovim.
 - [Zsh](http://zsh.sourceforge.net/) - A shell for unix.
+- [Exa](https://the.exa.website/) - A modern replacement for `ls`.
 - [Fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder.
 - [Starship](https://starship.rs/) - Cross-shell prompt written in rust.
 - Python3 - Some vim extensions need it.
