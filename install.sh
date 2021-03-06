@@ -98,7 +98,9 @@ function install() {
 		cp -f $BASEDIR/zshrc $HOME/.zshrc
 		cp -f $BASEDIR/config/spaceship.zsh $HOME/.config/spaceship.zsh
 		cp -f $BASEDIR/config/starship.toml $HOME/.config/starship.toml
-		git clone https://github.com/zplug/zplug $HOME/.zplug
+		if ! [[ -d $HOME/.zplug ]]; then
+			git clone https://github.com/zplug/zplug $HOME/.zplug
+		fi
 	fi
 
 	# if [[ $use_starship == 1 ]]; then
@@ -126,4 +128,7 @@ function install() {
 install
 echo ''
 
-nvim --headless --listen /tmp/nvimsocket -c ":PlugInstall" & echo 'Done!\n'
+nvim -es -u $HOME/.config/nvim/init.vim --listen /tmp/nvimsocket -c ":PlugInstall" &
+echo 'Done!'
+echo 'Neovim is installing plugins on background. Please run:'
+echo '$ nvim --listen /tmp/nvimsocket -c ":PlugStatus"'
