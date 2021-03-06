@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 BASEDIR="$(dirname "$0")"
 
@@ -74,12 +74,22 @@ function install() {
 
 	fi
 
+	if ! [[ -d $HOME/.config ]]; then
+		mkdir $HOME/.config
+	fi
+
 	if [[ $use_nvim == 1 ]]; then
 		sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+		if ! [[ -d $HOME/.config/nvim ]]; then
+			mkdir $HOME/.config/nvim
+		fi
 		cp -f $BASEDIR/vimrc $HOME/.config/nvim/init.vim
 		cp -f $BASEDIR/ginit.vim $HOME/.config/nvim/ginit.vim
 		cp -f $BASEDIR/config/nvim/coc-settings.json $HOME/.config/nvim/coc-settings.json
+		if ! [[ -d $HOME/.vim ]]; then
+			mkdir $HOME/.vim
+		fi
 		cp -r $BASEDIR/vim/UltiSnips $HOME/.vim/
 		# nvim --listen /tmp/nvim_pluginstall --headless -c ":PlugInstall" &
 	fi
