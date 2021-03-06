@@ -96,8 +96,8 @@ function install() {
 
 	if [[ $use_zsh == 1 ]]; then
 		cp -f $BASEDIR/zshrc $HOME/.zshrc
-		cp -f $BASEDIR/spaceship.zsh $HOME/.config/spaceship.zsh
-		cp -f $BASEDIR/starship.toml $HOME/.config/starship.toml
+		cp -f $BASEDIR/config/spaceship.zsh $HOME/.config/spaceship.zsh
+		cp -f $BASEDIR/config/starship.toml $HOME/.config/starship.toml
 		git clone https://github.com/zplug/zplug $HOME/.zplug
 	fi
 
