@@ -24,6 +24,7 @@ disabled = true
 [python]
 symbol = " "
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\))]($style)'
+pyenv_prefix = " "
 
 [nodejs]
 symbol =" "
@@ -89,18 +90,15 @@ format = "[$symbol($version )]($style)"
 [kotlin]
 format = "[$symbol($version )]($style)"
 
-[docker]
+[docker_context]
 symbol = " "
 format = "[$symbol$context]($style) "
-
-[pyenv]
-symbol = " "
 
 [dotnet]
 symbol = " "
 
-[ember]
-symbol = " "
+# [ember]
+# symbol = " "
 
 [kubernetes]
 symbol = "☸️ "
@@ -123,7 +121,7 @@ format = "[$symbol($version )]($style)"
 [ocaml]
 format = "[$symbol($version )]($style)"
 
-[vragant]
+[vagrant]
 format = "[$symbol($version )]($style)"
 
 [package]
