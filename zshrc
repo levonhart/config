@@ -29,7 +29,7 @@ zplug "softmoth/zsh-vim-mode"
 # prompt alternativo
 # zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 
-# zplug "Aloxaf/fzf-tab"
+zplug "Aloxaf/fzf-tab"
 
 
 if ! zplug check --verbose; then
@@ -39,7 +39,7 @@ if ! zplug check --verbose; then
     fi
 fi
 
-zplug load --verbose
+zplug load
 
 
 # }}} zplug #
