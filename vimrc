@@ -113,6 +113,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release',
 			\ 'do': ':CocInstall coc-clangd coc-cmake coc-fzf-preview coc-jedi coc-json coc-tsserver'}
 " Plug 'hugolgst/vimsence'
 Plug 'ryanoasis/vim-devicons'
+Plug 'rhysd/vim-grammarous'
 
 " Initialize plugin system
 call plug#end()
@@ -147,6 +148,10 @@ else
 endif
 " }}} CtrlP "
 
+" Fzf {{{ "
+nnoremap <A-p> :<C-W>Files<CR>
+" }}} Fzf "
+
 " Ag.vim {{{ "
 let g:ag_working_path_mode="r" "procura a partir da raiz do projeto
 " bind K to search word under cursor
@@ -179,6 +184,11 @@ let g:syntastic_mode_map = {
 		\ "passive_filetypes": [] }
 
 " }}} Syntastic "
+
+" Grammarous {{{ "
+let g:grammarous#languagetool_cmd = 'languagetool'
+" }}} Grammarous "
+
 
 " Emmet {{{ "
 let g:user_emmet_install_global = 0
