@@ -1,0 +1,58 @@
+#!/bin/sh
+
+B='#00000000'  # blank
+C='#ffffff22'  # clear ish
+D='#8AB4F8cc'  # default
+T='#ffffffee'  # text
+W='#d93025bb'  # wrong
+V='#80cbc4bb'  # verifying
+
+i3lock \
+--insidevercolor=$C   \
+--ringvercolor=$V     \
+\
+--insidewrongcolor=$C \
+--ringwrongcolor=$W   \
+\
+--insidecolor=$B      \
+--ringcolor=$D        \
+--linecolor=$B        \
+--separatorcolor=$D   \
+\
+--verifcolor=$T        \
+--wrongcolor=$T        \
+--timecolor=$T        \
+--datecolor=$T        \
+--layoutcolor=$T      \
+--keyhlcolor=$T       \
+--bshlcolor=$W        \
+\
+--screen 1            \
+--blur 10             \
+--clock               \
+--indicator           \
+--timestr="%H:%M:%S"  \
+--datestr="%A, %m %Y" \
+--keylayout 1         \
+--pass-media-keys     \
+--pass-screen-keys    \
+--locktext="bloqueando..." \
+--veriftext="verificando..." \
+--wrongtext="não foi dessa vez!" \
+--lockfailedtext="bloqueio falhou!" \
+--noinputtext="vazio" \
+--time-font=FiraSans-UltraLight \
+--date-font=FiraSans-Light \
+--layout-font=FiraSans-Light \
+--verif-font=FiraSans-Light \
+--wrong-font=FiraSans-Light \
+--greeter-font=FiraSans-Light \
+--timesize=38 \
+--datesize=16 \
+--layoutsize=9 \
+--verifsize=16 \
+--wrongsize=16 \
+--greetersize=16 \
+
+
+
