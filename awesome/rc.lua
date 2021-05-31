@@ -20,6 +20,9 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+-- Move indicators and float control
+require("collision")()
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -63,7 +66,7 @@ beautiful.init(theme_path)
 end
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xfce4-terminal"
+terminal = "alacritty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -x " .. editor
 mytags = { "principal", "desenvolvimento", "jogos", "testes", "musica", "voip" }
@@ -175,11 +178,15 @@ root.buttons(gears.table.join(
 globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "m",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
+    awful.key({ "Mod3",           }, "h",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
+    awful.key({ "Mod3",           }, "l",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
     awful.key({ modkey,           }, "'", awful.tag.history.restore,
+        {description = "view last", group = "client"}
+    ),
+    awful.key({ modkey,           }, "j",
+        function () awful.client.focus.bydirection("down") end,
         {description = "focus client below", group = "client"}
     ),
     awful.key({ modkey,           }, "k",
@@ -201,6 +208,11 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
 
+    awful.key({ "Mod3",           }, "j", function () awful.client.focus.byidx( 1) end,
+              {description = "focus next by index", group = "client"}),
+    awful.key({ "Mod3",           }, "k", function () awful.client.focus.byidx(-1) end,
+              {description = "focus previous by index", group = "client"}),
+
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
@@ -213,7 +225,7 @@ globalkeys = gears.table.join(
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey,           }, "'",
+    awful.key({ "Mod1",           }, "'",
         function ()
             awful.client.focus.history.previous()
             if client.focus then
@@ -227,7 +239,7 @@ globalkeys = gears.table.join(
     --           {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "F4", awesome.quit,
+    awful.key({ modkey, "Control", "Shift"   }, "F4", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
     awful.key({ modkey,         }, "Delete",
               function ()
@@ -236,7 +248,7 @@ globalkeys = gears.table.join(
                   awful.spawn(menu_path)
               end,
               {description = "open power menu", group = "awesome"}),
-              
+
     awful.key({ modkey,           }, ".",     function () awful.tag.incmwfact( 0.02)          end,
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey,           }, ",",     function () awful.tag.incmwfact(-0.02)          end,
@@ -395,7 +407,7 @@ globalkeys = gears.table.join(globalkeys,
                   end
               end
           end,
-          {description = "move focused client to his first tag", group = "tag"})
+          {description = "move focused client to its first tag only", group = "tag"})
 )
 
 clientbuttons = gears.table.join(
@@ -500,13 +512,19 @@ awful.rules.rules = {
         }
     },
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    -- Tag binding rules
+    { rule_any = { class = { "discord", "TeamSpeak 3", "Mumble" } },
+      properties = { screen = 1, tag = "voip" } },
+
+    { rule_any = { class = { "Spotify", "spotify" } },
+      properties = { screen = 1, tag = "musica" } },
+
+    { rule_any = { class = { "Steam" } },
+      properties = { screen = 1, tag = "jogos" } },
 
     { rule_any = { class = { "Ulauncher", "Synapse", "albert" } },
         properties = {
-            border_width = 0,
+            no_border = true,
             -- screen = awful.screen.preferred,
             -- placement = awful.placement.centered,
             callback = function(c)
@@ -519,14 +537,14 @@ awful.rules.rules = {
     { rule_any = { type = { "dock", "splash" } },
         properties = {
             focusable = false,
-            border_width = 0,
+            no_border = true,
             titlebars_enabled = false,
             floating = true,
             placement = awful.placement.no_offscreen,
         }
     },
 
-    { rule_any = { type = { "dialog", "notification" } },
+    { rule_any = { type = { "dialog", "notification" }, name = { "Picture-in-Picture" } },
         properties = {
             floating = true,
             placement = awful.placement.no_offscreen+awful.placement.centered,
@@ -543,7 +561,7 @@ awful.rules.rules = {
             y = 0,
             sticky = true,
             focusable = false,
-            border_width = 0,
+            no_border = true,
             skip_taskbar = true,
             keys = {},
         }
@@ -552,7 +570,7 @@ awful.rules.rules = {
     { rule_any = { class = { "Wrapper-2.0" } },
         properties = {
             floating = true,
-            border_width = 0,
+            no_border = true,
             titlebars_enabled = false,
             placement = awful.placement.no_offscreen,
         }
@@ -570,11 +588,31 @@ awful.rules.rules = {
 -- }}}
 
 -- {{{ Signals
+--
+-- Hide borders when maximize
+function manage_borders (c)
+    if c.no_border then
+        if c.border_width ~= 0 then
+            c.border_width = 0
+        end
+        return
+    end
+
+    if c.maximized == true or c.fullscreen then
+        c.border_width = 0
+    else
+        c.border_width = beautiful.border_width
+    end
+end
+
+
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
+
+    manage_borders(c)
 
     if awesome.startup
       and not c.size_hints.user_position
@@ -584,6 +622,12 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+-- Signal functions to hide borders when maximized
+client.connect_signal("property::hidden", manage_borders)
+client.connect_signal("property::minimized", manage_borders)
+client.connect_signal("property::maximized", manage_borders)
+client.connect_signal("property::fullscreen", manage_borders)
+
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
@@ -592,7 +636,19 @@ client.connect_signal("request::titlebars", function(c)
             c:emit_signal("request::activate", "titlebar", {raise = true})
             if c.maximized then
                 c.maximized = false
+            end
+            if c.floating then
+                c.floating = false
+            end
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ }, 2, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            if c.maximized or not c.floating then
                 c.floating = true
+            end
+            if c.maximized then
+                c.maximized = false
             end
             awful.mouse.client.move(c)
         end),
@@ -602,7 +658,7 @@ client.connect_signal("request::titlebars", function(c)
         end)
     )
 
-    local titlebar = awful.titlebar(c, { size = 4 })
+    local titlebar = awful.titlebar(c, { size = 3 })
 
     titlebar : setup {
         { -- Left
@@ -640,20 +696,16 @@ client.connect_signal("unfocus", function (c)
     c.border_color = beautiful.border_normal
 end)
 
--- Hide borders when maximize
-function manage_borders (c)
-    if c.maximized == true then
-        c.border_width = 0
-    else
-        c.border_width = beautiful.border_width
-    end
-end
-client.connect_signal("property::hidden", manage_borders)
-client.connect_signal("property::minimized", manage_borders)
-client.connect_signal("property::maximized", manage_borders)
-
 -- }}}
 
 -- Autostart Applications
+
+-- Set keyboard layout
+
+-- This should be loaded by xinitrc, in case it doesn't...
+-- awful.spawn.with_shell("test -f ~/.Xkeymap && xkbcomp ~/.Xkeymap $DISPLAY")
+
+-- Custom i3lock-color script
+awful.spawn.with_shell("xss-lock -- screenlock")
 -- awful.spawn.with_shell("xfdesktop")
 -- awful.spawn.with_shell("picom -b --experimental-backend")

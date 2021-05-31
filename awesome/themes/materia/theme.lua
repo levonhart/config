@@ -7,14 +7,15 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
 local gfs = require("gears.filesystem")
+local shape = require("gears.shape")
 local themes_path = gfs.get_themes_dir()
 
 local theme = {}
 
-theme.font          = "Fira Sans Light 11"
+theme.font          = "Fira Sans Medium 11"
 
 theme.bg_normal     = "#111111"
-theme.bg_focus      = "#8AB4F8"
+theme.bg_focus      = "#465C80"
 theme.bg_urgent     = "#CB4242"
 theme.bg_minimize   = "#242424"
 theme.bg_systray    = theme.bg_normal
@@ -24,14 +25,20 @@ theme.fg_focus      = "#ffffff"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
-theme.useless_gap   = dpi(2)
+theme.useless_gap   = dpi(8)
 theme.border_width  = dpi(1)
 theme.border_normal = "#000000"
-theme.border_focus  = "#8AB4F8"
+theme.border_focus  = "#465C80"
 theme.border_marked = "#CB4242"
 
 theme.titlebar_bg_normal = "#111111"
-theme.titlebar_bg_focus = "#8AB4F8"
+-- theme.titlebar_bg_focus = "#465C80"
+theme.titlebar_bg_focus = "#242424"
+
+theme.snap_bg = "#ffffff"
+theme.snap_border_width = 1
+theme.snap_shape = shape.rectangle
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
@@ -126,7 +133,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = nil
+theme.icon_theme = "Papirus-Dark"
 
 return theme
 
