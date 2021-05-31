@@ -1,7 +1,16 @@
 diff --git a/colors/ayu.vim b/colors/ayu.vim
-index 9158e6b..787cac9 100644
+index 9158e6b..6c56af5 100644
 --- a/colors/ayu.vim
 +++ b/colors/ayu.vim
+@@ -14,7 +14,7 @@ let g:colors_name = "ayu"
+ 
+ let s:palette = {}
+ 
+-let s:palette.bg        = {'dark': "#0F1419",  'light': "#FAFAFA",  'mirage': "#212733"}
++let s:palette.bg        = {'dark': "#0F1419b3",  'light': "#FAFAFAb3",  'mirage': "#212733b3"}
+ 
+ let s:palette.comment   = {'dark': "#5C6773",  'light': "#ABB0B6",  'mirage': "#5C6773"}
+ let s:palette.markup    = {'dark': "#F07178",  'light': "#F07178",  'mirage': "#F07178"}
 @@ -33,7 +33,7 @@ let s:palette.panel     = {'dark': "#14191F",  'light': "#FFFFFF",  'mirage': "#
  let s:palette.guide     = {'dark': "#2D3640",  'light': "#D9D8D7",  'mirage': "#3D4751"}
  let s:palette.line      = {'dark': "#151A1E",  'light': "#F3F3F3",  'mirage': "#242B38"}
