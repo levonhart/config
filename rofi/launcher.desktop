@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Grade de Aplicações
+Comment=Menu de Aplicações rofi
+Exec=/home/leon/.config/rofi/bin/launcher_misc
+Icon=start-here
+Path=/home/leon
+Terminal=false
+StartupNotify=false
+X-Desktop-File-Install-Version=0.26
