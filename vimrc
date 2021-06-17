@@ -82,7 +82,7 @@ endif
 
 Plug 'rking/ag.vim'
 " Plug 'chriskempson/base16-vim'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
 " Plug 'scrooloose/nerdtree'
@@ -140,16 +140,31 @@ let g:NERDToggleCheckAllLines = 1		" Enable NERDCommenterToggle to check all sel
 " }}} NERDcommenter "
 
 " CtrlP {{{ "
-let g:ctrlp_working_path_mode = 'ra'
-if has('win32')
-	set runtimepath^=$HOME/vimfiles/bundle/ctrlp.vim
-else
-	set runtimepath^=~/.vim/bundle/ctrlp.vim
-endif
+" let g:ctrlp_working_path_mode = 'ra'
+" if has('win32')
+"     set runtimepath^=$HOME/vimfiles/bundle/ctrlp.vim
+" else
+"     set runtimepath^=~/.vim/bundle/ctrlp.vim
+" endif
+"
+" let g:ctrlp_map = '<c-\>'
 " }}} CtrlP "
 
 " Fzf {{{ "
-nnoremap <A-p> :<C-W>Files<CR>
+nmap <C-p> [fzf]
+nnoremap [fzf]p :<C-W>Files<CR>
+nnoremap [fzf]b :<C-W>Buffers<CR>
+nnoremap [fzf]w :<C-W>Windows<CR>
+nnoremap [fzf]g :<C-W>GFiles<CR>
+nnoremap [fzf]l :<C-W>Lines<CR>
+nnoremap [fzf]' :<C-W>Marks<CR>
+nnoremap [fzf]r :<C-W>History<CR>
+nnoremap [fzf]: :<C-W>History:<CR>
+nnoremap [fzf]/ :<C-W>History/<CR>
+nnoremap [fzf]c :<C-W>Commits<CR>
+nnoremap [fzf]s :<C-W>Snippets<CR>
+nnoremap [fzf]m :<C-W>Maps<CR>
+
 " }}} Fzf "
 
 " Ag.vim {{{ "
@@ -189,7 +204,6 @@ let g:syntastic_mode_map = {
 let g:grammarous#languagetool_cmd = 'languagetool'
 " }}} Grammarous "
 
-
 " Emmet {{{ "
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
@@ -201,9 +215,9 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 let g:snips_author="ABREU, Leonardo C. de."
-let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/bundle/vim-snippets/UltiSnips']
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/plugged/vim-snippets/UltiSnips']
 if has('win32')
-	let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips', $HOME.'/vimfiles/bundle/vim-snippets/UltiSnips']
+	let g:UltiSnipsSnippetDirectories=[$HOME.'/vimfiles/UltiSnips', $HOME.'/vimfiles/plugged/vim-snippets/UltiSnips']
 endif
 " }}} Ultisnips "
 

@@ -39,6 +39,8 @@ theme.snap_bg = "#ffffff"
 theme.snap_border_width = 1
 theme.snap_shape = shape.rectangle
 
+theme.hotkeys_modifiers_fg = "#555555"
+
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:

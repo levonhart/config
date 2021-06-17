@@ -1,3 +1,5 @@
+-- vim: foldmethod=marker
+-- Includes {{{ --
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -19,9 +21,11 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+local keys = require("keys")
 
 -- Move indicators and float control
 require("collision")()
+-- }}} Includes --
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -54,7 +58,7 @@ do
         in_error = false
     end)
 end
--- }}}
+-- }}} Error handling --
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
@@ -66,10 +70,19 @@ beautiful.init(theme_path)
 end
 
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty"
+terminal = "kitty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -x " .. editor
 mytags = { "principal", "desenvolvimento", "jogos", "testes", "musica", "voip" }
+
+-- Keyboard map indicator and switcher
+mykeyboardlayout = awful.widget.keyboardlayout()
+
+-- Hotkeys Widget
+hotkeys_popup.hotkeys = hotkeys_popup.widget.new( { height = 600 } )
+hotkeys_popup.hotkeys:add_hotkeys(keys.vim.keys)
+hotkeys_popup.hotkeys:add_hotkeys(keys.firefox.keys)
+hotkeys_popup.hotkeys:add_hotkeys(keys.tmux.keys)
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -85,21 +98,22 @@ awful.layout.layouts = {
     -- awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
     -- awful.layout.suit.tile.top,
-    -- awful.layout.suit.fair,
+    awful.layout.suit.fair,
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
-    -- awful.layout.suit.max,
+    awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
+    -- awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
--- }}}
 
--- {{{ Menu
+-- }}} Variable definitions --
+
+-- {{{ Menu --
 -- Create a launcher widget and a main menu
 myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
@@ -119,12 +133,9 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
+-- }}} Menu --
 
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
-
--- {{{ Wibar
+-- {{{ Screen connect callback
 
 awful.screen.connect_for_each_screen(function(s)
 
@@ -145,6 +156,8 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
+    
+    -- }}} Restore tags --
 
     -- Create the popup
     s.mypopup = awful.popup (
@@ -164,7 +177,7 @@ awful.screen.connect_for_each_screen(function(s)
                     screen = s,
                 })
 end)
--- }}}
+-- }}} Screen connect callback --
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
@@ -172,11 +185,13 @@ root.buttons(gears.table.join(
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
--- }}}
+-- }}} Mouse bindings --
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    awful.key({ modkey, "Shift"   }, "m",      hotkeys_popup.show_help,
+    awful.key({ modkey, "Shift"   }, "m", function()
+            hotkeys_popup.hotkeys:show_help()
+    end,
               {description="show help", group="awesome"}),
     awful.key({ "Mod3",           }, "h",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
@@ -426,7 +441,7 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
+-- }}} Key bindings --
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
@@ -468,6 +483,7 @@ awful.rules.rules = {
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
+          "Magnus",
           "xtightvncviewer"},
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -493,6 +509,7 @@ awful.rules.rules = {
                 "Alacritty",
                 "Mate-terminal",
                 "Xfce-terminal",
+                "Kitty",
                 "XTerm",
                 "Termite",
                 "URxvt",
@@ -567,7 +584,7 @@ awful.rules.rules = {
         }
     },
     -- Xfce panel Wrapper-2.0 type windows (e.g. calendar)
-    { rule_any = { class = { "Wrapper-2.0" } },
+    { rule_any = { class = { "Wrapper-2.0", "steam_app_306130" } },
         properties = {
             floating = true,
             no_border = true,
@@ -585,7 +602,26 @@ awful.rules.rules = {
             }
     },
 }
--- }}}
+
+-- Hotkeys popup rules
+for group_name in pairs(keys.vim.keys) do
+    hotkeys_popup.hotkeys:add_group_rules(group_name,
+        { rule_any = { name = { "vim", "VIM", "Vim" } }
+    })
+end
+
+hotkeys_popup.hotkeys:add_group_rules( "Firefox: tabs",
+    { color = "#009F00",
+      rule_any = { class = { "Firefox", "firefox" } }
+})
+
+for group_name in pairs(keys.tmux.keys) do
+    hotkeys_popup.hotkeys:add_group_rules(group_name,
+        { rule = { name = "tmux" } 
+        })
+end
+
+-- }}} Rules --
 
 -- {{{ Signals
 --
@@ -696,9 +732,9 @@ client.connect_signal("unfocus", function (c)
     c.border_color = beautiful.border_normal
 end)
 
--- }}}
+-- }}} Signals --
 
--- Autostart Applications
+-- Autostart Applications {{{
 
 -- Set keyboard layout
 
@@ -709,3 +745,5 @@ end)
 awful.spawn.with_shell("xss-lock -- screenlock")
 -- awful.spawn.with_shell("xfdesktop")
 -- awful.spawn.with_shell("picom -b --experimental-backend")
+
+-- }}} Autostart Applications --
