@@ -55,6 +55,19 @@ set undoreload=10000
 " endif
 " }}} Geral "
 
+" Neovide (GUI) {{{ "
+if exists("g:neovide")
+	let g:neovide_refresh_rate=60
+	" let g:neovide_refresh_rate_idle=5
+	let g:neovide_transparency=0.8
+	let g:neovide_floating_blur_amount_x = 2.0
+	let g:neovide_floating_blur_amount_y = 2.0
+	let g:neovide_scroll_animation_length = 0.3
+	let g:neovide_cursor_trail_size=0.8
+	set guifont=FiraCode\ Nerd\ Font,DejaVuSansMono\ Nerd\ Font,Fira\ Code:h11
+endif
+" }}} Neovide (GUI) "
+
 " KeyBindings {{{ "
 nnoremap <C-t> :tabnew<CR>:Startify<CR>
 inoremap <C-t> :<C-u>tabnew<CR>
