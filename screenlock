@@ -8,51 +8,50 @@ W='#d93025bb'  # wrong
 V='#80cbc4bb'  # verifying
 
 i3lock \
---insidevercolor=$C   \
---ringvercolor=$V     \
+--insidever-color=$C   \
+--ringver-color=$V     \
 \
---insidewrongcolor=$C \
---ringwrongcolor=$W   \
+--insidewrong-color=$C \
+--ringwrong-color=$W   \
 \
---insidecolor=$B      \
---ringcolor=$D        \
---linecolor=$B        \
---separatorcolor=$D   \
+--inside-color=$B      \
+--ring-color=$D        \
+--line-color=$B        \
+--separator-color=$D   \
 \
---verifcolor=$T        \
---wrongcolor=$T        \
---timecolor=$T        \
---datecolor=$T        \
---layoutcolor=$T      \
---keyhlcolor=$T       \
---bshlcolor=$W        \
+--verif-color=$T        \
+--wrong-color=$T        \
+--time-color=$T        \
+--date-color=$T        \
+--layout-color=$T      \
+--keyhl-color=$T       \
+--bshl-color=$W        \
 \
 --screen 1            \
 --blur 10             \
 --clock               \
 --indicator           \
---timestr="%H:%M:%S"  \
---datestr="%A, %m %Y" \
+--time-str="%H:%M:%S"  \
+--date-str="%A, %m %Y" \
 --keylayout 1         \
 --pass-media-keys     \
 --pass-screen-keys    \
---locktext="bloqueando..." \
---veriftext="verificando..." \
---wrongtext="não foi dessa vez!" \
---lockfailedtext="bloqueio falhou!" \
---noinputtext="vazio" \
+--lock-text="bloqueando..." \
+--verif-text="verificando..." \
+--wrong-text="não foi dessa vez!" \
+--lockfailed-text="bloqueio falhou!" \
+--noinput-text="vazio" \
 --time-font=FiraSans-UltraLight \
 --date-font=FiraSans-Light \
 --layout-font=FiraSans-Light \
 --verif-font=FiraSans-Light \
 --wrong-font=FiraSans-Light \
 --greeter-font=FiraSans-Light \
---timesize=38 \
---datesize=16 \
---layoutsize=9 \
---verifsize=16 \
---wrongsize=16 \
---greetersize=16 \
-
-
+--time-size=38 \
+--date-size=16 \
+--layout-size=9 \
+--verif-size=16 \
+--wrong-size=16 \
+--greeter-size=16 \
+"$@"
 
