@@ -251,6 +251,7 @@ let g:ag_working_path_mode="r" "procura a partir da raiz do projeto
 " Vimtex {{{ "
 let g:vimtex_quickfix_mode=2
 let g:vimtex_quickfix_open_on_warning=0
+let g:vimtex_compiler_latexmk = { 'continuous': 0 }
 " }}} Vimtex "
 
 " Grammarous {{{ "
