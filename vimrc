@@ -65,6 +65,8 @@ if exists("g:neovide")
 	let g:neovide_scroll_animation_length = 0.3
 	let g:neovide_cursor_trail_size=0.8
 	set guifont=FiraCode\ Nerd\ Font,DejaVuSansMono\ Nerd\ Font,Fira\ Code:h11
+	nmap <C-S-v> "+p
+	imap <C-S-v> \<C-r>\<C-r>+
 endif
 " }}} Neovide (GUI) "
 
@@ -329,7 +331,14 @@ let g:airline_theme='ayu'
 " Lightline {{{ "
 let g:lightline = {
       \ 'colorscheme': 'ayu_dark',
-      \ }
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+  \ }
 " }}} Lightline "
 
 " Devicons {{{ "
