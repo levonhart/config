@@ -71,8 +71,8 @@ endif
 " KeyBindings {{{ "
 nnoremap <C-t> :tabnew<CR>:Startify<CR>
 inoremap <C-t> :<C-u>tabnew<CR>
-noremap <C-j> 10j
-noremap <C-k> 10k
+" noremap <C-j> 10j
+" noremap <C-k> 10k
 nnoremap <A-h> <C-w><C-h>
 nnoremap <A-j> <C-w><C-j>
 nnoremap <A-k> <C-w><C-k>
@@ -95,10 +95,8 @@ else
 endif
 
 Plug 'rking/ag.vim'
-" Plug 'chriskempson/base16-vim'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
-" Plug 'scrooloose/nerdtree'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " Plug 'vim-airline/vim-airline'
@@ -107,6 +105,11 @@ Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'dense-analysis/ale'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'rhysd/vim-lsp-ale'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-repeat'
 Plug 'mhinz/vim-startify'
@@ -132,6 +135,59 @@ Plug 'rhysd/vim-grammarous'
 call plug#end()
 
 " }}} Vim-plug "
+
+" Asyncomplete {{{ "
+let g:asyncomplete_auto_popup = 0
+inoremap <expr> <CR>  pumvisible() ? asyncomplete#close_popup() . "\<CR>" : "\<CR>"
+imap <c-space>        <Plug>(asyncomplete_force_refresh)
+
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <C-n>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<C-n>" :
+  \ asyncomplete#force_refresh()
+inoremap <expr><C-p> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" let g:asyncomplete_auto_completeopt = 0
+" set completeopt=menuone,noinsert,noselect,preview
+" autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" }}} Asyncomplete "
+
+" Vim-lsp {{{ "
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+" }}} Vim-lsp "
 
 " NERDTree {{{ "
 " map <C-n> :NERDTreeToggle<CR>
@@ -194,24 +250,6 @@ let g:ag_working_path_mode="r" "procura a partir da raiz do projeto
 let g:vimtex_quickfix_mode=2
 let g:vimtex_quickfix_open_on_warning=0
 " }}} Vimtex "
-
-" Syntastic {{{ "
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_stl_format = "[Syntax: line:%fe (%e:%w)]"
-
-set statusline+=\ %=%#warningmsg#
-set statusline+=\ %=%{SyntasticStatuslineFlag()}
-set statusline+=\ %=%*
-
-let g:syntastic_mode_map = {
-        \ "mode": "passive",
-        \ "active_filetypes": [],
-		\ "passive_filetypes": [] }
-
-" }}} Syntastic "
 
 " Grammarous {{{ "
 let g:grammarous#languagetool_cmd = 'languagetool'
