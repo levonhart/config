@@ -165,18 +165,22 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+    nmap <buffer><silent> gd <plug>(lsp-definition)
+    nmap <buffer><silent> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer><silent> gS <plug>(lsp-workspace-symbol-search)
+	nmap <buffer><silent> gD <plug>(lsp-references)
+	nmap <buffer><silent> gY <plug>(lsp-implementation)
+	nmap <buffer><silent> gy <plug>(lsp-type-definition)
+    nmap <buffer><silent> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer><silent> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer><silent> <leader>k <plug>(lsp-hover)
+    nmap <buffer><silent> <leader>rn <plug>(lsp-rename)
+	if has('nvim-0.4.0') || has('patch-8.1.1417')
+	nnoremap <buffer><silent> <expr><c-j>
+				\ lsp#document_hover_preview_winid() != v:null ? lsp#scroll(+4) : "\<c-j>"
+	nnoremap <buffer><silent> <expr><c-k>
+				\ lsp#document_hover_preview_winid() != v:null ? lsp#scroll(-4) : "\<c-k>"
+	endif
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
