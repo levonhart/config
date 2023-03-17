@@ -1,5 +1,5 @@
 diff --git a/colors/ayu.vim b/colors/ayu.vim
-index 9158e6b..3778325 100644
+index 9158e6b..1edab8b 100644
 --- a/colors/ayu.vim
 +++ b/colors/ayu.vim
 @@ -33,7 +33,7 @@ let s:palette.panel     = {'dark': "#14191F",  'light': "#FFFFFF",  'mirage': "#
@@ -20,3 +20,12 @@ index 9158e6b..3778325 100644
  exe "hi! SpecialKey"    .s:fg_selection   .s:bg_none        .s:fmt_none
  exe "hi! SpellCap"      .s:fg_tag         .s:bg_none        .s:fmt_undr
  exe "hi! SpellLocal"    .s:fg_keyword     .s:bg_none        .s:fmt_undr
+@@ -188,7 +188,7 @@ exe "hi! qfLineNr"        .s:fg_keyword   .s:bg_none        .s:fmt_none
+ "   qfLineNr"
+ "   qfError"
+ 
+-exe "hi! Conceal"         .s:fg_guide     .s:bg_none        .s:fmt_none
++exe "hi! Conceal"         .s:fg_special     .s:bg_none        .s:fmt_none
+ exe "hi! CursorLineConceal" .s:fg_guide   .s:bg_line        .s:fmt_none
+ 
+ 

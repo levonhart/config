@@ -47,6 +47,11 @@ set undofile
 set undolevels=1000
 set undoreload=10000
 
+" Tex settings
+set conceallevel=2
+let g:tex_flavor='latex'
+let g:tex_conceal='abdmgs'
+
 " Neovim Remote
 " if has('win32')
 "     call serverstart('\\.\pipe\nvim-socket')
@@ -253,6 +258,15 @@ let g:ag_working_path_mode="r" "procura a partir da raiz do projeto
 " }}} Polyglot "
 
 " Vimtex {{{ "
+if executable('sioyek')
+	let g:vimtex_view_method = 'sioyek'
+elseif executable('evince')
+	let g:vimtex_view_method = 'evince'
+elseif executable('zathura')
+	let g:vimtex_view_method = 'zathura'
+elseif executable('okular')
+	let g:vimtex_view_method = 'okular'
+endif
 let g:vimtex_quickfix_mode=2
 let g:vimtex_quickfix_open_on_warning=0
 let g:vimtex_compiler_latexmk = { 'continuous': 0 }
