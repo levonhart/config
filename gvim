@@ -1,7 +1,0 @@
-set guioptions=egt
-set guifont=DejaVuSansMono_NF:h10:cANSI:qDRAFT
-
-
-source $VIMRUNTIME/menu.vim
-set wcm=<C-Z>
-map <F4> :emenu <C-Z>
