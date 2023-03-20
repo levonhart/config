@@ -19,6 +19,7 @@ set mouse=nvi
 set hidden
 set nobackup
 set nowritebackup
+set spelllang=en_gb,pt_br
 filetype plugin indent on
 
 highlight CodeFormating ctermbg=red guibg=red
@@ -77,13 +78,16 @@ endif
 
 " KeyBindings {{{ "
 nnoremap <C-t> :tabnew<CR>:Startify<CR>
-inoremap <C-t> :<C-u>tabnew<CR>
+" inoremap <C-t> <ESC>:<C-u>tabnew<CR>
 " noremap <C-j> 10j
 " noremap <C-k> 10k
 nnoremap <A-h> <C-w><C-h>
 nnoremap <A-j> <C-w><C-j>
 nnoremap <A-k> <C-w><C-k>
 nnoremap <A-l> <C-w><C-l>
+
+inoremap <C-z> <C-g>u<ESC>[s1z=`]a<c-g>u
+nnoremap <C-s> :<C-u>set spell!<CR>
 
 " nnoremap <C-z> :nohlsearch<CR>
 " nnoremap <C-l> :<C-u>call UltiSnips#ListSnippets()<CR>
@@ -105,7 +109,7 @@ Plug 'rking/ag.vim'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'honza/vim-snippets'
 " Plug 'vim-airline/vim-airline'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
@@ -283,8 +287,8 @@ autocmd FileType html,css EmmetInstall
 
 " Ultisnips {{{ "
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsEditSplit="vertical"
 let g:snips_author="ABREU, Leonardo C. de."
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips', $HOME.'/.vim/plugged/vim-snippets/UltiSnips']
@@ -416,5 +420,5 @@ let g:startify_list_order = [
 
 " Goyo {{{ "
 nnoremap <A-f> :Goyo<CR>
-inoremap <A-f> <ESC><C-W>:Goyo<CR>
+inoremap <A-f> <ESC>:Goyo<CR>a
 " }}} Goyo "
