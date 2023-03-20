@@ -184,7 +184,7 @@ $0
 endsnippet
 
 context "math()"
-snippet '((\d+)|\|?(\d*)(\\)?([A-Za-z]+)((\^|_)(\{[\dA-Za-z]+\}|[\dA-Za-z]))?\|?)/' "Fraction auto" wrA
+snippet '((\d+)|\|?(\d*)(\\)?([A-Za-z]+)((\^|_)(\{[\dA-Za-z]+\}|[\dA-Za-z]))*\|?)/' "Fraction auto" wrA
 \frac{`!p snip.rv = match.group(1)`}{$1}$0
 endsnippet
 
