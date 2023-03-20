@@ -163,7 +163,10 @@ inoremap <silent><expr> <C-n>
   \ pumvisible() ? "\<C-n>" :
   \ <SID>check_back_space() ? "\<C-n>" :
   \ asyncomplete#force_refresh()
-inoremap <expr><C-p> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <C-p>
+  \ pumvisible() ? "\<C-p>" :
+  \ <SID>check_back_space() ? "\<C-p>" :
+  \ asyncomplete#force_refresh()
 
 " let g:asyncomplete_auto_completeopt = 0
 " set completeopt=menuone,noinsert,noselect,preview
