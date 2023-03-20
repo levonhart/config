@@ -85,6 +85,8 @@ nnoremap <A-h> <C-w><C-h>
 nnoremap <A-j> <C-w><C-j>
 nnoremap <A-k> <C-w><C-k>
 nnoremap <A-l> <C-w><C-l>
+nnoremap <C-S-Down> <Cmd>move +1<CR>
+nnoremap <C-S-Up> <Cmd>move -2<CR>
 
 inoremap <C-z> <C-g>u<ESC>[s1z=`]a<c-g>u
 nnoremap <C-s> :<C-u>set spell!<CR>
