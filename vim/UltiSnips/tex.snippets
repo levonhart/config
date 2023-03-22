@@ -254,6 +254,21 @@ snippet part "d/dx" w
 endsnippet
 
 context "math()"
+snippet Int "integral" wA
+\int_{${1:-\infty}}^{${2:\infty}} ${3:${VISUAL}} $0
+endsnippet
+
+context "math()"
+snippet '(?<!\\)(sin|cos|arccot|cot|csc|ln|log|exp|star|perp)' "ln" wrA
+\\`!p snip.rv = match.group(1)`
+endsnippet
+
+context "math()"
+snippet '(?<!\\)(arcsin|arccos|arctan|arccot|arccsc|arcsec|pi|zeta|int)' "ln" wrA
+\\`!p snip.rv = match.group(1)`
+endsnippet
+
+context "math()"
 snippet sq "\sqrt{}" iA
 \sqrt{${1:${VISUAL}}} $0
 endsnippet
@@ -357,6 +372,11 @@ endsnippet
 context "math()"
 snippet ss "subset" Ai
 \subset 
+endsnippet
+
+context "math()"
+snippet \\\ "setminus" iA
+\setminus
 endsnippet
 
 context "math()"

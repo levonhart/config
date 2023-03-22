@@ -1,0 +1,4 @@
+#!/bin/bash
+# Sioyek-Remote
+# Send PDF to sioyek instance
+sh -c "sioyek --reuse-window -- \"$@\"" > /dev/null 2>&1 &
