@@ -279,6 +279,7 @@ endif
 let g:vimtex_quickfix_mode=2
 let g:vimtex_quickfix_open_on_warning=0
 let g:vimtex_compiler_latexmk = { 'continuous': 0 }
+let g:vimtex_complete_enable=0
 " }}} Vimtex "
 
 " Grammarous {{{ "
