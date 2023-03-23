@@ -142,7 +142,6 @@ Plug 'godlygeek/tabular'
 			" \ 'do': ':CocInstall coc-clangd coc-cmake coc-fzf-preview coc-jedi coc-json coc-tsserver'}
 " Plug 'hugolgst/vimsence'
 Plug 'ryanoasis/vim-devicons'
-Plug 'rhysd/vim-grammarous'
 
 " Initialize plugin system
 call plug#end()
@@ -175,6 +174,23 @@ inoremap <silent><expr> <C-p>
 " }}} Asyncomplete "
 
 " Vim-lsp {{{ "
+if executable('ltex-ls')
+    " install ltex-ls-bin (AUR)
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'ltex',
+        \ 'cmd': {server_info->['ltex-ls']},
+        \ 'allowlist': ['plaintex', 'tex', 'gitcommit', 'markdown', 'rst'],
+		\ 'blocklist': [],
+		\ 'config': { 'diagnostics': v:false },
+		\ 'workspace_config': {
+		\     'ltex': {
+		\         'language': 'en',
+		\     }
+		\ },
+		\ 'languageId': {server_info->'latex'},
+        \ })
+endif
+
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
@@ -189,6 +205,7 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer><silent> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer><silent> <leader>k <plug>(lsp-hover)
     nmap <buffer><silent> <leader>rn <plug>(lsp-rename)
+    nmap <buffer><silent> <leader>f <plug>(lsp-code-action)
 	if has('nvim-0.4.0') || has('patch-8.1.1417')
 	nnoremap <buffer><silent> <expr><c-j>
 				\ lsp#document_hover_preview_winid() != v:null ? lsp#scroll(+4) : "\<c-j>"
@@ -208,6 +225,10 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 " }}} Vim-lsp "
+
+" ALE {{{ "
+let g:ale_virtualtext_cursor=0
+" }}} ALE "
 
 " NERDTree {{{ "
 " map <C-n> :NERDTreeToggle<CR>
@@ -281,10 +302,6 @@ let g:vimtex_quickfix_open_on_warning=0
 let g:vimtex_compiler_latexmk = { 'continuous': 0 }
 let g:vimtex_complete_enable=0
 " }}} Vimtex "
-
-" Grammarous {{{ "
-let g:grammarous#languagetool_cmd = 'languagetool'
-" }}} Grammarous "
 
 " Emmet {{{ "
 let g:user_emmet_install_global = 0
