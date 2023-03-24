@@ -161,7 +161,7 @@ snippet sc "Small caps" wi
 \textsc{${1:${VISUAL}}}$0
 endsnippet
 
-snippet '[\s~]*ref' "Reference" wir
+snippet '(?<!\\)[\s~]*ref' "Reference" wir
 ~\ref{$1}
 endsnippet
 
@@ -335,6 +335,11 @@ snippet => "implies" iA
 endsnippet
 
 context "math()"
+snippet <-- "gets" iA
+\gets 
+endsnippet
+
+context "math()"
 snippet =< "implied by" iA
 \impliedby
 endsnippet
@@ -420,7 +425,7 @@ $0
 endsnippet
 
 context "math()"
-snippet \\{ "set" wA
+snippet \{ "set" wA
 \\{$1\\} $0
 endsnippet
 
