@@ -50,15 +50,15 @@ source /usr/share/fzf/completion.zsh
 # }}} fzf #
 
 # alias {{{ #
-alias ls="exa"
-alias ll="exa -l"
-alias la="exa -la"
+alias ls="eza"
+alias ll="eza -l"
+alias la="eza -la"
 alias nano="nvim"
+alias nv="nvim"
+alias vim="nvim"
+alias cat="bat -pp"
+alias syr="sioyek-remote"
 # }}} alias #
-
-# spaceship {{{ #
-# source ~/.config/spaceship.zsh
-# }}} spaceship #
 
 # completion {{{ #
 autoload -U compinit
@@ -109,15 +109,6 @@ bindkey '^e' edit-command-line
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
 # }}} autosuggestions #
-
-# lab {{{ #
-#compdef lab
-function _lab {
-    source <(lab _carapace zsh)
-}
-
-if compquote '' 2>/dev/null; then _lab; else compdef _lab lab; fi
-# }}} lab #
 
 # Fim {{{ #
 eval "$(starship init zsh)"
