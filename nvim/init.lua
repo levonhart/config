@@ -299,10 +299,11 @@ vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
 vim.g.UltiSnipsEditSplit = "vertical"
 vim.g.snips_author = "ABREU, Leonardo C. de."
 vim.g.UltiSnipsSnippetDirectories = { os.getenv("HOME") .. '/.vim/UltiSnips' }
+vim.fn['UltiSnips#map_keys#MapKeys']()
+-- }}} Ultisnips
 
 -- Lualine {{{
 require('lualine').setup({
--- }}} Ultisnips
 	options = {
 		icons_enabled = false,
 		theme = 'onedark',
@@ -402,9 +403,9 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 
 -- LSP {{{
 local on_attach = function(_, bufnr)
-	vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+	vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-	local opts = { buffer = ev.buf }
+	local opts = { buffer = bufnr }
 	map('n', 'gD', vim.lsp.buf.declaration, opts)
 	map('n', 'gd', vim.lsp.buf.definition, opts)
 	map('n', 'gY', vim.lsp.buf.implementation, opts)
@@ -483,7 +484,7 @@ require('ltex-ls').setup {
 
 -- Copilot {{{
 require('copilot').setup({
-	suggestion = { enabled = true, keymap = { accept = '<Tab>' } },
+	suggestion = { enabled = true, keymap = { accept = '<c-cr>' } },
 	panel = { enabled = true },
 	filetypes = {
 		-- python = true, -- allow specific filetype
