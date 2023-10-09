@@ -139,6 +139,11 @@ require("lazy").setup({
 })
 -- }}} Plugins
 
+-- Mason {{{
+require('mason').setup()
+require('mason-lspconfig').setup()
+-- }}} Mason
+
 -- Treesitter {{{
 vim.defer_fn(function()
 	require('nvim-treesitter.configs').setup({
