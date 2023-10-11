@@ -105,6 +105,8 @@ require("lazy").setup({
 		dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
 		build = ':TSUpdate', },
 	{ 'nvim-tree/nvim-web-devicons' },
+	{ 'glepnir/dashboard-nvim', event = 'VimEnter',
+		dependencies = { 'nvim-tree/nvim-web-devicons' } },
 	{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
 	{ 'navarasu/onedark.nvim',
 		priority = 1000,
@@ -129,6 +131,7 @@ require("lazy").setup({
 			'hrsh7th/cmp-nvim-lsp',
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-nvim-lua',
+			-- 'quangnguyen30192/cmp-nvim-ultisnips',
 			'petertriho/cmp-git',
 		}
 	},
@@ -152,7 +155,7 @@ vim.defer_fn(function()
 			'javascript', 'typescript', 'vimdoc', 'vim', 'cmake',
 		},
 		auto_install = false,
-		highlight = { enable = true },
+		highlight = { enable = true, disable = { 'latex' } },
 		indent = { enable = true },
 		incremental_selection = {
 			enable = true,
@@ -230,6 +233,9 @@ require('Comment').setup({
     },
     mappings = { basic = true, extra = true, },
 })
+local comment = require('Comment.api')
+map('n', '<leader>c<space>', comment.toggle.linewise.current)
+map('n', '<leader>b<space>', comment.toggle.blockwise.current)
 -- }}} Comment
 
 -- Gitsigns {{{
@@ -284,8 +290,8 @@ map('n', '<space>l', fzf_lua.lines)
 map('n', "<space>'", fzf_lua.marks)
 map('n', '<space>r', fzf_lua.oldfiles)
 map('n', '<space>:', fzf_lua.command_history)
-map('n', '<space>/', fzf_lua.search_history)
 map('n', '<space>c', fzf_lua.git_commits)
+map('n', '<space>/', fzf_lua.search_history)
 -- map('n', '<space>s', fzf_lua.snippets)
 map('n', '<space>m', fzf_lua.keymaps)
 map('n', '<space><F1>', fzf_lua.help_tags)
@@ -344,34 +350,29 @@ cmp.setup({
 		expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end,
 	},
 	mapping = cmp.mapping.preset.insert({
-		['<C-b>'] = cmp.mapping.scroll_docs(-4),
-		['<C-f>'] = cmp.mapping.scroll_docs(4),
-		['<C-Space>'] = cmp.mapping.complete(),
-		['<C-e>'] = cmp.mapping.abort(),
-		['<CR>'] = cmp.mapping.confirm({ select = true }),
-		['<C-n>'] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif has_words_before() then
-				cmp.mapping.complete()
-			else
-				fallback()
+		['<c-b>'] = cmp.mapping.scroll_docs(-4),
+		['<c-f>'] = cmp.mapping.scroll_docs(4),
+		['<c-space>'] = cmp.mapping.complete(),
+		['<c-e>'] = cmp.mapping.abort(),
+		['<cr>'] = cmp.mapping.confirm({ select = true }),
+		['<c-n>'] = cmp.mapping(function(fallback)
+			if cmp.visible() then cmp.select_next_item()
+			elseif has_words_before() then cmp.complete()
+			else fallback()
 			end
 		end, { 'i', 's' }),
 		['<c-p>'] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif has_words_before() then
-				cmp.mapping.complete()
-			else 
-				fallback()
+			cmp.mapping.complete()
+			if cmp.visible() then cmp.select_prev_item()
+			elseif has_words_before() then cmp.complete()
+			else fallback()
 			end
 		end, { 'i', 's' }),
 	}),
 	sources = {
-		{ name = 'buffer' },
 		{ name = 'nvim_lsp' },
-		{ name = 'ultisnips' },
+		-- { name = 'ultisnips' },
+		{ name = 'buffer' },
 		{ name = 'git' },
 		{ name = 'path' },
 	},
@@ -386,11 +387,20 @@ require("cmp_git").setup({
 -- Set configuration for specific filetype.
 cmp.setup.filetype('gitcommit', {
 	sources = cmp.config.sources({
-		{ name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-		}, {
+		{ name = 'git' },
+	}, {
 		{ name = 'buffer' },
 	})
 })
+
+
+cmp.event:on("menu_opened", function()
+	vim.b.copilot_suggestion_hidden = true
+end)
+
+cmp.event:on("menu_closed", function()
+	vim.b.copilot_suggestion_hidden = false
+end)
 -- }}} Nvim-Cmp
 
 -- Nvim-Lint {{{
@@ -429,8 +439,8 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local lspconfig = require('lspconfig')
+lspconfig.lua_ls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.pyright.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.rust_analyzer.setup { { capabilities = capabilities, on_attach = on_attach },
 	settings = { ['rust-analyzer'] = {} }
 }
@@ -438,6 +448,7 @@ lspconfig.texlab.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.clangd.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.cmake.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.r_language_server.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 -- }}} LSP
 
 -- LTex {{{
@@ -462,7 +473,7 @@ require('ltex-ls').setup {
 			disabledRules = { },
 			dictionary = (function()
 				local files = {}
-				for _, file in ipairs(vim.api.nvim_get_runtime_file('.vim/ltex.dictionary.*', true)) do
+				for _, file in ipairs(vim.api.nvim_get_runtime_file('%.vim/ltex%.dictionary%.*', true)) do
 					local lang = vim.fn.fnamemodify(file, ':t:r'):match('ltex%.dictionary%.(.-)$')
 					local fullpath = vim.fs.normalize(file, ':p')
 					files[lang] = { ':' .. fullpath }
@@ -499,3 +510,47 @@ map('i', '<a-f>', '<cmd>ZenMode<CR>a')
 map('n', '<a-s>', '<cmd>Twilight<CR>')
 map('i', '<a-s>', '<cmd>Twilight<CR>a')
 -- }}} Zen-Mode
+
+-- Dashboard {{{
+require('dashboard').setup {
+	theme = 'hyper',
+	shortcut_type = 'number',
+	config = {
+		shortcut = {
+			{ desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+			{
+				icon = ' ',
+				icon_hl = '@variable',
+				desc = 'Files',
+				group = 'Label',
+				action = 'FzfLua files',
+				key = 'f',
+			},
+			{
+				desc = ' Repos',
+				group = 'DiagnosticHint',
+				action = 'FzfLua files cwd=~/repos',
+				key = 'a',
+			},
+			{
+				desc = ' dotfiles',
+				group = 'Number',
+				action = 'FzfLua files cwd=~/.config',
+				key = 'd',
+			},
+		},
+		packages = { enable = true },
+		project = { limit = 8, action = 'FzfLua files cwd=' },
+		mru = { limit = 10, icon = '' },
+		footer = {'THE LORD OF THE RINGS',
+		'Three Rings for the Elven-kings under the sky,             ',
+		'  Seven for the Dwarf-lords in their halls of stone,       ',
+		'Nine for Mortal Men doomed to die,                         ',
+		'  One for the Dark Lord on his dark throne                 ',
+		'In the Land of Mordor where the Shadows lie.               ',
+		'  One Ring to rule them all, One Ring to find them,        ',
+		'One Ring to bring them all and in the darkness bind them   ',
+		'  In the Land of Mordor where the Shadows lie.             '},
+	},
+}
+-- }}} Dashboard   
