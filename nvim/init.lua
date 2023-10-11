@@ -101,7 +101,7 @@ map('n', '<space>q', vim.diagnostic.setloclist)
 require("lazy").setup({
 	{ 'nvim-lua/plenary.nvim' },
 	{ 'folke/which-key.nvim', event = 'VeryLazy' },
-	{ 'nvim-treesitter/nvim-treesitter', 
+	{ 'nvim-treesitter/nvim-treesitter',
 		dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
 		build = ':TSUpdate', },
 	{ 'nvim-tree/nvim-web-devicons' },
@@ -342,6 +342,7 @@ vim.g.vimtex_quickfix_mode = 2
 vim.g.vimtex_quickfix_open_on_warning = 0
 vim.g.vimtex_compiler_latexmk = { continuous = 0 }
 vim.g.vimtex_complete_enable = 0
+vim.g.vimtex_imaps_leader = ';'
 -- }}} Vimtex
 
 -- Nvim-Cmp {{{
