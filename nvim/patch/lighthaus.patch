@@ -1,0 +1,13 @@
+diff --git a/lua/lighthaus/colors.lua b/lua/lighthaus/colors.lua
+index 6d04e8b..0c91899 100644
+--- a/lua/lighthaus/colors.lua
++++ b/lua/lighthaus/colors.lua
+@@ -2,7 +2,7 @@ local M = {
+   bg = '#18191E', -- this gets set to the right value based on config
+   bg_light = '#18191E',
+   bg_dark = '#000000',
+-  fg = '#FFFADE',
++  fg = '#a9d5c4',
+   fg_alt = '#FFEE79',
+   black = '#21252D',
+   blacker_than_black = '#1F1F1F',

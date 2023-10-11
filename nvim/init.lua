@@ -27,7 +27,7 @@ vim.opt.conceallevel = 2
 vim.g.tex_flavor='latex'
 vim.g.tex_conceal='abdmgs'
 
-vim.opt.undodir = os.getenv("HOME") .. '/.vim/undo/'
+vim.opt.undodir = vim.loop.os_getenv("HOME") .. '/.vim/undo/'
 
 if vim.fn.executable('rg') then
 	vim.opt.grepformat = '%f:%l:%c:%m'
@@ -108,9 +108,17 @@ require("lazy").setup({
 	{ 'glepnir/dashboard-nvim', event = 'VimEnter',
 		dependencies = { 'nvim-tree/nvim-web-devicons' } },
 	{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
-	{ 'navarasu/onedark.nvim',
-		priority = 1000,
-		config = function() vim.cmd.colorscheme 'onedark' end, },
+	{ 'navarasu/onedark.nvim', priority = 1000, },
+	{ 'mrjones2014/lighthaus.nvim', opts = {},
+		build = function()
+			local rootdir = vim.fn.stdpath('data') .. '/lazy/lighthaus.nvim/'
+			local patch = vim.fn.stdpath('config') .. '/nvim/patch/lighthaus.patch'
+			if vim.loop.fs_stat(patch) and vim.fn.executable('patch') then
+				vim.fn.system({ 'patch', '-Np1', '-d', rootdir, '<', patch })
+			end
+		end,
+		config = function() vim.cmd.colorscheme('lighthaus') end,
+	},
 	{ 'nvim-lualine/lualine.nvim' },
 	{ 'tpope/vim-fugitive' },
 	{ 'SirVer/ultisnips' },
@@ -304,7 +312,7 @@ vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
 vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
 vim.g.UltiSnipsEditSplit = "vertical"
 vim.g.snips_author = "ABREU, Leonardo C. de."
-vim.g.UltiSnipsSnippetDirectories = { os.getenv("HOME") .. '/.vim/UltiSnips' }
+vim.g.UltiSnipsSnippetDirectories = { vim.loop.os_getenv('HOME') .. '/.vim/UltiSnips' }
 vim.fn['UltiSnips#map_keys#MapKeys']()
 -- }}} Ultisnips
 
@@ -312,7 +320,7 @@ vim.fn['UltiSnips#map_keys#MapKeys']()
 require('lualine').setup({
 	options = {
 		icons_enabled = false,
-		theme = 'onedark',
+		theme = 'lighthaus',
 		component_separators = '|',
 		section_separators = '',
 	},
