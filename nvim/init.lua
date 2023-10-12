@@ -112,7 +112,7 @@ require("lazy").setup({
 	{ 'mrjones2014/lighthaus.nvim', opts = {},
 		build = function()
 			local rootdir = vim.fn.stdpath('data') .. '/lazy/lighthaus.nvim/'
-			local patch = vim.fn.stdpath('config') .. '/nvim/patch/lighthaus.patch'
+			local patch = vim.fn.stdpath('config') .. '/patch/lighthaus.patch'
 			if vim.loop.fs_stat(patch) and vim.fn.executable('patch') then
 				vim.fn.system({ 'patch', '-Np1', '-d', rootdir, '<', patch })
 			end
