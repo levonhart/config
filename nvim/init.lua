@@ -15,6 +15,8 @@ vim.opt.updatetime = 100
 vim.opt.swapfile = false
 vim.opt.wildmenu = true
 vim.opt.mouse = 'nvi'
+vim.opt.timeout = true
+vim.opt.timeoutlen = 1000
 vim.opt.hidden = true
 vim.opt.backup = false
 vim.opt.writebackup = false
@@ -98,9 +100,9 @@ map('n', '<space>q', vim.diagnostic.setloclist)
 -- }}} Keys
 
 -- Plugins {{{
-require("lazy").setup({
+require("lazy").setup {
 	{ 'nvim-lua/plenary.nvim' },
-	{ 'folke/which-key.nvim', event = 'VeryLazy' },
+	-- { 'folke/which-key.nvim', opts = {}, event = 'VeryLazy' },
 	{ 'nvim-treesitter/nvim-treesitter',
 		dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
 		build = ':TSUpdate', },
@@ -109,21 +111,12 @@ require("lazy").setup({
 		dependencies = { 'nvim-tree/nvim-web-devicons' } },
 	{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
 	{ 'navarasu/onedark.nvim', priority = 1000, },
-	{ 'mrjones2014/lighthaus.nvim', opts = {},
-		build = function()
-			local rootdir = vim.fn.stdpath('data') .. '/lazy/lighthaus.nvim/'
-			local patch = vim.fn.stdpath('config') .. '/patch/lighthaus.patch'
-			if vim.loop.fs_stat(patch) and vim.fn.executable('patch') then
-				vim.fn.system({ 'patch', '-Np1', '-d', rootdir, '<', patch })
-			end
-		end,
-		config = function() vim.cmd.colorscheme('lighthaus') end,
-	},
+	{ 'mrjones2014/lighthaus.nvim', opts = {}, },
 	{ 'nvim-lualine/lualine.nvim' },
 	{ 'tpope/vim-fugitive' },
 	{ 'SirVer/ultisnips' },
-	{ 'numToStr/Comment.nvim', opts = {}, lazy = false },
-	{ 'kylechui/nvim-surround', event = 'VeryLazy' },
+	{ 'numToStr/Comment.nvim', lazy = false },
+	{ 'kylechui/nvim-surround', opts = {}, event = 'VeryLazy' },
 	{ 'lewis6991/gitsigns.nvim' },
 	{ 'NvChad/nvim-colorizer.lua', opts = {} },
 	{ 'folke/twilight.nvim', opts = {} },
@@ -147,7 +140,8 @@ require("lazy").setup({
 	{ 'lervag/vimtex' },
 	{ 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
 	{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
-})
+}
+vim.g.colors_name = 'lighthaus'
 -- }}} Plugins
 
 -- Mason {{{
@@ -157,7 +151,7 @@ require('mason-lspconfig').setup()
 
 -- Treesitter {{{
 vim.defer_fn(function()
-	require('nvim-treesitter.configs').setup({
+	require('nvim-treesitter.configs').setup {
 		ensure_installed = {
 			'c', 'cpp', 'go', 'lua', 'python', 'rust', 'latex',
 			'javascript', 'typescript', 'vimdoc', 'vim', 'cmake',
@@ -217,38 +211,59 @@ vim.defer_fn(function()
 				},
 			},
 		},
-	})
+	}
 end, 0)
 -- }}} Treesitter
 
 -- Comment {{{
-require('Comment').setup({
+require('Comment').setup {
     padding = true,
     sticky = true,
     ignore = nil,
-    toggler = {
-        line = '<leader>cc',
-        block = '<leader>bc',
-    },
-    opleader = {
-        line = '<leader>c',
-        block = '<leader>b',
-    },
-    extra = {
-        above = '<leader>cO',
-        below = '<leader>co',
-        eol = '<leader>cA',
-    },
-    mappings = { basic = true, extra = true, },
-})
+    extra = { above = '<leader>cO', below = '<leader>co', eol = '<leader>cA', },
+    mappings = { basic = false, extra = true, opleader = false },
+}
 local comment = require('Comment.api')
-map('n', '<leader>c<space>', comment.toggle.linewise.current)
-map('n', '<leader>b<space>', comment.toggle.blockwise.current)
+local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+local comment_linewise_visual = function(op)
+	vim.api.nvim_feedkeys(esc, 'nx', false)
+	op.linewise(vim.fn.visualmode())
+end
+local comment_blockwise_visual = function(op)
+	vim.api.nvim_feedkeys(esc, 'nx', false)
+	op.blockwise(vim.fn.visualmode())
+end
+
+-- Mappings
+map('n', '<leader>c', comment.call('comment.linewise', 'g@'),
+	{ desc = 'Comment linewise', expr = true })
+map('n', '<leader>b', comment.call('comment.blockwise', 'g@'),
+	{ desc = 'Comment blockwise', expr = true })
+map('n', '<leader>c<space>', comment.toggle.linewise.current,
+	{ desc = 'Toggle comment linewise' })
+map('n', '<leader>b<space>', comment.toggle.blockwise.current,
+	{ desc = 'Toggle comment blockwise' })
+map('x', '<leader>c<space>', function() comment_linewise_visual(comment.toggle) end,
+	{ desc = 'Toggle comment on selection linewise' })
+map('x', '<leader>b<space>', function() comment_blockwise_visual(comment.toggle) end,
+	{ desc = 'Toggle comment on selection blockwise' })
+map('x', '<leader>cc', function() comment_linewise_visual(comment.comment) end,
+	{ desc = 'Comment selection linewise' })
+map('x', '<leader>bb', function() comment_blockwise_visual(comment.comment) end,
+	{ desc = 'Comment selection blockwise' })
+map('n', '<leader>cu', comment.call('uncomment.linewise', 'g@'),
+	{ desc = 'Uncomment linewise', expr = true })
+map('n', '<leader>bu', comment.call('uncomment.blockwise', 'g@'),
+	{ desc = 'Uncomment blockwise', expr = true })
+map('x', '<leader>cu', function() comment_linewise_visual(comment.uncomment) end,
+	{ desc = 'Uncomment selection linewise' })
+map('x', '<leader>bu', function() comment_blockwise_visual(comment.uncomment) end,
+	{ desc = 'Uncomment selection blockwise' })
 -- }}} Comment
 
 -- Gitsigns {{{
 local gitsigns = require('gitsigns')
-gitsigns.setup({
+gitsigns.setup {
 	-- See `:help gitsigns.txt`
 	signs = {
 		add = { text = '+' },
@@ -280,15 +295,15 @@ gitsigns.setup({
 			return '<Ignore>'
 		end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
 	end,
-})
+}
 -- }}} Gitsigns
 
 -- Fzf-Lua {{{
 local fzf_lua = require('fzf-lua')
-fzf_lua.setup({
+fzf_lua.setup {
 	'default',
 	fzf_opts = { ['--layout'] = 'default' },
-})
+}
 map('n', '<space>p', fzf_lua.files)
 map('n', '<space>b', fzf_lua.buffers)
 map('n', '<space>g', fzf_lua.git_files)
@@ -317,14 +332,14 @@ vim.fn['UltiSnips#map_keys#MapKeys']()
 -- }}} Ultisnips
 
 -- Lualine {{{
-require('lualine').setup({
+require('lualine').setup {
 	options = {
 		icons_enabled = false,
 		theme = 'lighthaus',
 		component_separators = '|',
 		section_separators = '',
 	},
-})
+}
 
 -- }}} Lualine
 
@@ -354,7 +369,7 @@ local has_words_before = function()
 	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
-cmp.setup({
+cmp.setup {
 	snippet = {
 		expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end,
 	},
@@ -378,21 +393,25 @@ cmp.setup({
 			end
 		end, { 'i', 's' }),
 	}),
-	sources = {
+	sources = cmp.config.sources({
 		{ name = 'nvim_lsp' },
 		-- { name = 'ultisnips' },
+	}, {
 		{ name = 'buffer' },
 		{ name = 'git' },
 		{ name = 'path' },
-	},
+	}),
 	completion = {
 		autocomplete = false,
 	},
-})
+	experimental = {
+		ghost_text = false -- this feature conflict with copilot.vim's preview.
+	}
+}
 
-require("cmp_git").setup({
+require("cmp_git").setup {
 	remotes = { 'origin', 'upstream', 'overleaf' },
-})
+}
 -- Set configuration for specific filetype.
 cmp.setup.filetype('gitcommit', {
 	sources = cmp.config.sources({
@@ -401,7 +420,6 @@ cmp.setup.filetype('gitcommit', {
 		{ name = 'buffer' },
 	})
 })
-
 
 cmp.event:on("menu_opened", function()
 	vim.b.copilot_suggestion_hidden = true
@@ -438,7 +456,7 @@ local on_attach = function(_, bufnr)
 	map('n', '<leader>wl', function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, opts)
-	map('n', '<space>f', function()
+	map('n', '<space>=', function()
 		vim.lsp.buf.format { async = true }
 	end, opts)
 end
@@ -459,6 +477,36 @@ lspconfig.cmake.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.r_language_server.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 -- }}} LSP
+
+-- init.lua autocommand {{{
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter' }, {
+	pattern = { '*.lua' },
+	callback = function(ev)
+		if vim.fs.normalize(ev.file, ':p'):match('%.config/nvim/') ~= nil then
+			cmp.setup.filetype({ 'lua' }, {
+				sources = cmp.config.sources({
+					{ name = 'nvim_lua' },
+					{ name = 'nvim_lsp' },
+				}, {
+					{ name = 'buffer' },
+				})
+			})
+			lspconfig.lua_ls.setup { capabilities = capabilities, on_attach = on_attach,
+				settings = {
+					Lua = {
+						diagnostics = { globals = { 'vim' },},
+						workspace = {
+							-- Make the server aware of Neovim runtime files
+							library = vim.api.nvim_get_runtime_file('', true),
+							checkThirdParty = false,
+						},
+					}
+				}
+			}
+		end
+	end,
+})
+-- }}} init.lua autocommand
 
 -- LTex {{{
 require('ltex-ls').setup {
@@ -503,14 +551,14 @@ require('ltex-ls').setup {
 -- }}} LTex
 
 -- Copilot {{{
-require('copilot').setup({
+require('copilot').setup {
 	suggestion = { enabled = true, keymap = { accept = '<c-cr>' } },
 	panel = { enabled = true },
 	filetypes = {
 		-- python = true, -- allow specific filetype
 		["*"] = false,
 	},
-})
+} 
 -- }}} Copilot
 
 -- Zen-Mode {{{
@@ -524,6 +572,7 @@ map('i', '<a-s>', '<cmd>Twilight<CR>a')
 require('dashboard').setup {
 	theme = 'hyper',
 	shortcut_type = 'number',
+	hide = { tabline = false, statusline = true },
 	config = {
 		shortcut = {
 			{ desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
@@ -551,15 +600,47 @@ require('dashboard').setup {
 		packages = { enable = true },
 		project = { limit = 8, action = 'FzfLua files cwd=' },
 		mru = { limit = 10, icon = '' },
-		footer = {'THE LORD OF THE RINGS',
-		'Three Rings for the Elven-kings under the sky,             ',
-		'  Seven for the Dwarf-lords in their halls of stone,       ',
-		'Nine for Mortal Men doomed to die,                         ',
-		'  One for the Dark Lord on his dark throne                 ',
-		'In the Land of Mordor where the Shadows lie.               ',
-		'  One Ring to rule them all, One Ring to find them,        ',
-		'One Ring to bring them all and in the darkness bind them   ',
-		'  In the Land of Mordor where the Shadows lie.             '},
+		header = { '', -- 'THE LORD OF THE RINGS',
+		'    Three Rings for the Elven-kings under the sky,             ',
+		'      Seven for the Dwarf-lords in their halls of stone,       ',
+		'    Nine for Mortal Men doomed to die,                         ',
+		'      One for the Dark Lord on his dark throne                 ',
+		'    In the Land of Mordor where the Shadows lie.               ',
+		'      One Ring to rule them all, One Ring to find them,        ',
+		'    One Ring to bring them all and in the darkness bind them   ',
+		'      In the Land of Mordor where the Shadows lie.             '},
+		footer = {
+			'                          ._____________.',
+			'       MM.         .MM    |             |',
+			'       "MM._______.MM"    |  私は平和を |',
+			'       /             \\    | 愛するパンダ|',
+			'     /   dMMb   dMMb   \\  |      !!     |',
+			'    /  dM"""Mb dM"""Mb  \\ |_____________|',
+			'   |   MMMMM"/O\\"MMMMM   |      ||o      ',
+			'   |   "MMM"/   \\"MMM"   |   .dMMM 8     ',
+			'   |                     dMMMMMMMM        ',
+			'   \\      \\       /     dMMMMMMMP       ',
+			'  AMMMMMMMMM\\_____/MMMMMMMMMMMM"         ',
+		},
 	},
 }
+local colors = require('lighthaus.colors')
+local function vim_highlights(highlights)
+    for group_name, group_settings in pairs(highlights) do
+        vim.api.nvim_command(string.format("highlight %s guifg=%s guibg=%s guisp=%s gui=%s", group_name,
+	            group_settings.fg or "none",
+	            group_settings.bg or "none",
+	            group_settings.sp or "none",
+	            group_settings.fmt or "none"))
+    end
+end
+local hiDashboard = {
+    DashboardShortCut = { fg = colors.blue3 },
+    DashboardHeader = { fg = colors.blue, fmt = "italic" },
+    DashboardCenter = { fg = colors.cyan },
+    DashboardFooter = { fg = colors.blue, fmt = 'bold' },
+}
+vim_highlights(hiDashboard)
+map('n', '<c-t>', ':tabnew<CR>:Dashboard<CR>:echo "New tab"<CR>',
+	{ desc = 'Open new tab' })
 -- }}} Dashboard   
