@@ -110,7 +110,16 @@ ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
 # }}} autosuggestions #
 
+# lab {{{ #
+#compdef lab
+function _lab {
+    source <(lab _carapace zsh)
+}
+
+if compquote '' 2>/dev/null; then _lab; else compdef _lab lab; fi
+# }}} lab #
+
 # Fim {{{ #
 eval "$(starship init zsh)"
-neofetch
+# neofetch
 # }}} Fim #

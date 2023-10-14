@@ -29,7 +29,7 @@ vim.opt.conceallevel = 2
 vim.g.tex_flavor='latex'
 vim.g.tex_conceal='abdmgs'
 
-vim.opt.undodir = vim.loop.os_getenv("HOME") .. '/.vim/undo/'
+vim.opt.undodir = vim.loop.os_homedir() .. '/.vim/undo/'
 
 if vim.fn.executable('rg') then
 	vim.opt.grepformat = '%f:%l:%c:%m'
@@ -100,7 +100,7 @@ map('n', '<space>q', vim.diagnostic.setloclist)
 -- }}} Keys
 
 -- Plugins {{{
-require("lazy").setup {
+require('lazy').setup {
 	{ 'nvim-lua/plenary.nvim' },
 	-- { 'folke/which-key.nvim', opts = {}, event = 'VeryLazy' },
 	{ 'nvim-treesitter/nvim-treesitter',
@@ -142,78 +142,13 @@ require("lazy").setup {
 	{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
 }
 vim.g.colors_name = 'lighthaus'
+local plugins = require('plugins')
 -- }}} Plugins
 
 -- Mason {{{
 require('mason').setup()
 require('mason-lspconfig').setup()
 -- }}} Mason
-
--- Treesitter {{{
-vim.defer_fn(function()
-	require('nvim-treesitter.configs').setup {
-		ensure_installed = {
-			'c', 'cpp', 'go', 'lua', 'python', 'rust', 'latex',
-			'javascript', 'typescript', 'vimdoc', 'vim', 'cmake',
-		},
-		auto_install = false,
-		highlight = { enable = true, disable = { 'latex' } },
-		indent = { enable = true },
-		incremental_selection = {
-			enable = true,
-			keymaps = {
-				init_selection = '<c-space>',
-				node_incremental = '<c-space>',
-				scope_incremental = '<c-s>',
-				node_decremental = '<m-space>',
-			},
-		},
-		textobjects = {
-			select = {
-				enable = true,
-				lookahead = true,
-				keymaps = {
-					['aa'] = '@parameter.outer',
-					['ia'] = '@parameter.inner',
-					['af'] = '@function.outer',
-					['if'] = '@function.inner',
-					['ac'] = '@class.outer',
-					['ic'] = '@class.inner',
-				},
-			},
-			move = {
-				enable = true,
-				set_jumps = true,
-				goto_next_start = {
-					[']m'] = '@function.outer',
-					[']]'] = '@class.outer',
-				},
-				goto_next_end = {
-					[']M'] = '@function.outer',
-					[']['] = '@class.outer',
-				},
-				goto_previous_start = {
-					['[m'] = '@function.outer',
-					['[['] = '@class.outer',
-				},
-				goto_previous_end = {
-					['[M'] = '@function.outer',
-					['[]'] = '@class.outer',
-				},
-			},
-			swap = {
-				enable = true,
-				swap_next = {
-					['<leader>a'] = '@parameter.inner',
-				},
-				swap_previous = {
-					['<leader>A'] = '@parameter.inner',
-				},
-			},
-		},
-	}
-end, 0)
--- }}} Treesitter
 
 -- Comment {{{
 require('Comment').setup {
@@ -223,41 +158,35 @@ require('Comment').setup {
     extra = { above = '<leader>cO', below = '<leader>co', eol = '<leader>cA', },
     mappings = { basic = false, extra = true, opleader = false },
 }
-local comment = require('Comment.api')
-local esc = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
-local comment_linewise_visual = function(op)
-	vim.api.nvim_feedkeys(esc, 'nx', false)
-	op.linewise(vim.fn.visualmode())
-end
-local comment_blockwise_visual = function(op)
-	vim.api.nvim_feedkeys(esc, 'nx', false)
-	op.blockwise(vim.fn.visualmode())
-end
-
 -- Mappings
-map('n', '<leader>c', comment.call('comment.linewise', 'g@'),
-	{ desc = 'Comment linewise', expr = true })
-map('n', '<leader>b', comment.call('comment.blockwise', 'g@'),
-	{ desc = 'Comment blockwise', expr = true })
-map('n', '<leader>c<space>', comment.toggle.linewise.current,
+local comment = require('Comment.api')
+map('n', '<leader>cc', function() plugins.comment_current_count(comment.comment.linewise) end,
+	{ desc = 'Comment linewise' })
+map('n', '<leader>bb', function() plugins.comment_current_count(comment.comment.blockwise) end,
+	{ desc = 'Comment blockwise' })
+map('n', '<leader>c<space>', function() plugins.comment_current_count(comment.toggle.linewise) end,
 	{ desc = 'Toggle comment linewise' })
-map('n', '<leader>b<space>', comment.toggle.blockwise.current,
+map('n', '<leader>b<space>', function() plugins.comment_current_count(comment.toggle.blockwise) end,
 	{ desc = 'Toggle comment blockwise' })
-map('x', '<leader>c<space>', function() comment_linewise_visual(comment.toggle) end,
+map('n', '<leader>c', plugins.comment_move_count(comment, 'comment.linewise'),
+	{ desc = 'Comment linewise', expr = true })
+map('n', '<leader>b', plugins.comment_move_count(comment, 'comment.blockwise'),
+	{ desc = 'Comment blockwise', expr = true })
+map('x', '<leader>c<space>', function() plugins.comment_linewise_visual(comment.toggle) end,
 	{ desc = 'Toggle comment on selection linewise' })
-map('x', '<leader>b<space>', function() comment_blockwise_visual(comment.toggle) end,
+map('x', '<leader>b<space>', function() plugins.comment_blockwise_visual(comment.toggle) end,
 	{ desc = 'Toggle comment on selection blockwise' })
-map('x', '<leader>cc', function() comment_linewise_visual(comment.comment) end,
+map('x', '<leader>cc', function() plugins.comment_linewise_visual(comment.comment) end,
 	{ desc = 'Comment selection linewise' })
-map('x', '<leader>bb', function() comment_blockwise_visual(comment.comment) end,
+map('x', '<leader>bb', function() plugins.comment_blockwise_visual(comment.comment) end,
 	{ desc = 'Comment selection blockwise' })
-map('n', '<leader>cu', comment.call('uncomment.linewise', 'g@'),
-	{ desc = 'Uncomment linewise', expr = true })
-map('n', '<leader>bu', comment.call('uncomment.blockwise', 'g@'),
-	{ desc = 'Uncomment blockwise', expr = true })
-map('x', '<leader>cu', function() comment_linewise_visual(comment.uncomment) end,
+map('n', '<leader>cu', function() plugins.comment_current_count(comment.uncomment.linewise) end,
+	{ desc = 'Uncomment linewise' })
+map('n', '<leader>bu', function() plugins.comment_current_count(comment.uncomment.blockwise) end,
+	{ desc = 'Uncomment blockwise' })
+map('x', '<leader>cu', function() plugins.comment_linewise_visual(comment.uncomment) end,
 	{ desc = 'Uncomment selection linewise' })
-map('x', '<leader>bu', function() comment_blockwise_visual(comment.uncomment) end,
+map('x', '<leader>bu', function() plugins.comment_blockwise_visual(comment.uncomment) end,
 	{ desc = 'Uncomment selection blockwise' })
 -- }}} Comment
 
@@ -322,19 +251,19 @@ map('i', '<c-x><c-g>', fzf_lua.complete_path)
 -- }}} Fzf-Lua
 
 -- Ultisnips {{{
-vim.g.UltiSnipsExpandTrigger = "<tab>"
-vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
-vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
-vim.g.UltiSnipsEditSplit = "vertical"
-vim.g.snips_author = "ABREU, Leonardo C. de."
-vim.g.UltiSnipsSnippetDirectories = { vim.loop.os_getenv('HOME') .. '/.vim/UltiSnips' }
+vim.g.UltiSnipsExpandTrigger = '<tab>'
+vim.g.UltiSnipsJumpForwardTrigger = '<tab>'
+vim.g.UltiSnipsJumpBackwardTrigger = '<s-tab>'
+vim.g.UltiSnipsEditSplit = 'vertical'
+vim.g.snips_author = 'ABREU, Leonardo C. de.'
+vim.g.UltiSnipsSnippetDirectories = { vim.loop.os_homedir() .. '/.vim/UltiSnips' }
 vim.fn['UltiSnips#map_keys#MapKeys']()
 -- }}} Ultisnips
 
 -- Lualine {{{
 require('lualine').setup {
 	options = {
-		icons_enabled = false,
+		icons_enabled = true,
 		theme = 'lighthaus',
 		component_separators = '|',
 		section_separators = '',
@@ -371,7 +300,7 @@ end
 
 cmp.setup {
 	snippet = {
-		expand = function(args) vim.fn["UltiSnips#Anon"](args.body) end,
+		expand = function(args) vim.fn['UltiSnips#Anon'](args.body) end,
 	},
 	mapping = cmp.mapping.preset.insert({
 		['<c-b>'] = cmp.mapping.scroll_docs(-4),
@@ -409,7 +338,7 @@ cmp.setup {
 	}
 }
 
-require("cmp_git").setup {
+require('cmp_git').setup {
 	remotes = { 'origin', 'upstream', 'overleaf' },
 }
 -- Set configuration for specific filetype.
@@ -421,19 +350,19 @@ cmp.setup.filetype('gitcommit', {
 	})
 })
 
-cmp.event:on("menu_opened", function()
+cmp.event:on('menu_opened', function()
 	vim.b.copilot_suggestion_hidden = true
 end)
 
-cmp.event:on("menu_closed", function()
+cmp.event:on('menu_closed', function()
 	vim.b.copilot_suggestion_hidden = false
 end)
 -- }}} Nvim-Cmp
 
 -- Nvim-Lint {{{
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 	callback = function()
-		require("lint").try_lint()
+		require('lint').try_lint()
 	end,
 })
 -- }}} Nvim-Lint
@@ -476,6 +405,7 @@ lspconfig.clangd.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.cmake.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.r_language_server.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
+
 -- }}} LSP
 
 -- init.lua autocommand {{{
@@ -508,46 +438,80 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter' }, {
 })
 -- }}} init.lua autocommand
 
+-- Diagnostics {{{
+vim.diagnostic.config {
+	virtual_text = false,
+}
+local s = vim.diagnostic.severity
+-- hi groups to echo diagnostic messages under cursor
+local hl_echo_diagnostics = {
+	[s.WARN] ='DiagnosticWarn',
+	[s.ERROR]='DiagnosticError',
+	[s.INFO] ='DiagnosticInfo',
+	[s.HINT] ='DiagnosticHint',
+}
+vim.api.nvim_create_autocmd('CursorMoved', {
+	group = vim.api.nvim_create_augroup('DiagnosticUnderCursor', {}),
+	callback = function(ev)
+		local diagnostics = vim.diagnostic.get(ev.buf,
+			{ lnum = vim.api.nvim_win_get_cursor(0)[1]-1 })
+		if diagnostics ~= nil and diagnostics[1] ~= nil then
+			local width = vim.o.columns - 15
+			local msg = string.sub(diagnostics[1].source ..': '.. diagnostics[1].message, 1, width)
+			local hl = hl_echo_diagnostics[diagnostics[1].severity]
+			vim.api.nvim_echo({{msg, hl}}, false, {})
+		end
+	end,
+})
+-- }}} Diagnostics
+
 -- LTex {{{
+local ltex_ls = function() return {
+	ltex = {
+		checkFrequency = 'save',
+		language = 'auto',
+		enabled = { 'latex', 'tex', 'bib', 'markdown', },
+		diagnosticSeverity = 'information',
+		sentenceCacheSize = 2000,
+		use_spellfile = true,
+		enabledRules = {
+			en = { 'OXFORD_SPELLING_NOUNS' }
+		},
+		disabledRules = {
+			en = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE' },
+		},
+		latex = {
+			commands = {
+				['\\nocite'] = 'ignore',
+				['\\todo'] = 'ignore',
+			},
+		},
+		additionalRules = {
+			enablePickyRules = true,
+			motherTongue = 'pt-BR',
+		},
+		dictionary = plugins.ltex_dictionaries(),
+	},
+}
+end
 require('ltex-ls').setup {
 	capabilities = capabilities,
 	on_attach = on_attach,
 	use_spellfile = false,
 	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'gitcommit', 'text', 'rst' },
-	settings = {
-		ltex = {
-			language = 'auto',
-			enabled = { 'latex', 'tex', 'bib', 'markdown', },
-			diagnosticSeverity = 'information',
-			sentenceCacheSize = 2000,
-			enabledRules = {
-				en_GB = { 'OXFORD_SPELLING_NOUNS' }
-			},
-			additionalRules = {
-				enablePickyRules = true,
-				motherTongue = 'pt-BR',
-			},
-			disabledRules = { },
-			dictionary = (function()
-				local files = {}
-				for _, file in ipairs(vim.api.nvim_get_runtime_file('%.vim/ltex%.dictionary%.*', true)) do
-					local lang = vim.fn.fnamemodify(file, ':t:r'):match('ltex%.dictionary%.(.-)$')
-					local fullpath = vim.fs.normalize(file, ':p')
-					files[lang] = { ':' .. fullpath }
-				end
-				if files.default then
-					for lang, _ in pairs(files) do
-						if lang ~= 'default' then
-							vim.list_extend(files[lang], files.default)
-						end
-					end
-					files.default = nil
-				end
-				return files
-			end)(),
-		},
-	},
+	settings = ltex_ls(),
 }
+vim.api.nvim_create_autocmd({ 'BufRead' }, {
+	pattern = { '*.tex' },
+	callback = function()
+		require('ltex-ls').setup {
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = ltex_ls(),
+		}
+	end,
+})
+
 -- }}} LTex
 
 -- Copilot {{{
@@ -556,9 +520,9 @@ require('copilot').setup {
 	panel = { enabled = true },
 	filetypes = {
 		-- python = true, -- allow specific filetype
-		["*"] = false,
+		['*'] = false,
 	},
-} 
+}
 -- }}} Copilot
 
 -- Zen-Mode {{{
@@ -625,22 +589,13 @@ require('dashboard').setup {
 	},
 }
 local colors = require('lighthaus.colors')
-local function vim_highlights(highlights)
-    for group_name, group_settings in pairs(highlights) do
-        vim.api.nvim_command(string.format("highlight %s guifg=%s guibg=%s guisp=%s gui=%s", group_name,
-	            group_settings.fg or "none",
-	            group_settings.bg or "none",
-	            group_settings.sp or "none",
-	            group_settings.fmt or "none"))
-    end
-end
 local hiDashboard = {
     DashboardShortCut = { fg = colors.blue3 },
-    DashboardHeader = { fg = colors.blue, fmt = "italic" },
+    DashboardHeader = { fg = colors.blue, fmt = 'italic' },
     DashboardCenter = { fg = colors.cyan },
     DashboardFooter = { fg = colors.blue, fmt = 'bold' },
 }
-vim_highlights(hiDashboard)
+plugins.vim_highlights(hiDashboard)
 map('n', '<c-t>', ':tabnew<CR>:Dashboard<CR>:echo "New tab"<CR>',
 	{ desc = 'Open new tab' })
 -- }}} Dashboard   
