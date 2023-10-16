@@ -69,16 +69,25 @@ end, 0)
 -- }}} Treesitter configuration
 
 -- Ltex External file {{{
+local lsputil = require('lspconfig.util')
 M.ltex_dictionaries = function()
 	---@diagnostic disable-next-line: lowercase-global
 	insert = insert or table.insert
 	local files = {}
 	local find_dictfiles = function()
+		local find_root = lsputil.root_pattern('.latexmkrc', '.git')
+		local wroot = find_root(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
+		local dictdirs = {}
+		if wroot ~= nil then
+			for fname, ftype in vim.fs.dir(wroot) do
+				if ftype:match('directory') and
+					(fname:match('^%.vim$') or fname:match('^%.vscode$')) then
+					insert(dictdirs, wroot .. '/' .. fname)
+				end
+			end
+		end
+		vim.notify(vim.inspect(dictdirs))
 		local dictfiles = {}
-		local dictdirs = vim.fs.find(function(name, _)
-			return name:match('^%.vim$') or name:match('^%.vscode$') end,
-			{ upward = true, stop = vim.loop.os_homedir(), type = 'directory',
-				path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)) })
 		for _, dir in ipairs(dictdirs) do
 			for fname, ftype in vim.fs.dir(dir) do
 				if fname:match('ltex%.dictionary%.') and ftype:match('file') then

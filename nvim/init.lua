@@ -501,14 +501,13 @@ require('ltex-ls').setup {
 	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'gitcommit', 'text', 'rst' },
 	settings = ltex_ls(),
 }
-vim.api.nvim_create_autocmd({ 'BufRead' }, {
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
 	pattern = { '*.tex' },
-	callback = function()
-		require('ltex-ls').setup {
-			capabilities = capabilities,
-			on_attach = on_attach,
-			settings = ltex_ls(),
-		}
+	callback = function(ev)
+		local client = require('lspconfig.util').get_active_client_by_name(ev.buf, 'ltex')
+		if client ~= nil then
+			client.config.settings = ltex_ls()
+		end
 	end,
 })
 
