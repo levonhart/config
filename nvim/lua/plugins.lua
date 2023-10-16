@@ -86,7 +86,6 @@ M.ltex_dictionaries = function()
 				end
 			end
 		end
-		vim.notify(vim.inspect(dictdirs))
 		local dictfiles = {}
 		for _, dir in ipairs(dictdirs) do
 			for fname, ftype in vim.fs.dir(dir) do

@@ -482,7 +482,7 @@ local ltex_ls = function() return {
 		},
 		latex = {
 			commands = {
-				['\\nocite'] = 'ignore',
+				["\\nocite{}"] = 'ignore',
 				['\\todo'] = 'ignore',
 			},
 		},
