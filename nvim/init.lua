@@ -475,10 +475,7 @@ local ltex_ls = function() return {
 		sentenceCacheSize = 2000,
 		use_spellfile = true,
 		enabledRules = {
-			en = { 'OXFORD_SPELLING_NOUNS' }
-		},
-		disabledRules = {
-			en = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE' },
+			['en-GB'] = { 'OXFORD_SPELLING_NOUNS' }
 		},
 		latex = {
 			commands = {
@@ -490,15 +487,20 @@ local ltex_ls = function() return {
 			enablePickyRules = true,
 			motherTongue = 'pt-BR',
 		},
-		dictionary = plugins.ltex_dictionaries(),
+		disabledRules = plugins.ltex_disabledrules {
+			['en-US'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE' },
+			['en-GB'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE' },
+		},
+		dictionary = plugins.ltex_dictionaries { },
+		hiddenFalsePositives = plugins.ltex_falsepositives { },
 	},
 }
 end
 require('ltex-ls').setup {
 	capabilities = capabilities,
 	on_attach = on_attach,
-	use_spellfile = false,
-	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'gitcommit', 'text', 'rst' },
+	use_spellfile = true,
+	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
 	settings = ltex_ls(),
 }
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
@@ -506,11 +508,13 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
 	callback = function(ev)
 		local client = require('lspconfig.util').get_active_client_by_name(ev.buf, 'ltex')
 		if client ~= nil then
+			plugins.ltex_wdirs = nil
 			client.config.settings = ltex_ls()
 		end
 	end,
 })
-
+vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
+	{ desc = 'Print out Ltex Server loaded Settings' })
 -- }}} LTex
 
 -- Copilot {{{

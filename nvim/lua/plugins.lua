@@ -70,42 +70,44 @@ end, 0)
 
 -- Ltex External file {{{
 local lsputil = require('lspconfig.util')
-M.ltex_dictionaries = function()
-	---@diagnostic disable-next-line: lowercase-global
-	insert = insert or table.insert
-	local files = {}
-	local find_dictfiles = function()
-		local find_root = lsputil.root_pattern('.latexmkrc', '.git')
-		local wroot = find_root(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
-		local dictdirs = {}
-		if wroot ~= nil then
-			for fname, ftype in vim.fs.dir(wroot) do
-				if ftype:match('directory') and
-					(fname:match('^%.vim$') or fname:match('^%.vscode$')) then
-					insert(dictdirs, wroot .. '/' .. fname)
-				end
+
+---@diagnostic disable-next-line: lowercase-global
+insert = insert or table.insert
+M.ltex_wdirs = nil
+local ltex_getwdirs = function()
+	local find_root = lsputil.root_pattern('.latexmkrc', '.git', '*.latexmain', 'main.tex')
+	local ltex_wroot = find_root(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
+	local dirs = {}
+	if ltex_wroot ~= nil then
+		for fname, ftype in vim.fs.dir(ltex_wroot) do
+			if ftype:match('directory') and
+				(fname:match('^%.vim$') or fname:match('^%.vscode$')) then
+				insert(dirs, ltex_wroot .. '/' .. fname)
 			end
 		end
-		local dictfiles = {}
-		for _, dir in ipairs(dictdirs) do
-			for fname, ftype in vim.fs.dir(dir) do
-				if fname:match('ltex%.dictionary%.') and ftype:match('file') then
-					insert(dictfiles, dir .. '/' .. fname)
-				end
-			end
-		end
-		return ipairs(dictfiles)
 	end
-	for _, file in find_dictfiles() do
-		local _, _, lang = file:find('ltex%.dictionary%.([%-%a]+)%.txt$')
+	return dirs
+end
+
+local ltex_extfiles = function(rule)
+	M.ltex_wdirs = M.ltex_wdirs or ltex_getwdirs()
+	local files = {}
+	for _, dir in ipairs(M.ltex_wdirs) do
+		for fname, ftype in vim.fs.dir(dir) do
+			if fname:match('ltex%.' .. rule .. '%.') and ftype:match('file') then
+				insert(files, dir .. '/' .. fname)
+			end
+		end
+	end
+	return ipairs(files)
+end
+
+M.ltex_disabledrules = function(defaults)
+	local files = defaults or {}
+	for _, file in ltex_extfiles('disabledRules') do
+		local _, _, lang = file:find('ltex%.disabledRules%.([%-%a]+)%.txt$')
 		files[lang] = files[lang] or {}
 		local fullpath = vim.fs.normalize(file, ':p')
-		insert(files[lang], ':' .. fullpath)
-	end
-	for _, file in ipairs(vim.api.nvim_get_runtime_file("spell/*.add", true)) do
-		local lang = vim.fn.fnamemodify(file, ":t:r:r")
-		files[lang] = files[lang] or {}
-		local fullpath = vim.fn.fnamemodify(file, ":p")
 		insert(files[lang], ':' .. fullpath)
 	end
 	if files.default then
@@ -117,6 +119,68 @@ M.ltex_dictionaries = function()
 		files.default = nil
 	end
 	return files
+end
+
+M.ltex_dictionaries = function(defaults)
+	local files = defaults or {}
+	for _, file in ltex_extfiles('dictionary') do
+		local _, _, lang = file:find('ltex%.dictionary%.([%-%a]+)%.txt$')
+		files[lang] = files[lang] or {}
+		local fullpath = vim.fs.normalize(file, ':p')
+		insert(files[lang], ':' .. fullpath)
+	end
+	for _, file in ipairs(vim.api.nvim_get_runtime_file("spell/*.add", true)) do
+		local lang = vim.fn.fnamemodify(file, ":t:r:r")
+		files[lang] = files[lang] or {}
+		local fullpath = vim.fn.fnamemodify(file, ":p")
+		insert(files[lang], ':' .. fullpath)
+		if lang == 'en' then
+			files['en-US'] = files['en-US'] or {}
+			files['en-GB'] = files['en-GB'] or {}
+			insert(files['en-US'], ':' .. fullpath)
+			insert(files['en-GB'], ':' .. fullpath)
+		end
+		if lang == 'pt' then
+			files['pt-BR'] = files['pt-BR'] or {}
+			insert(files['pt-BR'], ':' .. fullpath)
+		end
+	end
+	if files.default then
+		for lang, _ in pairs(files) do
+			if lang ~= 'default' then
+				vim.list_extend(files[lang], files.default)
+			end
+		end
+		files.default = nil
+	end
+	return files
+end
+
+M.ltex_falsepositives = function(defaults)
+	local files = defaults or {}
+	for _, file in ltex_extfiles('hiddenFalsePositives') do
+		local _, _, lang = file:find('ltex%.hiddenFalsePositives%.([%-%a]+)%.txt$')
+		files[lang] = files[lang] or {}
+		local fullpath = vim.fs.normalize(file, ':p')
+		insert(files[lang], ':' .. fullpath)
+	end
+	if files.default then
+		for lang, _ in pairs(files) do
+			if lang ~= 'default' then
+				vim.list_extend(files[lang], files.default)
+			end
+		end
+		files.default = nil
+	end
+	return files
+end
+M.ltex_getsettings = function()
+	local ltex_server = lsputil.get_active_client_by_name(0, 'ltex')
+	if ltex_server ~= nil then
+		print(vim.inspect(ltex_server.config.settings))
+	else
+		print('No Ltex server attached to the buffer')
+	end
 end
 -- }}} Ltex External file
 
