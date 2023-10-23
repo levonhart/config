@@ -7,14 +7,18 @@
 	ui = true
 
 [merge]
-	tool = vimdiff3
+	tool = fugitive
 
 [mergetool "vimdiff3"]
 	cmd = nvim -d $MERGED $LOCAL
 
+[mergetool "fugitive"]
+	cmd = nvim $LOCAL +Gdiff
+
 [pretty]
-	workspace = format:%C(blue)%h%C(reset)  %C(green)(%ad)%C(reset) %C(white)%s%C(reset) %C(auto)%d%C(reset)%n         %C(cyan)%an %C(reset) %C(magenta)<%ae>%C(reset)
-	full-hash = format:%C(blue)%h%C(reset)  %C(green)(%ad)%C(reset) %C(white)%s%C(reset) %C(auto)%d%C(reset)%n         %C(cyan)%an %C(reset) %C(magenta)<%ae>%C(reset)  %C(bold black)%H%C(reset)
+	workspace = format:%C(blue)%h%C(reset)  %C(green)(%ad)%C(reset) %C(white)%s%C(reset) %C(auto)%d%C(reset)%C(auto)%+b%C(reset)%n         %C(cyan)%an %C(reset) %C(magenta)%ae%C(reset)
+	subject = format:%C(blue)%h%C(reset)  %C(green)(%ad)%C(reset) %C(white)%s%C(reset) %C(auto)%d%C(reset)%n         %C(cyan)%an %C(reset) %C(magenta)%ae%C(reset)
+	fullhash = format:%C(blue)%h%C(reset)  %C(green)(%ad)%C(reset) %C(white)%s%C(reset) %C(auto)%d%C(reset)%n         %C(cyan)%an %C(reset) %C(magenta)%ae%C(reset)  %C(red)%H%C(reset)
 
 [format]
 	pretty = workspace
@@ -30,13 +34,10 @@
 
 [alias]
 	l = log --format=workspace
-	lg = log --graph --format=workspace
+	lg = log --graph --format=subject
+	lh = log --graph --format=fullhash
 	lm = log --pretty=medium
 
-
-    lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
-    lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-    lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 
 [pull]
