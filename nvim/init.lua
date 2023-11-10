@@ -9,6 +9,7 @@ vim.opt.number = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.autowrite = true
+vim.opt.expandtab = false
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.updatetime = 100
