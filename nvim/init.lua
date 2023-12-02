@@ -6,6 +6,7 @@ vim.opt.backspace = { 'indent', 'eol', 'start' }
 vim.opt.history = 500
 vim.opt.numberwidth = 3
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.autowrite = true
