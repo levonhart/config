@@ -5,7 +5,7 @@ vim.opt.encoding = 'utf8'
 vim.opt.backspace = { 'indent', 'eol', 'start' }
 vim.opt.history = 500
 vim.opt.numberwidth = 3
-vim.opt.number = true
+vim.opt.number = false
 vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
@@ -463,7 +463,7 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 			{ lnum = vim.api.nvim_win_get_cursor(0)[1]-1 })
 		if diagnostics ~= nil and diagnostics[1] ~= nil then
 			local width = vim.o.columns - 15
-			local msg = string.sub(diagnostics[1].source ..': '.. diagnostics[1].message, 1, width)
+			local msg = string.sub((diagnostics[1].source or '') ..': '.. diagnostics[1].message, 1, width)
 			local hl = hl_echo_diagnostics[diagnostics[1].severity]
 			vim.api.nvim_echo({{msg, hl}}, false, {})
 		end
@@ -529,7 +529,7 @@ require('copilot').setup {
 	panel = { enabled = true },
 	filetypes = {
 		-- python = true, -- allow specific filetype
-		['*'] = false,
+		-- ['*'] = false,
 	},
 }
 -- }}} Copilot
@@ -548,6 +548,7 @@ require('dashboard').setup {
 	hide = { tabline = false, statusline = true },
 	config = {
 		shortcut = {
+			{ desc = '✍ Edit', group = 'Boolean', action = 'enew', key = 'e' },
 			{ desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
 			{
 				icon = ' ',
