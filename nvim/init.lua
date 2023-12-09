@@ -485,8 +485,13 @@ local ltex_ls = function() return {
 		},
 		latex = {
 			commands = {
-				["\\nocite{}"] = 'ignore',
+				['\\nocite{}'] = 'ignore',
 				['\\todo'] = 'ignore',
+				['\\NP'] = 'vowelDummy',
+				['\\NPC'] = 'vowelDummy',
+				['\\NPH'] = 'vowelDummy',
+				['\\P'] = 'Dummy',
+				['\\W'] = 'Dummy',
 			},
 		},
 		additionalRules = {
@@ -494,8 +499,8 @@ local ltex_ls = function() return {
 			motherTongue = 'pt-BR',
 		},
 		disabledRules = plugins.ltex_disabledrules {
-			['en-US'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE' },
-			['en-GB'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE' },
+			['en-US'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE', 'INSTANCE' },
+			['en-GB'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE', 'INSTANCE' },
 		},
 		dictionary = plugins.ltex_dictionaries { },
 		hiddenFalsePositives = plugins.ltex_falsepositives { },
