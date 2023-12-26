@@ -5,17 +5,22 @@
       "title": "pop-shell-example"
     },
     {
-      "class": "Steam"
+      "class": "Pinentry-gtk-2",
+      "title": "rbw"
+    },
+    {
+      "class": "Steam",
+      "title": "Lista de amigos"
+    },
+    {
+      "class": "steam",
+      "title": "Steam — Configurações"
     },
     {
       "class": "albert"
     },
     {
       "class": "TelegramDesktop"
-    },
-    {
-      "class": "Steam",
-      "title": "Lista de amigos"
     },
     {
       "class": "steamwebhelper"
