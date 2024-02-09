@@ -535,7 +535,7 @@ vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
 -- Copilot {{{
 require('copilot').setup {
 	suggestion = { enabled = true, keymap = { accept = '<c-cr>' } },
-	panel = { enabled = true },
+	panel = { enabled = true, auto_refresh = true },
 	filetypes = {
 		-- python = true, -- allow specific filetype
 		-- ['*'] = false,
