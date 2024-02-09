@@ -208,7 +208,7 @@ gitsigns.setup {
 		vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
 		vim.keymap.set('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
 		vim.keymap.set('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'Undo last stage' })
-		vim.keymap.set('n', '<leader>hr', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
+		vim.keymap.set('n', '<leader>hX', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
 
 		-- don't override the built-in and fugitive keymaps
 		vim.keymap.set({ 'n', 'v' }, ']c', function()
