@@ -45,9 +45,9 @@ if vim.g.neovide then
 	vim.g.neovide_transparency=0.9
 	vim.g.neovide_floating_blur_amount_x = 2.0
 	vim.g.neovide_floating_blur_amount_y = 2.0
-	vim.g.neovide_scroll_animation_length = 0.3
+	vim.g.neovide_scroll_animation_length = 0.15
 	vim.g.neovide_cursor_trail_size=0.8
-	vim.o.guifont='FiraCode Nerd Font,DejaVuSansMono Nerd Font,Fira Code:h11'
+	vim.opt.guifont= { 'FiraCode Nerd Font', 'DejaVuSansM Nerd Font', 'Fira Code', ':h11' }
 	vim.keymap.set('n', '<c-s-v>', '"+p')
 	vim.keymap.set('i', '<c-s-v>', '<c-r><c-o>+')
 
