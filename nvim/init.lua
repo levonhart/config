@@ -47,7 +47,7 @@ if vim.g.neovide then
 	vim.g.neovide_floating_blur_amount_y = 2.0
 	vim.g.neovide_scroll_animation_length = 0.1
 	vim.g.neovide_cursor_trail_size=0.8
-	vim.o.guifont='FiraCode Nerd Font,DejaVuSansM Nerd Font,Fira Code:h11'
+	vim.opt.guifont= { 'FiraCode Nerd Font', 'DejaVuSansM Nerd Font', 'Fira Code', ':h11' }
 	vim.keymap.set('n', '<c-s-v>', '"+p')
 	vim.keymap.set('i', '<c-s-v>', '<c-r><c-o>+')
 
@@ -78,10 +78,10 @@ map('n', '<a-h>', '<c-w><c-h>')
 map('n', '<a-j>', '<c-w><c-j>')
 map('n', '<a-k>', '<c-w><c-k>')
 map('n', '<a-l>', '<c-w><c-l>')
-map('n', '<c-J>', '<Cmd>move +1<cr>')
-map('n', '<c-K>', '<cmd>move -2<cr>')
-map('v', '<c-J>', ":move '>+1<cr>gv=gv")
-map('v', '<c-K>', ":move '<-2<cr>gv=gv")
+map('n', '<c-s-j>', '<Cmd>move +1<cr>')
+map('n', '<c-s-k>', '<cmd>move -2<cr>')
+map('v', '<c-s-j>', ":move '>+1<cr>gv=gv")
+map('v', '<c-s-k>', ":move '<-2<cr>gv=gv")
 map('n', '<c-S-Down>', '<cmd>move +1<cr>')
 map('n', '<c-S-Up>', '<cmd>move -2<cr>')
 map('v', '<c-S-Down>', ":move '>+1<cr>gv=gv")
@@ -204,7 +204,11 @@ gitsigns.setup {
 		changedelete = { text = '~' },
 	},
 	on_attach = function(bufnr)
-		vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+		vim.keymap.set('n', '<leader>hv', gitsigns.select_hunk, { buffer = bufnr, desc = 'Visual select git hunk' })
+		vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+		vim.keymap.set('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
+		vim.keymap.set('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'Undo last stage' })
+		vim.keymap.set('n', '<leader>hX', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
 
 		-- don't override the built-in and fugitive keymaps
 		vim.keymap.set({ 'n', 'v' }, ']c', function()
@@ -485,7 +489,7 @@ local ltex_ls = function() return {
 		},
 		latex = {
 			commands = {
-				["\\nocite{}"] = 'ignore',
+				['\\nocite{}'] = 'ignore',
 				['\\todo'] = 'ignore',
 				['\\NP'] = 'vowelDummy',
 				['\\NPC'] = 'vowelDummy',
