@@ -45,9 +45,9 @@ if vim.g.neovide then
 	vim.g.neovide_transparency=0.9
 	vim.g.neovide_floating_blur_amount_x = 2.0
 	vim.g.neovide_floating_blur_amount_y = 2.0
-	vim.g.neovide_scroll_animation_length = 0.3
+	vim.g.neovide_scroll_animation_length = 0.1
 	vim.g.neovide_cursor_trail_size=0.8
-	vim.o.guifont='FiraCode Nerd Font,DejaVuSansMono Nerd Font,Fira Code:h11'
+	vim.o.guifont='FiraCode Nerd Font,DejaVuSansM Nerd Font,Fira Code:h11'
 	vim.keymap.set('n', '<c-s-v>', '"+p')
 	vim.keymap.set('i', '<c-s-v>', '<c-r><c-o>+')
 
@@ -485,7 +485,7 @@ local ltex_ls = function() return {
 		},
 		latex = {
 			commands = {
-				['\\nocite{}'] = 'ignore',
+				["\\nocite{}"] = 'ignore',
 				['\\todo'] = 'ignore',
 				['\\NP'] = 'vowelDummy',
 				['\\NPC'] = 'vowelDummy',
@@ -499,8 +499,8 @@ local ltex_ls = function() return {
 			motherTongue = 'pt-BR',
 		},
 		disabledRules = plugins.ltex_disabledrules {
-			['en-US'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE', 'INSTANCE' },
-			['en-GB'] = { 'PASSIVE_VOICE', 'TOO_LONG_SENTENCE', 'INSTANCE' },
+			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
+			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
 		},
 		dictionary = plugins.ltex_dictionaries { },
 		hiddenFalsePositives = plugins.ltex_falsepositives { },
@@ -530,8 +530,11 @@ vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
 
 -- Copilot {{{
 require('copilot').setup {
-	suggestion = { enabled = true, keymap = { accept = '<c-cr>' } },
-	panel = { enabled = true },
+	suggestion = {
+		enabled = true,
+		keymap = { dismiss = '<c-[>', accept = '<c-]>' }
+	},
+	panel = { enabled = true, keymap = { open = '<c-/>' }, },
 	filetypes = {
 		-- python = true, -- allow specific filetype
 		-- ['*'] = false,
