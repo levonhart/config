@@ -45,6 +45,18 @@ zplug load
 # }}} zplug #
 
 # fzf {{{ #
+export FZF_ALT_C_OPTS="
+  --walker-skip .git,node_modules,target,.local,.cache,.wine,.steam,pfx
+  --preview 'eza --tree --level=3 {}'
+  --bind 'ctrl-/:toggle-preview'"
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -s clipboard --)+abort'"
+export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:toggle-preview'"
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 # }}} fzf #
