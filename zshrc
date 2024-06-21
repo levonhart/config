@@ -54,7 +54,7 @@ export FZF_CTRL_R_OPTS="
   --bind 'ctrl-/:toggle-preview'
   --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -s clipboard --)+abort'"
 export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules,target
+  --walker-skip .git,node_modules,target,.cache,.wine,.steam,pfx
   --preview 'bat -n --color=always {}'
   --bind 'ctrl-/:toggle-preview'"
 source /usr/share/fzf/key-bindings.zsh
