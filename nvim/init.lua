@@ -302,6 +302,9 @@ vim.api.nvim_create_autocmd( 'User' , {
 		map( { 'n', 'o', 'x' }, '[E', '<plug>(vimtex-[M)', { buffer = ev.buf })
 		map( { 'n', 'o', 'x' }, ']e', '<plug>(vimtex-]m)', { buffer = ev.buf })
 		map( { 'n', 'o', 'x' }, ']E', '<plug>(vimtex-]M)', { buffer = ev.buf })
+
+		map( 'n', '<leader>t', '<plug>(vimtex-toc-open)',   { buffer = ev.buf })
+		map( 'n', '<leader>T', '<plug>(vimtex-toc-toggle)', { buffer = ev.buf })
 	end,
 })
 -- }}} Vimtex
