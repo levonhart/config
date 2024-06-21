@@ -293,6 +293,17 @@ vim.g.vimtex_quickfix_open_on_warning = 0
 vim.g.vimtex_compiler_latexmk = { continuous = 0 }
 vim.g.vimtex_complete_enable = 0
 vim.g.vimtex_imaps_leader = ';'
+
+vim.api.nvim_create_autocmd( 'User' , {
+	group = vim.api.nvim_create_augroup('VimtexEvents', {}),
+	pattern = 'VimtexEventInitPost',
+	callback = function(ev)
+		map( { 'n', 'o', 'x' }, '[e', '<plug>(vimtex-[m)', { buffer = ev.buf })
+		map( { 'n', 'o', 'x' }, '[E', '<plug>(vimtex-[M)', { buffer = ev.buf })
+		map( { 'n', 'o', 'x' }, ']e', '<plug>(vimtex-]m)', { buffer = ev.buf })
+		map( { 'n', 'o', 'x' }, ']E', '<plug>(vimtex-]M)', { buffer = ev.buf })
+	end,
+})
 -- }}} Vimtex
 
 -- Nvim-Cmp {{{
