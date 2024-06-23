@@ -44,6 +44,6 @@
 	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}; gi"
 
 [pull]
-	rebase = false
+	rebase = true
 [init]
 	defaultBranch = main
