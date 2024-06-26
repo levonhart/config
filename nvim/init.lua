@@ -73,76 +73,99 @@ end
 
 -- Keys {{{
 vim.g.mapleader = '\\'
+vim.g.maplocalleader = '\\'
 local map = vim.keymap.set
-map('n', '<a-h>', '<c-w><c-h>')
-map('n', '<a-j>', '<c-w><c-j>')
-map('n', '<a-k>', '<c-w><c-k>')
-map('n', '<a-l>', '<c-w><c-l>')
-map('n', '<c-q>', '<c-w><c-q>')
-map('n', '<c-s-j>', '<Cmd>move +1<cr>')
-map('n', '<c-s-k>', '<cmd>move -2<cr>')
-map('v', '<c-s-j>', ":move '>+1<cr>gv=gv")
-map('v', '<c-s-k>', ":move '<-2<cr>gv=gv")
-map('n', '<c-S-Down>', '<cmd>move +1<cr>')
-map('n', '<c-S-Up>', '<cmd>move -2<cr>')
-map('v', '<c-S-Down>', ":move '>+1<cr>gv=gv")
-map('v', '<c-S-Up>', ":move '<-2<cr>gv=gv")
-map('i', '<c-z>', '<c-g>u<esc>[s1z=`]a<c-g>u')
-map('n', '<c-s>', ':<c-u>set spell!<cr>')
+map('n', '<a-h>', '<c-w><c-h>', { desc = 'Change window' })
+map('n', '<a-j>', '<c-w><c-j>', { desc = 'Change window' })
+map('n', '<a-k>', '<c-w><c-k>', { desc = 'Change window' })
+map('n', '<a-l>', '<c-w><c-l>', { desc = 'Change window' })
+map('n', '<c-q>', '<c-w><c-q>', { desc = 'Change window' })
+map('n', '<c-s-j>', '<Cmd>move +1<cr>', { desc = 'Move line' })
+map('n', '<c-s-k>', '<cmd>move -2<cr>', { desc = 'Move line' })
+map('v', '<c-s-j>', ":move '>+1<cr>gv=gv", { desc = 'Move line' })
+map('v', '<c-s-k>', ":move '<-2<cr>gv=gv", { desc = 'Move line' })
+map('n', '<c-S-Down>', '<cmd>move +1<cr>', { desc = 'Move line' })
+map('n', '<c-S-Up>', '<cmd>move -2<cr>', { desc = 'Move line' })
+map('v', '<c-S-Down>', ":move '>+1<cr>gv=gv", { desc = 'Move line' })
+map('v', '<c-S-Up>', ":move '<-2<cr>gv=gv", { desc = 'Move line' })
+map('i', '<c-z>', '<c-g>u<esc>[s1z=`]a<c-g>u', { desc = 'Fix spelling' })
+map('n', '<c-s>', ':<c-u>set spell!<cr>', { desc = 'Toggle spell check' })
 map('n', '<leader>p', vim.cmd.Ex)
+map("n", '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = 'Substitute all occurences of the word under cursor in the current file' })
+map('n', '¨', '`^', { desc = 'Jump to last insert' })
+map('n', 'ç', '`.', { desc = 'Jump to last change/yank' })
+map('n', 'n', 'nzzzv')
 map('n', 'n', 'nzzzv')
 map('n', 'N', 'Nzzzv')
-map('n', '[g', vim.diagnostic.goto_prev,
-	{ desc = 'Go to previous diagnostic message' })
-map('n', ']g', vim.diagnostic.goto_next,
-	{ desc = 'Go to next diagnostic message' })
+map('i', '<C-c>', '<Esc>')
+map('n', '[q', "<cmd>cnext<CR>zz",
+	{ desc = 'Go to previous error message' })
+map('n', ']q', "<cmd>cprev<CR>zz",
+	{ desc = 'Go to next error message' })
+map('n', '[g', "<cmd>lnext<CR>zz",
+	{ desc = 'Go to previous jump location' })
+map('n', ']g', "<cmd>lprev<CR>zz",
+	{ desc = 'Go to next jump location' })
 map('n', '<space>e', vim.diagnostic.open_float)
-map('n', '[d', vim.diagnostic.goto_prev)
-map('n', ']d', vim.diagnostic.goto_next)
+map('n', '[d', vim.diagnostic.goto_prev,
+	{ desc = 'Go to previous diagnostic message' })
+map('n', ']d', vim.diagnostic.goto_next,
+	{ desc = 'Go to next diagnostic message' })
 map('n', '<space>q', vim.diagnostic.setloclist)
 -- }}} Keys
 
 -- Plugins {{{
 require('lazy').setup {
-	{ 'nvim-lua/plenary.nvim' },
-	-- { 'folke/which-key.nvim', opts = {}, event = 'VeryLazy' },
-	{ 'nvim-treesitter/nvim-treesitter',
-		dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
-		build = ':TSUpdate', },
-	{ 'nvim-tree/nvim-web-devicons' },
-	{ 'glepnir/dashboard-nvim', event = 'VimEnter',
-		dependencies = { 'nvim-tree/nvim-web-devicons' } },
-	{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
-	{ 'navarasu/onedark.nvim', priority = 1000, },
-	{ 'mrjones2014/lighthaus.nvim', opts = {}, },
-	{ 'nvim-lualine/lualine.nvim' },
-	{ 'tpope/vim-fugitive' },
-	{ 'SirVer/ultisnips' },
-	{ 'numToStr/Comment.nvim', lazy = false },
-	{ 'kylechui/nvim-surround', opts = {}, event = 'VeryLazy' },
-	{ 'lewis6991/gitsigns.nvim' },
-	{ 'NvChad/nvim-colorizer.lua', opts = {} },
-	{ 'folke/twilight.nvim', opts = {} },
-	{ 'folke/zen-mode.nvim', opts = {} },
-	{ 'neovim/nvim-lspconfig', dependencies = {
-		'williamboman/mason.nvim',
-		'williamboman/mason-lspconfig.nvim',
-		}
+	spec = {
+		{ 'nvim-lua/plenary.nvim' },
+		-- { 'folke/which-key.nvim', opts = {}, event = 'VeryLazy' },
+		{ 'nvim-treesitter/nvim-treesitter',
+			dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
+			build = ':TSUpdate', },
+		{ 'nvim-tree/nvim-web-devicons' },
+		{ 'glepnir/dashboard-nvim', event = 'VimEnter',
+			dependencies = { 'nvim-tree/nvim-web-devicons' } },
+		{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
+		{ 'navarasu/onedark.nvim', priority = 1000, },
+		{ 'mrjones2014/lighthaus.nvim', opts = {}, },
+		{ 'nvim-lualine/lualine.nvim' },
+		{ 'tpope/vim-fugitive' },
+		{ 'SirVer/ultisnips' },
+		{ 'numToStr/Comment.nvim', lazy = false },
+		{ 'kylechui/nvim-surround', opts = {}, event = 'VeryLazy' },
+		{ 'lewis6991/gitsigns.nvim' },
+		{ 'NvChad/nvim-colorizer.lua', opts = {} },
+		{ 'folke/twilight.nvim', opts = {} },
+		{ 'folke/zen-mode.nvim', opts = {} },
+		{ 'neovim/nvim-lspconfig', dependencies = {
+			'williamboman/mason.nvim',
+			'williamboman/mason-lspconfig.nvim',
+			}
+		},
+		{ 'hrsh7th/nvim-cmp',
+			dependencies = {
+				'hrsh7th/cmp-buffer',
+				'hrsh7th/cmp-nvim-lsp',
+				'hrsh7th/cmp-path',
+				'hrsh7th/cmp-nvim-lua',
+				-- 'quangnguyen30192/cmp-nvim-ultisnips',
+				'petertriho/cmp-git',
+			}
+		},
+		{ 'mfussenegger/nvim-lint' },
+		{ 'lervag/vimtex', ft = { 'tex', 'latex', 'plaintex', 'bib' } },
+		-- { 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
+		{ 'barreiroleo/ltex-extra.nvim', ft = { 'tex', 'latex', 'bib', 'markdown' }, branch = 'dev',
+			config = function() require('ltex_extra').setup({
+				load_langs = { 'en-US', 'en-GB', 'pt-BR' }, path = find_root(),
+				log_level = 'info' })
+			end
+		},
+		{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
 	},
-	{ 'hrsh7th/nvim-cmp',
-		dependencies = {
-			'hrsh7th/cmp-buffer',
-			'hrsh7th/cmp-nvim-lsp',
-			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-nvim-lua',
-			-- 'quangnguyen30192/cmp-nvim-ultisnips',
-			'petertriho/cmp-git',
-		}
-	},
-	{ 'mfussenegger/nvim-lint' },
-	{ 'lervag/vimtex' },
-	{ 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
-	{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
+	checker = { enabled  = false },
+	custom_keys = { ["<localleader>l"] = false, ["<localleader>t"] = false, },
 }
 vim.g.colors_name = 'lighthaus'
 local plugins = require('plugins')
@@ -431,6 +454,58 @@ lspconfig.cmake.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.r_language_server.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 
+vim.g.latex_commands = { -- Ltex {{{
+	['\\nocite{}'] = 'ignore',
+	['\\todo'] = 'ignore',
+	['\\NP'] = 'vowelDummy',
+	['\\NPC'] = 'vowelDummy',
+	['\\NPH'] = 'vowelDummy',
+	['\\P'] = 'Dummy',
+	['\\W'] = 'Dummy',
+}
+local ltex_settings = function() return {
+	ltex = {
+		checkFrequency = 'save',
+		language = 'auto',
+		enabled = { 'latex', 'tex', 'bib', 'markdown', },
+		diagnosticSeverity = 'information',
+		sentenceCacheSize = 2000,
+		use_spellfile = true,
+		enabledRules = {
+			['en-GB'] = { 'OXFORD_SPELLING_NOUNS' }
+		},
+		latex = {
+			commands = vim.g.latex_commands,
+		},
+		additionalRules = {
+			enablePickyRules = true,
+			motherTongue = 'pt-BR',
+		},
+		disabledRules = plugins.ltex_disabledrules {
+			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
+			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
+		},
+		-- dictionary = plugins.ltex_dictionaries { },
+		-- hiddenFalsePositives = plugins.ltex_falsepositives { },
+	},
+}
+end
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
+	pattern = { '*.tex' },
+	callback = function(ev)
+		local client = require('lspconfig.util').get_active_client_by_name(ev.buf, 'ltex')
+		if client ~= nil then
+			-- plugins.ltex_wdirs = nil
+			client.config.settings = ltex_settings()
+		end
+	end,
+})
+lspconfig.ltex.setup { capabilities = capabilities, on_attach = on_attach,
+	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
+	settings = ltex_settings(),
+}
+vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
+	{ desc = 'Print out Ltex Server loaded Settings' }) -- }}} Ltex
 -- }}} LSP
 
 -- init.lua autocommand {{{
@@ -489,63 +564,6 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 	end,
 })
 -- }}} Diagnostics
-
--- LTex {{{
-local ltex_ls = function() return {
-	ltex = {
-		checkFrequency = 'save',
-		language = 'auto',
-		enabled = { 'latex', 'tex', 'bib', 'markdown', },
-		diagnosticSeverity = 'information',
-		sentenceCacheSize = 2000,
-		use_spellfile = true,
-		enabledRules = {
-			['en-GB'] = { 'OXFORD_SPELLING_NOUNS' }
-		},
-		latex = {
-			commands = {
-				['\\nocite{}'] = 'ignore',
-				['\\todo'] = 'ignore',
-				['\\NP'] = 'vowelDummy',
-				['\\NPC'] = 'vowelDummy',
-				['\\NPH'] = 'vowelDummy',
-				['\\P'] = 'Dummy',
-				['\\W'] = 'Dummy',
-			},
-		},
-		additionalRules = {
-			enablePickyRules = true,
-			motherTongue = 'pt-BR',
-		},
-		disabledRules = plugins.ltex_disabledrules {
-			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
-			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
-		},
-		dictionary = plugins.ltex_dictionaries { },
-		hiddenFalsePositives = plugins.ltex_falsepositives { },
-	},
-}
-end
-require('ltex-ls').setup {
-	capabilities = capabilities,
-	on_attach = on_attach,
-	use_spellfile = true,
-	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
-	settings = ltex_ls(),
-}
-vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
-	pattern = { '*.tex' },
-	callback = function(ev)
-		local client = require('lspconfig.util').get_active_client_by_name(ev.buf, 'ltex')
-		if client ~= nil then
-			plugins.ltex_wdirs = nil
-			client.config.settings = ltex_ls()
-		end
-	end,
-})
-vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
-	{ desc = 'Print out Ltex Server loaded Settings' })
--- }}} LTex
 
 -- Copilot {{{
 require('copilot').setup {

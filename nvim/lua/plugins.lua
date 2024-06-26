@@ -68,6 +68,14 @@ vim.defer_fn(function()
 end, 0)
 -- }}} Treesitter configuration
 
+-- Find Root {{{
+-- }}} Find Root
+---@diagnostic disable-next-line: lowercase-global
+function find_root()
+	local file_path = vim.api.nvim_buf_get_name(0)
+	local root_pattern = require("lspconfig").util.root_pattern
+	return root_pattern('.ltex', '.latexmkrc', '.hg', '.git')(file_path) or vim.fn.fnamemodify(file_path, ':p:h')
+end
 -- Ltex External file {{{
 local lsputil = require('lspconfig.util')
 
@@ -75,8 +83,7 @@ local lsputil = require('lspconfig.util')
 insert = insert or table.insert
 M.ltex_wdirs = nil
 local ltex_getwdirs = function()
-	local find_root = lsputil.root_pattern('.latexmkrc', '.git', '*.latexmain', 'main.tex')
-	local ltex_wroot = find_root(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
+	local ltex_wroot = find_root()
 	local dirs = {}
 	if ltex_wroot ~= nil then
 		for fname, ftype in vim.fs.dir(ltex_wroot) do
