@@ -154,7 +154,7 @@ require('lazy').setup {
 			}
 		},
 		{ 'mfussenegger/nvim-lint' },
-		{ 'lervag/vimtex', ft = { 'tex', 'latex', 'plaintex', 'bib' } },
+		{ 'lervag/vimtex' },
 		-- { 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
 		{ 'barreiroleo/ltex-extra.nvim', ft = { 'tex', 'latex', 'bib', 'markdown' }, branch = 'dev',
 			config = function() require('ltex_extra').setup({
