@@ -156,11 +156,14 @@ require('lazy').setup {
 		{ 'mfussenegger/nvim-lint' },
 		{ 'lervag/vimtex' },
 		-- { 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
-		{ 'barreiroleo/ltex-extra.nvim', ft = { 'tex', 'latex', 'bib', 'markdown' }, branch = 'dev',
-			config = function() require('ltex_extra').setup({
-				load_langs = { 'en-US', 'en-GB', 'pt-BR' }, path = find_root(),
-				log_level = 'info' })
-			end
+		{ 'barreiroleo/ltex_extra.nvim', ft = { 'tex', 'latex', 'bib', 'markdown' }, branch = 'dev',
+			opts = {
+				load_langs = { 'en-US', 'en-GB', 'pt-BR' }, path ='.ltex',
+				log_level = 'info',
+
+				---@deprecated
+				init_check = true, server_start = false, server_opts = nil
+			}, dependencies = { 'neovim/nvim-lspconfig' }
 		},
 		{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
 	},
@@ -500,6 +503,7 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
 		end
 	end,
 })
+
 lspconfig.ltex.setup { capabilities = capabilities, on_attach = on_attach,
 	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
 	settings = ltex_settings(),
@@ -512,7 +516,7 @@ vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter' }, {
 	pattern = { '*.lua' },
 	callback = function(ev)
-		if vim.fs.normalize(ev.file, ':p'):match('%.config/nvim/') ~= nil then
+		if vim.fs.normalize(ev.file):match('%.config/nvim/') ~= nil then
 			cmp.setup.filetype({ 'lua' }, {
 				sources = cmp.config.sources({
 					{ name = 'nvim_lua' },
@@ -557,7 +561,8 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 			{ lnum = vim.api.nvim_win_get_cursor(0)[1]-1 })
 		if diagnostics ~= nil and diagnostics[1] ~= nil then
 			local width = vim.o.columns - 15
-			local msg = string.sub((diagnostics[1].source or '') ..': '.. diagnostics[1].message, 1, width)
+			local msg = (diagnostics[1].source or '') ..': '.. diagnostics[1].message
+			msg = msg:match('[^\n\r\v]*'):sub(1, width)
 			local hl = hl_echo_diagnostics[diagnostics[1].severity]
 			vim.api.nvim_echo({{msg, hl}}, false, {})
 		end

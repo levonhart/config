@@ -70,20 +70,20 @@ end, 0)
 
 -- Find Root {{{
 -- }}} Find Root
----@diagnostic disable-next-line: lowercase-global
-function find_root()
-	local file_path = vim.api.nvim_buf_get_name(0)
-	local root_pattern = require("lspconfig").util.root_pattern
-	return root_pattern('.ltex', '.latexmkrc', '.hg', '.git')(file_path) or vim.fn.fnamemodify(file_path, ':p:h')
-end
 -- Ltex External file {{{
-local lsputil = require('lspconfig.util')
+local lsputil = require('lspconfig').util
+
+M.find_root = function()
+	local file_path = vim.api.nvim_buf_get_name(0)
+	local root_pattern = lsputil.root_pattern('.ltex', '.latexmkrc', '.git', '.hg')
+	return root_pattern(file_path) or vim.fn.fnamemodify(file_path, ':p:h')
+end
 
 ---@diagnostic disable-next-line: lowercase-global
 insert = insert or table.insert
 M.ltex_wdirs = nil
 local ltex_getwdirs = function()
-	local ltex_wroot = find_root()
+	local ltex_wroot = M.find_root()
 	local dirs = {}
 	if ltex_wroot ~= nil then
 		for fname, ftype in vim.fs.dir(ltex_wroot) do
@@ -95,6 +95,9 @@ local ltex_getwdirs = function()
 	end
 	return dirs
 end
+
+---
+--- probably not needed anymore:
 
 local ltex_extfiles = function(rule)
 	M.ltex_wdirs = M.ltex_wdirs or ltex_getwdirs()
@@ -114,7 +117,7 @@ M.ltex_disabledrules = function(defaults)
 	for _, file in ltex_extfiles('disabledRules') do
 		local _, _, lang = file:find('ltex%.disabledRules%.([%-%a]+)%.txt$')
 		files[lang] = files[lang] or {}
-		local fullpath = vim.fs.normalize(file, ':p')
+		local fullpath = vim.fs.normalize(file)
 		insert(files[lang], ':' .. fullpath)
 	end
 	if files.default then
@@ -133,7 +136,7 @@ M.ltex_dictionaries = function(defaults)
 	for _, file in ltex_extfiles('dictionary') do
 		local _, _, lang = file:find('ltex%.dictionary%.([%-%a]+)%.txt$')
 		files[lang] = files[lang] or {}
-		local fullpath = vim.fs.normalize(file, ':p')
+		local fullpath = vim.fs.normalize(file)
 		insert(files[lang], ':' .. fullpath)
 	end
 	for _, file in ipairs(vim.api.nvim_get_runtime_file("spell/*.add", true)) do
