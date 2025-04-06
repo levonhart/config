@@ -64,6 +64,36 @@
     },
     {
       "class": "Bitwarden"
+    },
+    {
+      "class": "gnome-control-center"
+    },
+    {
+      "class": "qBittorrent"
+    },
+    {
+      "class": "GoldenDict-ng"
+    },
+    {
+      "class": "ZapZap"
+    },
+    {
+      "class": "zenity"
+    },
+    {
+      "class": "Zotero"
+    },
+    {
+      "class": "Gsconnect-preferences"
+    },
+    {
+      "class": "tecla"
+    },
+    {
+      "class": "gnome-network-displays"
+    },
+    {
+      "class": "zen"
     }
   ],
   "skiptaskbarhidden": [],
