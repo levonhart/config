@@ -11,3 +11,24 @@ index 6d04e8b..0c91899 100644
    fg_alt = '#FFEE79',
    black = '#21252D',
    blacker_than_black = '#1F1F1F',
+diff --git a/lua/lighthaus/core.lua b/lua/lighthaus/core.lua
+index 661c585..f5e8b03 100644
+--- a/lua/lighthaus/core.lua
++++ b/lua/lighthaus/core.lua
+@@ -52,14 +52,14 @@ function M.apply(colors, options)
+   -- EDITOR SETTINGS
+   -- ― ― ― ― ― ― ― ― ―
+   set_highlight('Normal', colors.fg, config.transparent and 'NONE' or colors.bg)
+-  set_highlight('Cursor', colors.hl_yellow, colors.bg)
++  set_highlight('Cursor', colors.bg, colors.cyan2)
+   if vim.o.cursorline then
+     set_highlight('CursorLine', nil, colors.black)
+   else
+     set_highlight('CursorLine')
+   end
+   set_highlight('CursorColumn')
+-  set_highlight('CursorLineNr', colors.hl_yellow, colors.black)
++  set_highlight('CursorLineNr', colors.black, colors.cyan2)
+   set_highlight('ColorColumn', nil, colors.black)
+   set_highlight('LineNr', colors.line_fg, config.transparent and 'NONE' or colors.bg)
+   set_highlight('EndOfBuffer', config.transparent and 'NONE' or colors.bg, config.transparent and 'NONE' or colors.bg)

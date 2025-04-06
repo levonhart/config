@@ -1,5 +1,4 @@
 -- vim: foldmethod=marker
-require('bootstrap')
 -- Options {{{
 vim.opt.encoding = 'utf8'
 vim.opt.backspace = { 'indent', 'eol', 'start' }
@@ -42,14 +41,17 @@ end
 -- Neovide {{{
 if vim.g.neovide then
 	vim.g.neovide_refresh_rate=60
-	vim.g.neovide_transparency=0.9
-	vim.g.neovide_floating_blur_amount_x = 2.0
-	vim.g.neovide_floating_blur_amount_y = 2.0
+	vim.g.neovide_opacity=0.9
+	vim.g.neovide_floating_blur_amount_x = 0.0
+	vim.g.neovide_floating_blur_amount_y = 0.0
 	vim.g.neovide_scroll_animation_length = 0.1
 	vim.g.neovide_cursor_trail_size=0.8
+	vim.g.neovide_cursor_animate_in_insert_mode = false
+	vim.g.neovide_cursor_animate_in_command_line = false
 	vim.opt.guifont= { 'FiraCode Nerd Font', 'DejaVuSansM Nerd Font', 'Fira Code', ':h11' }
 	vim.keymap.set('n', '<c-s-v>', '"+p')
 	vim.keymap.set('i', '<c-s-v>', '<c-r><c-o>+')
+	vim.opt.guicursor:prepend('n-v-c:block-Cursor/lCursor')
 
 	local default_font = vim.o.guifont
 	vim.keymap.set({ 'n', 'i' }, '<c-=>', function()
@@ -91,11 +93,11 @@ map('v', '<c-S-Up>', ":move '<-2<cr>gv=gv", { desc = 'Move line' })
 map('i', '<c-z>', '<c-g>u<esc>[s1z=`]a<c-g>u', { desc = 'Fix spelling' })
 map('n', '<c-s>', ':<c-u>set spell!<cr>', { desc = 'Toggle spell check' })
 map('n', '<leader>p', vim.cmd.Ex)
+map('n', '<c-p>', vim.cmd.Re)
 map("n", '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = 'Substitute all occurences of the word under cursor in the current file' })
 map('n', '¨', '`^', { desc = 'Jump to last insert' })
 map('n', 'ç', '`.', { desc = 'Jump to last change/yank' })
-map('n', 'n', 'nzzzv')
 map('n', 'n', 'nzzzv')
 map('n', 'N', 'Nzzzv')
 map('i', '<C-c>', '<Esc>')
@@ -116,6 +118,7 @@ map('n', '<space>q', vim.diagnostic.setloclist)
 -- }}} Keys
 
 -- Plugins {{{
+require('bootstrap')
 require('lazy').setup {
 	spec = {
 		{ 'nvim-lua/plenary.nvim' },
@@ -128,8 +131,15 @@ require('lazy').setup {
 			dependencies = { 'nvim-tree/nvim-web-devicons' } },
 		{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
 		{ 'navarasu/onedark.nvim', priority = 1000, },
-		{ 'mrjones2014/lighthaus.nvim', opts = {}, },
-		{ 'nvim-lualine/lualine.nvim' },
+		{ 'mrjones2014/lighthaus.nvim', config = function()
+				require('lighthaus').setup { transparent = true }
+				if vim.g.neovide then
+					vim.cmd(string.format('highlight Normal guibg=%s', require('lighthaus.colors').bg))
+				end
+			end },
+		{ 'nvim-lualine/lualine.nvim',
+			dependencies =  { 'nvim-tree/nvim-web-devicons', 'AndreM222/copilot-lualine' },
+		},
 		{ 'tpope/vim-fugitive' },
 		{ 'SirVer/ultisnips' },
 		{ 'numToStr/Comment.nvim', lazy = false },
@@ -151,6 +161,7 @@ require('lazy').setup {
 				'hrsh7th/cmp-nvim-lua',
 				-- 'quangnguyen30192/cmp-nvim-ultisnips',
 				'petertriho/cmp-git',
+				'zbirenbaum/copilot-cmp',
 			}
 		},
 		{ 'mfussenegger/nvim-lint' },
@@ -158,11 +169,14 @@ require('lazy').setup {
 		-- { 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
 		{ 'barreiroleo/ltex-extra.nvim', ft = { 'tex', 'latex', 'bib', 'markdown' }, branch = 'dev',
 			config = function() require('ltex_extra').setup({
-				load_langs = { 'en-US', 'en-GB', 'pt-BR' }, path = find_root(),
+				load_langs = { 'en-US', 'en-GB', 'pt-BR' }, path = require('plugins').ltex_find(),
 				log_level = 'info' })
 			end
 		},
+		{ 'folke/trouble.nvim', opts = {} },
 		{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
+		{ "zbirenbaum/copilot-cmp", config = function ()
+			require("copilot_cmp").setup() end },
 	},
 	checker = { enabled  = false },
 	custom_keys = { ["<localleader>l"] = false, ["<localleader>t"] = false, },
@@ -260,23 +274,28 @@ gitsigns.setup {
 -- Fzf-Lua {{{
 local fzf_lua = require('fzf-lua')
 fzf_lua.setup {
-	'default',
+	'fzf-native',
 	fzf_opts = { ['--layout'] = 'default' },
 }
-map('n', '<space>p', fzf_lua.files)
+map('n', '<space>P', fzf_lua.files)
 map('n', '<space>b', fzf_lua.buffers)
-map('n', '<space>g', fzf_lua.git_files)
-map('n', '<space>f', fzf_lua.grep)
-map('n', '<space>F', fzf_lua.live_grep)
+map('n', '<space>t', fzf_lua.tabs)
+map('n', '<space>p', fzf_lua.git_files)
+map('n', '<space>gg', fzf_lua.grep)
+map('n', '<space>G', fzf_lua.live_grep)
+map('n', '<space>gw', fzf_lua.grep_cword)
+map('n', '<space>gW', fzf_lua.grep_cWORD)
 map('n', '<space>l', fzf_lua.lines)
 map('n', "<space>'", fzf_lua.marks)
 map('n', '<space>r', fzf_lua.oldfiles)
 map('n', '<space>:', fzf_lua.command_history)
 map('n', '<space>c', fzf_lua.git_commits)
+map('n', '<space>x', fzf_lua.git_commits)
 map('n', '<space>/', fzf_lua.search_history)
 -- map('n', '<space>s', fzf_lua.snippets)
 map('n', '<space>m', fzf_lua.keymaps)
-map('n', '<space><F1>', fzf_lua.help_tags)
+map('n', '<space>h', fzf_lua.help_tags)
+map('n', '<space>z', fzf_lua.spell_suggest)
 map('i', '<c-x><c-g>', fzf_lua.complete_path)
 -- }}} Fzf-Lua
 
@@ -297,6 +316,19 @@ require('lualine').setup {
 		theme = 'lighthaus',
 		component_separators = '|',
 		section_separators = '',
+	},
+	sections = {
+		lualine_a = { 'mode' },
+		lualine_b = { 'branch', 'diff', 'diagnostics' },
+		lualine_c = { 'filename' },
+		lualine_x = {
+			{ 'copilot', symbols = { status = { icons = { unknown = '' } } } },
+			'encoding',
+			'fileformat',
+			'filetype',
+		},
+		lualine_y = { 'progress' },
+		lualine_z = { 'location' }
 	},
 }
 
@@ -368,11 +400,12 @@ cmp.setup {
 	}),
 	sources = cmp.config.sources({
 		{ name = 'nvim_lsp' },
-		-- { name = 'ultisnips' },
-	}, {
-		{ name = 'buffer' },
 		{ name = 'git' },
 		{ name = 'path' },
+		-- { name = 'ultisnips' },
+	}, {
+		{ name = 'copilot' },
+		{ name = 'buffer' },
 	}),
 	completion = {
 		autocomplete = false,
@@ -394,13 +427,13 @@ cmp.setup.filetype('gitcommit', {
 	})
 })
 
-cmp.event:on('menu_opened', function()
-	vim.b.copilot_suggestion_hidden = true
-end)
-
-cmp.event:on('menu_closed', function()
-	vim.b.copilot_suggestion_hidden = false
-end)
+-- cmp.event:on('menu_opened', function()
+-- 	vim.b.copilot_suggestion_hidden = true
+-- end)
+--
+-- cmp.event:on('menu_closed', function()
+-- 	vim.b.copilot_suggestion_hidden = false
+-- end)
 -- }}} Nvim-Cmp
 
 -- Nvim-Lint {{{
@@ -419,23 +452,25 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 local on_attach = function(_, bufnr)
 	vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-	local opts = { buffer = bufnr }
-	map('n', 'gD', vim.lsp.buf.declaration, opts)
-	map('n', 'gd', vim.lsp.buf.definition, opts)
-	map('n', 'gY', vim.lsp.buf.implementation, opts)
-	map('n', 'gy', vim.lsp.buf.type_definition, opts)
-	map('n', '<leader>k', vim.lsp.buf.hover, opts)
-	map('n', '<leader><C-k>', vim.lsp.buf.signature_help, opts)
-	map({ 'n', 'v' }, '<leader>f', vim.lsp.buf.code_action, opts)
-	map('n', '<leader>rn', vim.lsp.buf.rename, opts)
-	map('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
-	map('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+	map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Go to declaration (Lsp)' } )
+	map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Go to definition (Lsp)' } )
+	map('n', 'gY', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Go to implementation (Lsp)' } )
+	map('n', 'gy', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Go to type definition (Lsp)' } )
+	map('n', 'gR', vim.lsp.buf.references, { buffer = bufnr, desc = 'Go to references (Lsp)' } )
+	map('n', 'gS', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols (Lsp)' } )
+	map('n', '<leader>k', vim.lsp.buf.hover, { buffer = bufnr, desc = 'Display symbol information (Lsp)' } )
+	map('n', '<leader><C-k>', vim.lsp.buf.signature_help, { buffer = bufnr, desc = 'Display signature (Lsp)' } )
+	map('i', '<C-s>', vim.lsp.buf.signature_help, { buffer = bufnr, desc = 'Display signature (Lsp)' } )
+	map({ 'n', 'v' }, '<leader>f', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code action (Lsp)' } )
+	map('n', '<leader>rn', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Rename (Lsp)' } )
+	map('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, { buffer = bufnr, desc = 'Add workspace directory (Lsp)' } )
+	map('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, { buffer = bufnr, desc = 'Remove workspace directory (Lsp)' } )
 	map('n', '<leader>wl', function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, opts)
+	end, { buffer = bufnr, desc = 'List workspace folders (Lsp)' } )
 	map('n', '<space>=', function()
 		vim.lsp.buf.format { async = true }
-	end, opts)
+	end, { buffer = bufnr, desc = 'Format document (Lsp)' } )
 end
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
@@ -485,8 +520,6 @@ local ltex_settings = function() return {
 			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
 			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
 		},
-		-- dictionary = plugins.ltex_dictionaries { },
-		-- hiddenFalsePositives = plugins.ltex_falsepositives { },
 	},
 }
 end
@@ -557,7 +590,8 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 			{ lnum = vim.api.nvim_win_get_cursor(0)[1]-1 })
 		if diagnostics ~= nil and diagnostics[1] ~= nil then
 			local width = vim.o.columns - 15
-			local msg = string.sub((diagnostics[1].source or '') ..': '.. diagnostics[1].message, 1, width)
+			local msg = string.sub((diagnostics[1].source or '') ..': '
+				.. diagnostics[1].message:gsub('[\n\t]', '    '), 1, width)
 			local hl = hl_echo_diagnostics[diagnostics[1].severity]
 			vim.api.nvim_echo({{msg, hl}}, false, {})
 		end
@@ -565,18 +599,35 @@ vim.api.nvim_create_autocmd('CursorMoved', {
 })
 -- }}} Diagnostics
 
+-- Trouble {{{
+map("n", "<leader>tt", '<cmd>Trouble diagnostics toggle<cr>', { desc = 'Toggle Trouble' })
+map("n", "<leader>tw", '<cmd>Trouble diagnostics toggle<cr>',
+	{ desc = 'Trouble workspace diagnostics' })
+map("n", "<leader>td", '<cmd>Trouble diagnostics toggle focus=false filter.buf=0<cr>',
+	{ desc = 'Trouble document diagnostics' })
+map("n", "<leader>tq", '<cmd>Trouble diagnostics toggle quickfix<cr>',
+	{ desc = 'Trouble quickfix' })
+map("n", "<leader>tl", '<cmd>Trouble diagnostics toggle loclist<cr>',
+	{ desc = 'Trouble location list' })
+map("n", "<leader>ts", '<cmd>Trouble diagnostics toggle lsp_document_symbols<cr>',
+	{ desc = 'Lsp document symbols (Trouble)' })
+map("n", "[t", function() require("trouble").next({skip_groups = true, jump = true}); end,
+	{ desc = 'Go to next Trouble' })
+map("n", "]t", function() require("trouble").previous({skip_groups = true, jump = true}); end,
+	{ desc = 'Go to previous Trouble' })
+-- }}} Trouble
+
 -- Copilot {{{
 require('copilot').setup {
-	suggestion = {
-		enabled = true,
-		keymap = { dismiss = '<c-[>', accept = '<c-]>' }
-	},
-	panel = { enabled = true, keymap = { open = '<c-/>' }, },
+	suggestion = { enabled = false, },
+	panel = { enabled = false, keymap = { open = '<c-/>' }, },
 	filetypes = {
 		-- python = true, -- allow specific filetype
 		-- ['*'] = false,
+		tex = false,
 	},
 }
+vim.cmd("silent! Copilot disable")
 -- }}} Copilot
 
 -- Zen-Mode {{{
