@@ -1,0 +1,13 @@
+diff --git a/lua/copilot/client/init.lua b/lua/copilot/client/init.lua
+index 8e06f14..7f13218 100644
+--- a/lua/copilot/client/init.lua
++++ b/lua/copilot/client/init.lua
+@@ -46,7 +46,7 @@ function M.buf_attach(force)
+   end
+ 
+   if is_disabled then
+-    logger.warn("copilot is disabled")
++    logger.info("copilot is disabled")
+     return
+   end
+ 
