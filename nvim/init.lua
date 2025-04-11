@@ -1,5 +1,6 @@
 -- vim: foldmethod=marker
 -- Options {{{
+vim.opt.guicursor = ''
 vim.opt.encoding = 'utf8'
 vim.opt.backspace = { 'indent', 'eol', 'start' }
 vim.opt.history = 500
@@ -26,9 +27,12 @@ vim.opt.smartindent = true
 vim.opt.termguicolors = true
 vim.opt.undofile = true
 vim.opt.colorcolumn = '90'
+vim.opt.signcolumn = 'yes'
+vim.opt.isfname:append("@-@")
 vim.opt.conceallevel = 2
 vim.g.tex_flavor='latex'
 vim.g.tex_conceal='abdmgs'
+vim.g.netrw_banner=0
 
 vim.opt.undodir = vim.loop.os_homedir() .. '/.vim/undo/'
 
@@ -39,6 +43,7 @@ end
 -- }}} Options
 
 -- Neovide {{{
+local map = vim.keymap.set
 if vim.g.neovide then
 	vim.g.neovide_refresh_rate=60
 	vim.g.neovide_opacity=0.9
@@ -48,26 +53,26 @@ if vim.g.neovide then
 	vim.g.neovide_cursor_trail_size=0.8
 	vim.g.neovide_cursor_animate_in_insert_mode = false
 	vim.g.neovide_cursor_animate_in_command_line = false
-	vim.opt.guifont= { 'FiraCode Nerd Font', 'DejaVuSansM Nerd Font', 'Fira Code', ':h11' }
-	vim.keymap.set('n', '<c-s-v>', '"+p')
-	vim.keymap.set('i', '<c-s-v>', '<c-r><c-o>+')
+	vim.opt.guifont= { 'FiraCode Nerd Font', 'DejaVuSansM Nerd Font', 'Fira Code', ':h10' }
+	map('n', '<c-s-v>', '"+p')
+	map('i', '<c-s-v>', '<c-r><c-o>+')
 	vim.opt.guicursor:prepend('n-v-c:block-Cursor/lCursor')
 
 	local default_font = vim.o.guifont
-	vim.keymap.set({ 'n', 'i' }, '<c-=>', function()
+	map({ 'n', 'i' }, '<c-=>', function()
 		local fsize = vim.o.guifont:match('^.*:h([^:]*).*$')
 		fsize = tonumber(fsize) + 1
 		local gfont = vim.o.guifont:gsub(':h([^:]*)', ':h' .. fsize)
 		vim.o.guifont = gfont
 	end)
 
-	vim.keymap.set({ 'n', 'i' }, '<c-->', function()
+	map({ 'n', 'i' }, '<c-->', function()
 		local fsize = vim.o.guifont:match('^.*:h([^:]*).*$')
 		fsize = tonumber(fsize) - 1
 		local gfont = vim.o.guifont:gsub(':h([^:]*)', ':h' .. fsize)
 		vim.o.guifont = gfont
 	end)
-	vim.keymap.set({ 'n', 'i' }, '<c-0>', function()
+	map({ 'n', 'i' }, '<c-0>', function()
 		vim.o.guifont = default_font
 	end)
 end
@@ -76,7 +81,6 @@ end
 -- Keys {{{
 vim.g.mapleader = '\\'
 vim.g.maplocalleader = '\\'
-local map = vim.keymap.set
 map('n', '<a-h>', '<c-w><c-h>', { desc = 'Change window' })
 map('n', '<a-j>', '<c-w><c-j>', { desc = 'Change window' })
 map('n', '<a-k>', '<c-w><c-k>', { desc = 'Change window' })
@@ -93,7 +97,7 @@ map('v', '<c-S-Up>', ":move '<-2<cr>gv=gv", { desc = 'Move line' })
 map('i', '<c-z>', '<c-g>u<esc>[s1z=`]a<c-g>u', { desc = 'Fix spelling' })
 map('n', '<c-s>', ':<c-u>set spell!<cr>', { desc = 'Toggle spell check' })
 map('n', '<leader>p', vim.cmd.Ex)
-map('n', '<c-p>', vim.cmd.Re)
+map('n', '<c-p>', function() if vim.g.loaded_netrw then vim.cmd.Rex() else vim.cmd.Ex() end end)
 map("n", '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = 'Substitute all occurences of the word under cursor in the current file' })
 map('n', '¨', '`^', { desc = 'Jump to last insert' })
@@ -110,11 +114,17 @@ map('n', '[g', "<cmd>lnext<CR>zz",
 map('n', ']g', "<cmd>lprev<CR>zz",
 	{ desc = 'Go to next jump location' })
 map('n', '<space>e', vim.diagnostic.open_float)
-map('n', '[d', vim.diagnostic.goto_prev,
+map('n', '[d', function() vim.diagnostic.jump {count=-1, float=true} end,
 	{ desc = 'Go to previous diagnostic message' })
-map('n', ']d', vim.diagnostic.goto_next,
+map('n', ']d', function() vim.diagnostic.jump {count=1, float=true} end,
 	{ desc = 'Go to next diagnostic message' })
 map('n', '<space>q', vim.diagnostic.setloclist)
+-- greatest remap ever : primeagen
+map('x', '<leader>p', '"_dP')
+-- next greatest remap ever : asbjornHaland
+map({"n", "v"}, "<leader>y", '"+y')
+map("n", "<leader>Y", '"+Y')
+map({"n", "v"}, "<leader>d", '"_d')
 -- }}} Keys
 
 -- Plugins {{{
@@ -127,9 +137,14 @@ require('lazy').setup {
 			dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
 			build = ':TSUpdate', },
 		{ 'nvim-tree/nvim-web-devicons' },
+		{ 'prichrd/netrw.nvim', opts = {} },
 		{ 'glepnir/dashboard-nvim', event = 'VimEnter',
 			dependencies = { 'nvim-tree/nvim-web-devicons' } },
 		{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
+		{ "gennaro-tedesco/nvim-possession", dependencies = { "ibhagwan/fzf-lua", },
+			config = function() require('nvim-possession').setup {}
+				vim.fn.mkdir(require('nvim-possession.config').sessions.sessions_path, 'p')
+			end, },
 		{ 'navarasu/onedark.nvim', priority = 1000, },
 		{ 'mrjones2014/lighthaus.nvim', config = function()
 				require('lighthaus').setup { transparent = true }
@@ -140,7 +155,11 @@ require('lazy').setup {
 		{ 'nvim-lualine/lualine.nvim',
 			dependencies =  { 'nvim-tree/nvim-web-devicons', 'AndreM222/copilot-lualine' },
 		},
-		{ 'tpope/vim-fugitive' },
+		{ "mbbill/undotree", config = function()
+			map("n", "<leader>u", vim.cmd.UndotreeToggle) end },
+		{ 'tpope/vim-fugitive', config = function()
+			map("n", "<leader>g", vim.cmd.Git)
+		end },
 		{ 'SirVer/ultisnips' },
 		{ 'numToStr/Comment.nvim', lazy = false },
 		{ 'kylechui/nvim-surround', opts = {}, event = 'VeryLazy' },
@@ -173,6 +192,8 @@ require('lazy').setup {
 				log_level = 'info' })
 			end
 		},
+		{ 'MeanderingProgrammer/render-markdown.nvim', opts = {}, -- require python-pylatexenc
+			dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, },
 		{ 'folke/trouble.nvim', opts = {} },
 		{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
 		{ "zbirenbaum/copilot-cmp", config = function ()
@@ -195,38 +216,40 @@ require('Comment').setup {
     padding = true,
     sticky = true,
     ignore = nil,
-    extra = { above = '<leader>cO', below = '<leader>co', eol = '<leader>cA', },
+    extra = { above = 'gcO', below = 'gco', eol = 'gcA', },
     mappings = { basic = false, extra = true, opleader = false },
 }
 -- Mappings
 local comment = require('Comment.api')
-map('n', '<leader>cc', function() plugins.comment_current_count(comment.comment.linewise) end,
+map('n', 'gcc', function() plugins.comment_current_count(comment.comment.linewise) end,
 	{ desc = 'Comment linewise' })
-map('n', '<leader>bb', function() plugins.comment_current_count(comment.comment.blockwise) end,
-	{ desc = 'Comment blockwise' })
-map('n', '<leader>c<space>', function() plugins.comment_current_count(comment.toggle.linewise) end,
-	{ desc = 'Toggle comment linewise' })
-map('n', '<leader>b<space>', function() plugins.comment_current_count(comment.toggle.blockwise) end,
-	{ desc = 'Toggle comment blockwise' })
-map('n', '<leader>c', plugins.comment_move_count(comment, 'comment.linewise'),
-	{ desc = 'Comment linewise', expr = true })
-map('n', '<leader>b', plugins.comment_move_count(comment, 'comment.blockwise'),
-	{ desc = 'Comment blockwise', expr = true })
-map('x', '<leader>c<space>', function() plugins.comment_linewise_visual(comment.toggle) end,
-	{ desc = 'Toggle comment on selection linewise' })
-map('x', '<leader>b<space>', function() plugins.comment_blockwise_visual(comment.toggle) end,
-	{ desc = 'Toggle comment on selection blockwise' })
-map('x', '<leader>cc', function() plugins.comment_linewise_visual(comment.comment) end,
-	{ desc = 'Comment selection linewise' })
-map('x', '<leader>bb', function() plugins.comment_blockwise_visual(comment.comment) end,
-	{ desc = 'Comment selection blockwise' })
-map('n', '<leader>cu', function() plugins.comment_current_count(comment.uncomment.linewise) end,
+map('n', 'gcuu', function() plugins.comment_current_count(comment.uncomment.linewise) end,
 	{ desc = 'Uncomment linewise' })
-map('n', '<leader>bu', function() plugins.comment_current_count(comment.uncomment.blockwise) end,
-	{ desc = 'Uncomment blockwise' })
-map('x', '<leader>cu', function() plugins.comment_linewise_visual(comment.uncomment) end,
+map('n', 'gbb', function() plugins.comment_current_count(comment.comment.blockwise) end,
+	{ desc = 'Comment blockwise' })
+map('n', 'gc<space>', function() plugins.comment_current_count(comment.toggle.linewise) end,
+	{ desc = 'Toggle comment linewise' })
+map('n', 'gb<space>', function() plugins.comment_current_count(comment.toggle.blockwise) end,
+	{ desc = 'Toggle comment blockwise' })
+map('n', 'gc', plugins.comment_move_count(comment, 'comment.linewise'),
+	{ desc = 'Comment linewise', expr = true })
+map('n', 'gb', plugins.comment_move_count(comment, 'comment.blockwise'),
+	{ desc = 'Comment blockwise', expr = true })
+map('n', 'gcu', plugins.comment_move_count(comment, 'uncomment.linewise'),
+	{ desc = 'Uncomment linewise', expr = true })
+map('n', 'gbu', plugins.comment_move_count(comment, 'uncomment.blockwise'),
+	{ desc = 'Uncomment blockwise', expr = true })
+map('x', 'gc<space>', function() plugins.comment_linewise_visual(comment.toggle) end,
+	{ desc = 'Toggle comment on selection linewise' })
+map('x', 'gb<space>', function() plugins.comment_blockwise_visual(comment.toggle) end,
+	{ desc = 'Toggle comment on selection blockwise' })
+map('x', 'gcc', function() plugins.comment_linewise_visual(comment.comment) end,
+	{ desc = 'Comment selection linewise' })
+map('x', 'gbb', function() plugins.comment_blockwise_visual(comment.comment) end,
+	{ desc = 'Comment selection blockwise' })
+map('x', 'gcu', function() plugins.comment_linewise_visual(comment.uncomment) end,
 	{ desc = 'Uncomment selection linewise' })
-map('x', '<leader>bu', function() plugins.comment_blockwise_visual(comment.uncomment) end,
+map('x', 'gbu', function() plugins.comment_blockwise_visual(comment.uncomment) end,
 	{ desc = 'Uncomment selection blockwise' })
 -- }}} Comment
 
@@ -242,14 +265,14 @@ gitsigns.setup {
 		changedelete = { text = '~' },
 	},
 	on_attach = function(bufnr)
-		vim.keymap.set('n', '<leader>hv', gitsigns.select_hunk, { buffer = bufnr, desc = 'Visual select git hunk' })
-		vim.keymap.set('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
-		vim.keymap.set('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
-		vim.keymap.set('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'Undo last stage' })
-		vim.keymap.set('n', '<leader>hX', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
+		map('n', '<leader>hv', gitsigns.select_hunk, { buffer = bufnr, desc = 'Visual select git hunk' })
+		map('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+		map('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
+		map('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'Undo last stage' })
+		map('n', '<leader>hX', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
 
 		-- don't override the built-in and fugitive keymaps
-		vim.keymap.set({ 'n', 'v' }, ']c', function()
+		map({ 'n', 'v' }, ']c', function()
 			if vim.wo.diff then
 				return ']c'
 			end
@@ -258,7 +281,7 @@ gitsigns.setup {
 			end)
 			return '<Ignore>'
 		end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
-		vim.keymap.set({ 'n', 'v' }, '[c', function()
+		map({ 'n', 'v' }, '[c', function()
 			if vim.wo.diff then
 				return '[c'
 			end
@@ -281,6 +304,8 @@ map('n', '<space>P', fzf_lua.files)
 map('n', '<space>b', fzf_lua.buffers)
 map('n', '<space>t', fzf_lua.tabs)
 map('n', '<space>p', fzf_lua.git_files)
+map('n', '<space>f', fzf_lua.grep)
+map('n', '<space>F', fzf_lua.live_grep)
 map('n', '<space>gg', fzf_lua.grep)
 map('n', '<space>G', fzf_lua.live_grep)
 map('n', '<space>gw', fzf_lua.grep_cword)
@@ -320,7 +345,10 @@ require('lualine').setup {
 	sections = {
 		lualine_a = { 'mode' },
 		lualine_b = { 'branch', 'diff', 'diagnostics' },
-		lualine_c = { 'filename' },
+		lualine_c = {
+			'filename',
+			{ require("nvim-possession").status,
+				cond = function() return require("nvim-possession").status() ~= nil end, }, },
 		lualine_x = {
 			{ 'copilot', symbols = { status = { icons = { unknown = '' } } } },
 			'encoding',
@@ -333,6 +361,27 @@ require('lualine').setup {
 }
 
 -- }}} Lualine
+
+-- Fugitive {{{
+
+vim.api.nvim_create_autocmd('BufWinEnter', {
+    group = vim.api.nvim_create_augroup('FugitiveEvents', {}),
+    pattern = '',
+	callback = function()
+		if vim.bo.ft ~= 'fugitive' then return end
+
+		local bufnr = vim.api.nvim_get_current_buf()
+		local opts = { buffer = bufnr, remap = false }
+		map('n', '<leader>pp', function() vim.cmd.Git('push') end, opts)
+		map('n', '<leader>P', function() vim.cmd.Git({ args = { 'pull --rebase' } }) end, opts)
+
+		-- set upstream
+		map('n', '<leader>pu', ':Git push -u origin ', opts);
+		map('n', '<leader>bu', ':Git branch -u origin ', opts);
+	end
+})
+
+-- }}} Fugitive
 
 -- Vimtex {{{
 if vim.fn.executable('sioyek') then
@@ -468,9 +517,7 @@ local on_attach = function(_, bufnr)
 	map('n', '<leader>wl', function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, { buffer = bufnr, desc = 'List workspace folders (Lsp)' } )
-	map('n', '<space>=', function()
-		vim.lsp.buf.format { async = true }
-	end, { buffer = bufnr, desc = 'Format document (Lsp)' } )
+	map('n', '<space>=', function() vim.lsp.buf.format { async = true } end, { buffer = bufnr, desc = 'Format document (Lsp)' } )
 end
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
@@ -645,7 +692,7 @@ require('dashboard').setup {
 	config = {
 		shortcut = {
 			{ desc = '✍ Edit', group = 'Boolean', action = 'enew', key = 'e' },
-			{ desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+			-- { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
 			{
 				icon = ' ',
 				icon_hl = '@variable',
@@ -656,9 +703,15 @@ require('dashboard').setup {
 			},
 			{
 				desc = ' Repos',
-				group = 'DiagnosticHint',
+				group = 'Tag',
 				action = 'FzfLua files cwd=~/repos',
 				key = 'a',
+			},
+			{
+				desc = '📌Sessions',
+				group = 'Special',
+				action = "lua require('nvim-possession').list()",
+				key = 's',
 			},
 			{
 				desc = ' dotfiles',
@@ -678,7 +731,8 @@ require('dashboard').setup {
 		'    In the Land of Mordor where the Shadows lie.               ',
 		'      One Ring to rule them all, One Ring to find them,        ',
 		'    One Ring to bring them all and in the darkness bind them   ',
-		'      In the Land of Mordor where the Shadows lie.             '},
+		'      In the Land of Mordor where the Shadows lie.             ',
+		''},
 		footer = {
 			'                          ._____________.',
 			'       MM.         .MM    |             |',
@@ -704,4 +758,13 @@ local hiDashboard = {
 plugins.vim_highlights(hiDashboard)
 map('n', '<c-t>', ':tabnew<CR>:Dashboard<CR>:echo "New tab"<CR>',
 	{ desc = 'Open new tab' })
--- }}} Dashboard   
+-- }}} Dashboard
+
+-- Possesion {{{
+require('nvim-possession').setup { autoswitch = { enable = true, exclude_ft = {}, }, }
+map('n', '<space>ss', function() require('nvim-possession').list() end, { desc = 'List Sessions', })
+map('n', '<space>sc', function() require('nvim-possession').new() end, { desc = 'Create new session', })
+map('n', '<space>su', function() require('nvim-possession').update() end, { desc = 'Update current session', })
+map('n', '<space>sd', function() require('nvim-possession').delete() end, { desc = 'Delete selected session', })
+-- }}} Possesion
+

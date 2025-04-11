@@ -93,7 +93,7 @@ M.ltex_find = function()
 			wdir = root .. '/.ltex'
 		end
 	end
-	vim.print('ltex Working Directory:\t' .. (wdir or ''))
+	vim.notify('ltex Working Directory:\t' .. (wdir or ''), vim.log.levels.INFO)
 	return wdir or ''
 end
 
