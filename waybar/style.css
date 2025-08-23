@@ -1,0 +1,168 @@
+@import "mocha.css";
+
+* {
+  font-family: Fira Sans, DejaVu Sans, FiraCode Nerd Font, FantasqueSansM Nerd Font, sans-serif;
+  font-size: 13px;
+  min-height: 0;
+  padding: 0;
+}
+
+#waybar {
+  background: rgba(17,17,27,0.85); /* @crust */
+  color: @text;
+  margin: 0px;
+}
+
+#workspaces {
+  border-radius: 1rem;
+  margin: 2px;
+  background-color: @base;
+  margin-left: 2px;
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+#workspaces button {
+  color: @lavender;
+  border-radius: 1rem;
+  padding: 0.4rem;
+}
+
+#workspaces button.active {
+  color: @sky;
+  border-radius: 1rem;
+}
+
+#workspaces button:hover {
+  color: @sapphire;
+  border-radius: 1rem;
+}
+
+#cpu {
+  border-radius: 1rem 0px 0px 1rem;
+  margin-left: 1rem;
+}
+
+#idle_inhibitor,
+#bluetooth,
+#custom-music,
+#tray,
+#backlight,
+#clock,
+#network,
+#battery,
+#temperature,
+#memory,
+#cpu,
+#power-profiles-daemon,
+#backlight,
+#pulseaudio,
+#custom-lock,
+#custom-power {
+  background-color: @base;
+  padding: 0.5rem 1rem;
+  margin: 2px 0px 4px 0px;
+}
+
+#idle_inhibitor:hover,
+#custom-music:hover,
+#tray:hover,
+#backlight:hover,
+#clock:hover,
+#network:hover,
+#battery:hover,
+#temperature:hover,
+#memory:hover,
+#cpu:hover,
+#power-profiles-daemon:hover,
+#backlight:hover,
+#pulseaudio:hover,
+#custom-lock:hover,
+#custom-power:hover {
+  background-color: @surface0;
+}
+
+#clock {
+  color: @blue;
+  border-radius: 1rem;
+  margin-right: 1rem;
+}
+#power-profiles-daemon {
+  color: @blue;
+  border-radius: 0px 0px 0px 0px;
+  padding-right: 3ex;
+}
+
+#battery {
+  color: @green;
+  border-radius: 0px 1rem 1rem 0px;
+  margin-right: 2px;
+}
+
+#battery.charging {
+  color: @green;
+}
+
+#battery.warning:not(.charging) {
+  color: @red;
+}
+
+#backlight {
+  color: @yellow;
+}
+
+#backlight {
+    border-radius: 0;
+}
+
+#idle_inhibitor {
+  color: @peach;
+  border-radius: 1rem 0px 0px 1rem;
+  margin-left: 1rem;
+}
+
+#pulseaudio {
+  color: @maroon;
+  border-radius: 0px;
+}
+
+#custom-music {
+  color: @mauve;
+  border-radius: 1rem;
+}
+
+#custom-lock {
+    border-radius: 1rem 0px 0px 1rem;
+    color: @lavender;
+}
+
+#temperature {
+    margin-right: 1rem;
+    padding-right: 1.5rem;
+    border-radius: 0px 1rem 1rem 0px;
+}
+
+#tray {
+  margin-right: 0px;
+  border-radius: 1rem 0px 0px 1rem;
+}
+
+#custom-power {
+    margin-right: 2px;
+    border-radius: 0px 1rem 1rem 0px;
+    color: @red;
+}
+
+tooltip {
+    background: @crust;
+    border-radius: 12px;
+	padding: 2rem;
+}
+
+tooltip label {
+    color: @text;
+    font-size: 13px;
+}
+
+tooltip > box {
+	margin: 8px;
+}

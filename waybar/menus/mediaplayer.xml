@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <object class="GtkMenu" id="menu">
+        <child>
+            <object class="GtkMenuItem" id="play-pause">
+                <property name="label">  Play/Pause</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="next">
+                <property name="label">  Next</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="previous">
+                <property name="label">  Previous</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="stop">
+                <property name="label">  Stop</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="shuffle">
+                <property name="label">  Shuffle</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="repeat">
+                <property name="label">󰑘  Repeat Once</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="loop">
+                <property name="label">󰑖  Repeat</property>
+            </object>
+        </child>
+
+        <child>
+            <object class="GtkMenuItem" id="disable-loop">
+                <property name="label">󰑗  Disable loop</property>
+            </object>
+        </child>
+
+
+    </object>
+</interface>

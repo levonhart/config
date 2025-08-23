@@ -25,3 +25,6 @@ cmd on-init :{{
 
     on-redraw
 }}
+
+cmd on-cd on-redraw
+cmd on-focus-gained on-redraw

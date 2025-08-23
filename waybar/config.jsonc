@@ -1,0 +1,260 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    // "height": 30, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 0, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+      "hyprland/workspaces",
+      "cpu",
+      "memory",
+      "temperature"
+    ],
+    "modules-center": [
+      "clock"
+    ],
+    "modules-right": [
+      "custom/media",
+      "mpd",
+      "idle_inhibitor",
+      "bluetooth",
+      "pulseaudio",
+      "network",
+      "power-profiles-daemon",
+      "backlight",
+      "battery",
+      "tray",
+      "custom/power"
+    ],
+    // Modules configuration
+    // "sway/workspaces": {
+    //     "disable-scroll": true,
+    //     "all-outputs": true,
+    //     "warp-on-scroll": false,
+    //     "format": "{name}: {icon}",
+    //     "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+    //         "urgent": "",
+    //         "focused": "",
+    //         "default": ""
+    //     }
+    // },
+    "mpd": {
+      "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+      "format-disconnected": "Disconnected  ",
+      "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}󰝚 ",
+      "unknown-tag": "N/A",
+      "interval": 5,
+      "consume-icons": {
+        "on": "  "
+      },
+      "random-icons": {
+        "off": " ",
+        "on": "  "
+      },
+      "repeat-icons": {
+        "on": "  "
+      },
+      "single-icons": {
+        "on": "1 "
+      },
+      "state-icons": {
+        "paused": " ",
+        "playing": " "
+      },
+      "tooltip-format": "MPD (connected)",
+      "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+      "format": "{icon}",
+      "format-icons": {
+        "activated": "󰛊",
+        "deactivated": "󰾫"
+      }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10,
+        // "icons": {
+        //   "blueman": "bluetooth",
+        //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+        // }
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "cpu": {
+      "format": "{usage}% ",
+      "tooltip": false
+    },
+    "memory": {
+      "format": "{}%  "
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+      "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+      },
+      "format": "{capacity}% {icon}",
+      "format-full": "{capacity}% {icon}",
+      "format-charging": "{capacity}% 󰂄",
+      "format-plugged": "{capacity}% ",
+      "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+      "bat": "BAT2"
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "Connected 󰈀",
+        "tooltip-format": "{ifname} via {gwaddr} 󱂇",
+        "format-linked": "{ifname} (No IP) 󰈁",
+        "format-disconnected": "Disconnected 󰌙",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "bluetooth": {
+      "format": "",
+      "rotate": 0,
+      "format-disabled": "",
+      "format-connected": " {num_connections}",
+      "format-connected-battery": "{icon} {num_connections}",
+    // "format-connected-battery": "{icon} {device_alias}-{device_battery_percentage}%",
+    "format-icons": ["󰥇", "󰤾", "󰤿", "󰥀", "󰥁", "󰥂", "󰥃", "󰥄", "󰥅", "󰥆", "󰥈"],
+    // "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device If this config option is not defined or none of the devices in the list are connected, it will fall back to showing the last connected device.
+    "tooltip-format": "{controller_alias}\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{icon} {device_battery_percentage}%"
+    },
+    "pulseaudio": {
+      "scroll-step": 5,
+      "format": "{icon} {volume}% {format_source}",
+      "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": "󰝟 {icon} {format_source}",
+        "format-muted": "󰝟 {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "tooltip-format": "{icon} {desc} // {volume}%",
+        "format-icons": {
+          "headphone": " ",
+          "hands-free": "󱡏 ",
+          "headset": "󱡏 ",
+          "phone": " ",
+          "portable": " ",
+          "car": " ",
+          "default": [" ", " ", " "]
+        },
+      "on-click": "pavucontrol -t 3",
+      "on-click-right": "$HOME/.config/waybar/scripts/volumecontrol.sh -s ''",
+      "on-click-middle": "$HOME/.config/waybar/scripts/volumecontrol.sh -o m",
+      "on-scroll-up": "$HOME/.config/waybar/scripts/volumecontrol.sh -o i",
+      "on-scroll-down": "$HOME/.config/waybar/scripts/volumecontrol.sh -o d",
+      "rotate": 0
+    },
+    "keyboard-state": {
+      "numlock": true,
+      "capslock": true,
+      "format": "{name} {icon}",
+      "format-icons": {
+        "locked": "",
+        "unlocked": ""
+      }
+    },
+    "sway/mode": {
+      "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/scratchpad": {
+      "format": "{icon} {count}",
+      "show-empty": false,
+      "format-icons": ["", " "],
+      "tooltip": true,
+      "tooltip-format": "{app}: {title}"
+    },
+    "custom/media": {
+      "format": "{icon} {text}",
+      "return-type": "json",
+      "max-length": 40,
+      "format-icons": {
+        "spotify": " ",
+        "default": "󰝚 "
+      },
+      "escape": true,
+      "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null", // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+
+
+        "tooltip": true,
+        "on-click": "playerctl play-pause",
+        "on-click-middle": "playerctl previous",
+        "on-scroll-up": "playerctl position 1-",
+        "on-scroll-down": "playerctl position 1+",
+        "menu": "on-click-right",
+        "menu-file": "$HOME/.config/waybar/menus/mediaplayer.xml",
+        "menu-actions": {
+          "play-pause": "playerctl play-pause",
+          "next": "playerctl next",
+          "previous": "playerctl previous",
+          "stop": "playerctl stop",
+          "shuffle": "playerctl shuffle toggle",
+          "repeat": "playerctl loop Track",
+          "loop": "playerctl loop Playlist",
+          "disable-loop": "playerctl loop None"
+        },
+        "restart-interval": 5
+    },
+    "custom/power": {
+      "format" : "⏻ ",
+      "tooltip": false,
+      "on-click": "zenity --question --title='Confirm' --text='Quit Hyprland?' && hyprctl dispatch exit 0",
+      "menu": "on-click-right",
+      "menu-file": "$HOME/.config/waybar/menus/power_menu.xml", // Menu file in resources folder
+      "menu-actions": {
+        "shutdown-now": "shutdown now",
+        "shutdown-wait": "systemctl poweroff",
+        "reboot-now": "systemctl reboot",
+        "reboot-firmware": "systemctl reboot --firmware-setup",
+        "suspend": "systemctl suspend",
+        "hibernate": "systemctl hibernate",
+        "lock": "hyprlock",
+        "logout": "hyprctl dispatch exit 0"
+      },
+      "interval": 86400
+    }
+}
