@@ -30,11 +30,12 @@ vim.opt.colorcolumn = '90'
 vim.opt.signcolumn = 'yes'
 vim.opt.isfname:append("@-@")
 vim.opt.conceallevel = 2
+vim.opt.formatoptions:remove('o')
 vim.g.tex_flavor='latex'
 vim.g.tex_conceal='abdmgs'
 vim.g.netrw_banner=0
 
-vim.opt.undodir = vim.loop.os_homedir() .. '/.vim/undo/'
+vim.opt.undodir = vim.uv.os_homedir() .. '/.vim/undo/'
 
 if vim.fn.executable('rg') then
 	vim.opt.grepformat = '%f:%l:%c:%m'
@@ -100,6 +101,8 @@ map('n', '<leader>p', vim.cmd.Ex)
 map('n', '<c-p>', function() if vim.g.loaded_netrw then vim.cmd.Rex() else vim.cmd.Ex() end end)
 map("n", '<leader>s', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = 'Substitute all occurences of the word under cursor in the current file' })
+map("v", '<leader>s', [["-y:%s/\<<C-r><C-r>-\>/<C-r><C-r>-/gI<Left><Left><Left>]],
+	{ desc = 'Substitute all occurences of the selected word in the current file' })
 map('n', '¨', '`^', { desc = 'Jump to last insert' })
 map('n', 'ç', '`.', { desc = 'Jump to last change/yank' })
 map('n', 'n', 'nzzzv')
@@ -132,7 +135,6 @@ require('bootstrap')
 require('lazy').setup {
 	spec = {
 		{ 'nvim-lua/plenary.nvim' },
-		-- { 'folke/which-key.nvim', opts = {}, event = 'VeryLazy' },
 		{ 'nvim-treesitter/nvim-treesitter',
 			dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
 			build = ':TSUpdate', },
@@ -141,10 +143,7 @@ require('lazy').setup {
 		{ 'glepnir/dashboard-nvim', event = 'VimEnter',
 			dependencies = { 'nvim-tree/nvim-web-devicons' } },
 		{ 'ibhagwan/fzf-lua', dependencies = { 'nvim-tree/nvim-web-devicons' } },
-		{ "gennaro-tedesco/nvim-possession", dependencies = { "ibhagwan/fzf-lua", },
-			config = function() require('nvim-possession').setup {}
-				vim.fn.mkdir(require('nvim-possession.config').sessions.sessions_path, 'p')
-			end, },
+		{ 'folke/persistence.nvim', event = 'BufReadPre', opts = {} },
 		{ 'navarasu/onedark.nvim', priority = 1000, },
 		{ 'mrjones2014/lighthaus.nvim', config = function()
 				require('lighthaus').setup { transparent = true }
@@ -161,7 +160,6 @@ require('lazy').setup {
 			map("n", "<leader>g", vim.cmd.Git)
 		end },
 		{ 'SirVer/ultisnips' },
-		{ 'numToStr/Comment.nvim', lazy = false },
 		{ 'kylechui/nvim-surround', opts = {}, event = 'VeryLazy' },
 		{ 'lewis6991/gitsigns.nvim' },
 		{ 'NvChad/nvim-colorizer.lua', opts = {} },
@@ -185,7 +183,6 @@ require('lazy').setup {
 		},
 		{ 'mfussenegger/nvim-lint' },
 		{ 'lervag/vimtex' },
-		-- { 'vigoux/ltex-ls.nvim', dependencies = { 'neovim/nvim-lspconfig' } },
 		{ 'barreiroleo/ltex-extra.nvim', ft = { 'tex', 'latex', 'bib', 'markdown' }, branch = 'dev',
 			config = function() require('ltex_extra').setup({
 				load_langs = { 'en-US', 'en-GB', 'pt-BR' }, path = require('plugins').ltex_find(),
@@ -198,6 +195,19 @@ require('lazy').setup {
 		{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
 		{ "zbirenbaum/copilot-cmp", config = function ()
 			require("copilot_cmp").setup() end },
+		{ "epwalsh/obsidian.nvim", version = "*", lazy = true, event = {
+			  'BufReadPre ' .. vim.uv.os_homedir() .. '/Documentos/Obsidian/*.md',
+			  'BufNewFile ' .. vim.uv.os_homedir() .. '/Documentos/Obsidian/*.md',
+		}, dependencies = { "nvim-lua/plenary.nvim", },
+			opts = {
+				workspaces = {
+					{
+						name = "baú",
+						path = "~/Documentos/Obsidian/baú",
+					},
+				},
+			},
+		},
 	},
 	checker = { enabled  = false },
 	custom_keys = { ["<localleader>l"] = false, ["<localleader>t"] = false, },
@@ -210,48 +220,6 @@ local plugins = require('plugins')
 require('mason').setup()
 require('mason-lspconfig').setup()
 -- }}} Mason
-
--- Comment {{{
-require('Comment').setup {
-    padding = true,
-    sticky = true,
-    ignore = nil,
-    extra = { above = 'gcO', below = 'gco', eol = 'gcA', },
-    mappings = { basic = false, extra = true, opleader = false },
-}
--- Mappings
-local comment = require('Comment.api')
-map('n', 'gcc', function() plugins.comment_current_count(comment.comment.linewise) end,
-	{ desc = 'Comment linewise' })
-map('n', 'gcuu', function() plugins.comment_current_count(comment.uncomment.linewise) end,
-	{ desc = 'Uncomment linewise' })
-map('n', 'gbb', function() plugins.comment_current_count(comment.comment.blockwise) end,
-	{ desc = 'Comment blockwise' })
-map('n', 'gc<space>', function() plugins.comment_current_count(comment.toggle.linewise) end,
-	{ desc = 'Toggle comment linewise' })
-map('n', 'gb<space>', function() plugins.comment_current_count(comment.toggle.blockwise) end,
-	{ desc = 'Toggle comment blockwise' })
-map('n', 'gc', plugins.comment_move_count(comment, 'comment.linewise'),
-	{ desc = 'Comment linewise', expr = true })
-map('n', 'gb', plugins.comment_move_count(comment, 'comment.blockwise'),
-	{ desc = 'Comment blockwise', expr = true })
-map('n', 'gcu', plugins.comment_move_count(comment, 'uncomment.linewise'),
-	{ desc = 'Uncomment linewise', expr = true })
-map('n', 'gbu', plugins.comment_move_count(comment, 'uncomment.blockwise'),
-	{ desc = 'Uncomment blockwise', expr = true })
-map('x', 'gc<space>', function() plugins.comment_linewise_visual(comment.toggle) end,
-	{ desc = 'Toggle comment on selection linewise' })
-map('x', 'gb<space>', function() plugins.comment_blockwise_visual(comment.toggle) end,
-	{ desc = 'Toggle comment on selection blockwise' })
-map('x', 'gcc', function() plugins.comment_linewise_visual(comment.comment) end,
-	{ desc = 'Comment selection linewise' })
-map('x', 'gbb', function() plugins.comment_blockwise_visual(comment.comment) end,
-	{ desc = 'Comment selection blockwise' })
-map('x', 'gcu', function() plugins.comment_linewise_visual(comment.uncomment) end,
-	{ desc = 'Uncomment selection linewise' })
-map('x', 'gbu', function() plugins.comment_blockwise_visual(comment.uncomment) end,
-	{ desc = 'Uncomment selection blockwise' })
--- }}} Comment
 
 -- Gitsigns {{{
 local gitsigns = require('gitsigns')
@@ -294,6 +262,9 @@ gitsigns.setup {
 }
 -- }}} Gitsigns
 
+-- Telescope {{{
+-- }}} Telescope
+
 -- Fzf-Lua {{{
 local fzf_lua = require('fzf-lua')
 fzf_lua.setup {
@@ -330,7 +301,7 @@ vim.g.UltiSnipsJumpForwardTrigger = '<tab>'
 vim.g.UltiSnipsJumpBackwardTrigger = '<s-tab>'
 vim.g.UltiSnipsEditSplit = 'vertical'
 vim.g.snips_author = 'ABREU, Leonardo C. de.'
-vim.g.UltiSnipsSnippetDirectories = { vim.loop.os_homedir() .. '/.vim/UltiSnips' }
+vim.g.UltiSnipsSnippetDirectories = { vim.uv.os_homedir() .. '/.vim/UltiSnips' }
 vim.fn['UltiSnips#map_keys#MapKeys']()
 -- }}} Ultisnips
 
@@ -345,10 +316,7 @@ require('lualine').setup {
 	sections = {
 		lualine_a = { 'mode' },
 		lualine_b = { 'branch', 'diff', 'diagnostics' },
-		lualine_c = {
-			'filename',
-			{ require("nvim-possession").status,
-				cond = function() return require("nvim-possession").status() ~= nil end, }, },
+		lualine_c = { 'filename' },
 		lualine_x = {
 			{ 'copilot', symbols = { status = { icons = { unknown = '' } } } },
 			'encoding',
@@ -408,8 +376,8 @@ vim.api.nvim_create_autocmd( 'User' , {
 		map( { 'n', 'o', 'x' }, ']e', '<plug>(vimtex-]m)', { buffer = ev.buf })
 		map( { 'n', 'o', 'x' }, ']E', '<plug>(vimtex-]M)', { buffer = ev.buf })
 
-		map( 'n', '<leader>t', '<plug>(vimtex-toc-open)',   { buffer = ev.buf })
-		map( 'n', '<leader>T', '<plug>(vimtex-toc-toggle)', { buffer = ev.buf })
+		map( 'n', '<leader>lT', '<plug>(vimtex-toc-open)',   { buffer = ev.buf })
+		map( 'n', '<leader>lt', '<plug>(vimtex-toc-toggle)', { buffer = ev.buf })
 	end,
 })
 -- }}} Vimtex
@@ -545,7 +513,7 @@ vim.g.latex_commands = { -- Ltex {{{
 	['\\P'] = 'Dummy',
 	['\\W'] = 'Dummy',
 }
-local ltex_settings = function() return {
+local ltex_settings = {
 	ltex = {
 		checkFrequency = 'save',
 		language = 'auto',
@@ -563,26 +531,26 @@ local ltex_settings = function() return {
 			enablePickyRules = true,
 			motherTongue = 'pt-BR',
 		},
-		disabledRules = plugins.ltex_disabledrules {
+		disabledRules = {
 			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
 			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
 		},
 	},
 }
-end
+
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
 	pattern = { '*.tex' },
 	callback = function(ev)
 		local client = require('lspconfig.util').get_active_client_by_name(ev.buf, 'ltex')
 		if client ~= nil then
 			-- plugins.ltex_wdirs = nil
-			client.config.settings = ltex_settings()
+			client.config.settings = ltex_settings
 		end
 	end,
 })
 lspconfig.ltex.setup { capabilities = capabilities, on_attach = on_attach,
 	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
-	settings = ltex_settings(),
+	settings = ltex_settings,
 }
 vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
 	{ desc = 'Print out Ltex Server loaded Settings' }) -- }}} Ltex
@@ -679,7 +647,7 @@ vim.cmd("silent! Copilot disable")
 
 -- Zen-Mode {{{
 map('n', '<a-f>', '<cmd>ZenMode<CR>')
-map('i', '<a-f>', '<cmd>ZenMode<CR>a')
+map('i', '<a-f>', '<cmd>ZenMode<CR>')
 map('n', '<a-s>', '<cmd>Twilight<CR>')
 map('i', '<a-s>', '<cmd>Twilight<CR>a')
 -- }}} Zen-Mode
@@ -710,7 +678,7 @@ require('dashboard').setup {
 			{
 				desc = '📌Sessions',
 				group = 'Special',
-				action = "lua require('nvim-possession').list()",
+				action = "require('plugins').find_session()",
 				key = 's',
 			},
 			{
@@ -756,15 +724,17 @@ local hiDashboard = {
     DashboardFooter = { fg = colors.blue, fmt = 'bold' },
 }
 plugins.vim_highlights(hiDashboard)
-map('n', '<c-t>', ':tabnew<CR>:Dashboard<CR>:echo "New tab"<CR>',
-	{ desc = 'Open new tab' })
+map('n', '<c-t>', ':tabnew<CR>:Dashboard<CR>:echo "New tab"<CR>', { desc = 'Open new tab' })
 -- }}} Dashboard
 
--- Possesion {{{
-require('nvim-possession').setup { autoswitch = { enable = true, exclude_ft = {}, }, }
-map('n', '<space>ss', function() require('nvim-possession').list() end, { desc = 'List Sessions', })
-map('n', '<space>sc', function() require('nvim-possession').new() end, { desc = 'Create new session', })
-map('n', '<space>su', function() require('nvim-possession').update() end, { desc = 'Update current session', })
-map('n', '<space>sd', function() require('nvim-possession').delete() end, { desc = 'Delete selected session', })
--- }}} Possesion
+-- Persistence {{{
+local persistence = require('persistence')
+
+map("n", "<space>sa", function() persistence.load() end, { desc = 'Load directory session (attach)' })
+map("n", "<space>ss", plugins.find_session, { desc = 'Find sessions' })
+map("n", "<space>sS", plugins.save_session, { desc = 'Save session' })
+map("n", "<space>s;", function() persistence.load({ last = true }) end, { desc = 'Load last session' })
+map("n", "<space>sk", function() persistence.stop() end, { desc = "Stop persistence (session won't be saved" })
+
+-- }}} Persistence
 
