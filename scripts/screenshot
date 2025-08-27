@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# vim: set filetype=bash
+#
+result=$(mktemp "${TMPDIR:-/tmp/}$(basename $0)-XXXXXXXX.png")
+gnome-screenshot -f ${result} "$@"
+
+screenshot="$(test -s $result && echo ${result})"
+if [[ -n $screenshot ]]; then
+	satty --filename $screenshot --output-filename ~/Imagens/Capturas\ de\ tela/satty-$(date '+%Y%m%d-%H:%M:%S').png
+else
+	notify "Failed."
+	return 1
+fi

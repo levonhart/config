@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+	[[ "$@" == "key ctrl+v" ]] && wlrctl keyboard type V modifiers CTRL && exit 0 || echo "wlrctl not installed" && exit 2
+fi
+xdotool "$@"
