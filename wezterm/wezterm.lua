@@ -53,14 +53,7 @@ config = {
 	leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1500 },
 	keys = mappings.keys,
 	key_tables = mappings.key_tables,
-	mouse_bindings = {
-		{ -- don't follow links on mouse click
-			event = { Up = { streak = 1, button = 'Left' } },
-			mods = 'NONE',
-			action = act.CompleteSelection 'ClipboardAndPrimarySelection',
-		}
-	},
-
+	mouse_bindings = mappings.mouse_bindings,
 	default_cursor_style = 'BlinkingBlock',
 	animation_fps = 1,
 

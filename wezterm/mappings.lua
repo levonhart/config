@@ -6,7 +6,7 @@ local sessionizer = wezterm.plugin.require 'https://github.com/mikkasendke/sessi
 local sessions = require('sessions')
 local session_name = sessions.session_name
 
-local timeout <const> = 3000
+local timeout <const> = 1000
 
 M = {
 	keys = {
@@ -23,8 +23,8 @@ M = {
 		{ key = '"',   mods = 'CTRL|SHIFT',  action = act.ActivateTabRelative(-1), },
 		{ key = 'h',   mods = 'CTRL|ALT',    action = act.ActivateTabRelative(-1), },
 		{ key = 'l',   mods = 'CTRL|ALT',    action = act.ActivateTabRelative(1), },
-		{ key = 's',   mods = 'LEADER|CTRL', action = act.SplitVertical { domain = 'CurrentPaneDomain' }, },
-		{ key = 'v',   mods = 'LEADER|CTRL', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
+		{ key = 's',   mods = 'LEADER', action = act.SplitVertical { domain = 'CurrentPaneDomain' }, },
+		{ key = 'v',   mods = 'LEADER', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
 		{ key = 'k',   mods = 'LEADER|CTRL', action = act.Multiple { act.ActivatePaneDirection('Up'),
 			act.ActivateKeyTable { name = 'mux_mode', one_shot = false, until_unknown = true, timeout_milliseconds = timeout }, }
 		},
@@ -96,9 +96,7 @@ M = {
 		{ key = 'H',   mods = 'SHIFT|CTRL',  action = act.ActivateCopyMode },
 		{ key = 'X',   mods = 'SHIFT|CTRL',  action = act.QuickSelect },
 		{ key = 'y',   mods = 'LEADER',      action = act.QuickSelect },
-		{ key = 'z',   mods = 'LEADER',      action = act.Multiple { act.TogglePaneZoomState,
-			act.ActivateKeyTable { name = 'mux_mode', one_shot = false, until_unknown = true, timeout_milliseconds = timeout }, }
-		},
+		{ key = 'z',   mods = 'LEADER',      action = act.TogglePaneZoomState,},
 		{ key = 'z',   mods = 'SHIFT|CTRL',  action = act.TogglePaneZoomState },
 		{ key = '{',   mods = 'SHIFT|CTRL',  action = act.ActivateWindowRelative(-1) },
 		{ key = '}',   mods = 'SHIFT|CTRL',  action = act.ActivateWindowRelative(1) },
@@ -155,12 +153,8 @@ M = {
 		{ key = 'n',          mods = 'LEADER|CTRL', action = act.Multiple { act.ActivateTabRelative(1),
 			act.ActivateKeyTable { name = 'mux_mode', one_shot = false, until_unknown = true, timeout_milliseconds = timeout }, }
 		},
-		{ key = '%',          mods= 'LEADER|SHIFT', action = act.Multiple { act.SplitHorizontal { domain = 'CurrentPaneDomain' },
-			act.ActivateKeyTable { name = 'mux_mode', one_shot = false, until_unknown = true, timeout_milliseconds = timeout }, }
-		},
-		{ key = '"',          mods= 'LEADER|SHIFT', action = act.Multiple { act.SplitVertical { domain = 'CurrentPaneDomain' },
-			act.ActivateKeyTable { name = 'mux_mode', one_shot = false, until_unknown = true, timeout_milliseconds = timeout }, }
-		},
+		{ key = '%',          mods= 'LEADER|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
+		{ key = '"',          mods= 'LEADER|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' }, },
 		{ key = 'k',          mods = 'LEADER',      action = act.Multiple { act.ActivatePaneDirection('Up'),
 			act.ActivateKeyTable { name = 'mux_mode', one_shot = false, until_unknown = true, timeout_milliseconds = timeout }, }
 		},
@@ -201,7 +195,7 @@ M = {
 		{ key = 'k', mods = 'LEADER|SHIFT', action = act.MoveTabRelative(-1) },
 		{ key = 'j', mods = 'LEADER|SHIFT', action = act.MoveTabRelative(1) },
 		-- Workspaces
-		{ key = 'S', mods = 'LEADER|SHIFT', action = act.PromptInputLine {
+		{ key = 'c', mods = 'LEADER|CTRL', action = act.PromptInputLine {
 			description = 'New session name',
 			action = wezterm.action_callback(function(window, pane, line)
 				if line:len() > 0 then window:perform_action(act.SwitchToWorkspace { name = line }, pane)
@@ -237,7 +231,7 @@ M = {
 				end
 			end),
 		},
-		{ key = 's', mods = 'LEADER',      action = sessionizer.show('sessions'), },
+		{ key = 's', mods = 'LEADER|CTRL', action = sessionizer.show('sessions'), },
 		{ key = 'f', mods = 'LEADER|CTRL', action = sessionizer.show() },
 		{ key = 'r', mods = 'LEADER|CTRL', action = sessionizer.show('repos') },
 		{ key = '.', mods = 'LEADER|CTRL', action = sessionizer.show('config') },
@@ -384,6 +378,7 @@ M = {
 		},
 		mux_mode = {
 			{ key = 'Escape', action = act.PopKeyTable },
+			{ key = 'Space', action = act.PopKeyTable },
 			{ key = 'a', action = act.PopKeyTable },
 			{ key = 'i', action = act.PopKeyTable },
 			{ key = 'c', mods = 'CTRL', action = act.PopKeyTable },
@@ -393,6 +388,8 @@ M = {
 			{ key = 'l', action = act.ActivatePaneDirection('Right') },
 			{ key = 'o',   mods = 'CTRL',   action = act.RotatePanes('CounterClockwise') },
 			{ key = 'o',   mods = 'ALT',    action = act.RotatePanes('Clockwise') },
+			{ key = 's',                    action = act.SplitVertical { domain = 'CurrentPaneDomain' }, },
+			{ key = 'v',                    action = act.SplitHorizontal { domain = 'CurrentPaneDomain' }, },
 			{ key = '<',   mods = 'SHIFT',  action = act.AdjustPaneSize { 'Left', 4 } },
 			{ key = '>',   mods = 'SHIFT',  action = act.AdjustPaneSize { 'Right', 4 } },
 			{ key = '+',   mods = 'SHIFT',  action = act.AdjustPaneSize { 'Up', 4 } },
@@ -435,6 +432,17 @@ M = {
 			{ key = 'RightShift',  action = act.Nop },
 			{ key = 'LeftControl',  action = act.Nop },
 			{ key = 'RightControl',  action = act.Nop },
+		},
+	},
+	mouse_bindings = {
+		{ -- don't follow links on mouse click
+			event = { Up = { streak = 1, button = 'Left' } },
+			mods = 'NONE',
+			action = act.CompleteSelection 'ClipboardAndPrimarySelection',
+		}, {
+			event = { Up = { streak = 1, button = 'Left' } },
+			mods = 'CTRL',
+			action = act.OpenLinkAtMouseCursor,
 		},
 	},
 }
