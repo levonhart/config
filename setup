@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+usage() {
+    echo "
+Usage: $(basename "$0") [-n | --dry-run] [-h | --help] [-l | --log <file>] [-u | --update]
+
+Arguments:
+    -h, --help              print help
+    -l, --log <file>        set log file path
+    -u, --update            replace only files that are older
+    --dry-run               do a trial run with no permanent changes
+" | column -t -s $'\t'
+    exit 1
+}
+
+dry_run=0
+update=0
+logfile=""
+
+if [ -z "$XDG_CONFIG_HOME" ]; then
+    echo "XDG_CONFIG_HOME is unset, using ~/.config"
+    XDG_CONFIG_HOME=$HOME/.config
+fi
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            ;;
+        -n|--dry-run)
+            dry_run=1
+            ;;
+        -u|--update)
+            update=1
+            ;;
+        -l|--log)
+            logfile="$2"
+            shift
+            ;;
+        -*)
+            printf "$(basename "$0"): invalid option “$1”\n"
+            printf "Try \"$(basename "$0") --help\" for more information."
+            ;;
+        *)
+            usage
+            ;;
+    esac
+    shift
+done
+
+log() {
+    tformat="+%Y-%m-%dT%H:%M:%S%z"
+    is_dryrun=""
+    if [[ $dry_run == "1" ]]; then
+        is_dryrun="[DRY_RUN] "
+    fi
+    if [[ -n $logfile ]]; then
+        echo "[$(date $tformat)] $is_dryrun$1" >> $logfile
+    fi
+    echo "$is_dryrun$1"
+}
+
+log "starting setup script"
+
+if ! command -v git-lfs >/dev/null 2>&1; then
+	pushd '$PWD' &> /dev/null
+	sudo pacman -S --noconfirm git-lfs || log "error: git-lfs is not installed"
+	git lfs fetch || log "error: git-lfs could not fetch files"
+	git reset . && git restore --source=HEAD :/
+	popd &> /dev/null
+fi
+
+update_files() {
+    cpflags=-rf
+    log "copying over files from: $1"
+	copying="copying"
+    if [[ $update -eq 1 ]]; then
+        cpflags=-ru
+		copying="updating"
+    fi
+    pushd $1 &> /dev/null
+    (
+        directories=`find . -mindepth 1 -maxdepth 1 -type d`
+        for c in $directories; do
+            destdir=${2%/}/${c#./}
+
+            log "$copying env: cp $cpflags $c to $2"
+            if [[ $dry_run -eq 0 ]]; then
+                cp $cpflags ./$c $2
+            fi
+        done
+    )
+    popd &> /dev/null
+}
+
+copy() {
+    cpflags=-f
+    if [[ $update -eq 1 ]]; then
+        cpflags=-u
+		log "updating: $1 to $2"
+	else
+		log "copying: $1 to $2"
+    fi
+    if [[ $dry_run == "0" ]]; then
+        cp $cpflags $1 $2
+    fi
+}
+
+update_files $PWD/env/config $XDG_CONFIG_HOME
+mkdir -p $HOME/.local/bin
+update_files "$PWD/env/local" "$HOME/.local"
+
+copy $PWD/env/zshrc $HOME/.zshrc
+copy $PWD/env/gitconfig $HOME/.gitconfig
+copy $PWD/env/config/starship.toml $HOME/.config/starship.toml
+
+log 'running post-installation hooks'
+
+if [[ $dry_run == "1" ]]; then
+	log 'command: sed -i "s:<CONFIG_HOME>:$XDG_CONFIG_HOME:g" $XDG_CONFIG_HOME/wlogout/style.css'
+else
+	sed -i "s:<CONFIG_HOME>:$XDG_CONFIG_HOME:g" $XDG_CONFIG_HOME/wlogout/style.css # wlogout icons
+fi
+
+log "setup script finished"

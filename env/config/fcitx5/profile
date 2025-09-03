@@ -1,0 +1,67 @@
+[Groups/0]
+# Group Name
+Name=pt
+# Layout
+Default Layout=br
+# Default Input Method
+DefaultIM=keyboard-br
+
+[Groups/0/Items/0]
+# Name
+Name=keyboard-br
+# Layout
+Layout=
+
+[Groups/1]
+# Group Name
+Name=jp
+# Layout
+Default Layout=br
+# Default Input Method
+DefaultIM=mozc
+
+[Groups/1/Items/0]
+# Name
+Name=mozc
+# Layout
+Layout=br
+
+[Groups/2]
+# Group Name
+Name=zh
+# Layout
+Default Layout=br
+# Default Input Method
+DefaultIM=rime
+
+# [Groups/3]
+# # Group Name
+# Name=en
+# # Layout
+# Default Layout=us-alt-intl
+# # Default Input Method
+# DefaultIM=keyboard-us
+#
+# [Groups/3/Items/0]
+# # Name
+# Name=keyboard-us-alt-intl
+# # Layout
+# Layout=
+#
+# [Groups/3/Items/1]
+# # Name
+# Name=keyboard-us
+# # Layout
+# Layout=
+
+[Groups/2/Items/0]
+# Name
+Name=rime
+# Layout
+Layout=
+
+[GroupOrder]
+0=pt
+1=zh
+2=jp
+

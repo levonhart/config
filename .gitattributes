@@ -1,3 +1,4 @@
 nvim/spell/en.utf-8.add.spl filter=lfs diff=lfs merge=lfs -text
 nvim/spell/en.utf-8.spl filter=lfs diff=lfs merge=lfs -text
 nvim/spell/pt.utf-8.spl filter=lfs diff=lfs merge=lfs -text
+env/config/hypr/profile.jpg filter=lfs diff=lfs merge=lfs -text

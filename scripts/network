@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+paru -S --noconfirm --needed nss-mdns openssh gcr-4
+paru -S --needed iptables-nft
+paru -S --needed seahorse
+
+# enable local dns resolution (hostname.local)
+grep -q "mdns" /etc/nsswitch.conf || sudo sed -i 's/\(resolve\)/mdns_minimal [NOTFOUND=return] \1/g' /etc/nsswitch.conf
+
+systemctl is-active --quiet sshd || echo "[WARN] sshd is turned off. Start sshd.service service to enable ssh connections"
+
+#systemctl --user enable --now ssh-agent.service
+systemctl --user enable --now gcr-ssh-agent.socket
+

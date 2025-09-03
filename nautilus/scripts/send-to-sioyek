@@ -1,4 +1,0 @@
-#!/bin/bash
-filename=$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS
-filename=${filename%%$'\n'*}
-sh -c "sioyek --reuse-window -- \"$filename\"" >/dev/null

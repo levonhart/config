@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+if [ -z "$DEST" ]; then
+    DEST=${HOME}
+fi
+export DEST="$DEST"
+
+usage() {
+    echo "
+Usage: $(basename "$0") [-h | --help] [-l | --log-file <file>] [-n | --dry-run] [<pattern>]...
+
+Arguments:
+    -h, --help              print help
+    -l, --log <file>        set log file path
+    --dry-run               do a trial run with no permanent changes
+
+Optional:
+    <pattern>              run only scripts that match <pattern>
+" | column -t -s $'\t'
+    exit 1
+}
+
+# Script name
+pattern=""
+logfile="$PWD/install.log"
+dry_run=0
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            ;;
+        -n|--dry-run)
+            dry_run=1
+            ;;
+        -l|--log)
+            logfile="$2"
+            shift
+            ;;
+        -*)
+            printf "$(basename "$0"): invalid option “$1”\n"
+            printf "Try \"$(basename "$0") --help\" for more information."
+            ;;
+        *)
+			if [[ -n $pattern ]]; then pattern+="\\|"; fi
+			pattern+="\\($1\\)"
+            ;;
+    esac
+    shift
+done
+
+log() {
+    tformat="+%Y-%m-%dT%H:%M:%S%z"
+    is_dryrun=""
+    if [[ $dry_run == "1" ]]; then
+        is_dryrun="[DRY_RUN] "
+    fi
+    if [[ -n $logfile ]]; then
+        echo "[$(date $tformat)] $is_dryrun$1" >> $logfile
+    fi
+    echo "$is_dryrun$1"
+}
+
+log "starting install script"
+
+if ! command -v paru >/dev/null 2>&1; then
+    log "command “paru” not found. attempting to install paru..."
+    if [[ $dry_run -eq 0 ]]; then
+		git clone https://aur.archlinux.org/paru.git /tmp/paru
+		makepkg -sic -D /tmp/paru/
+		read -r -p "Continue? [Y/n] " response
+		if [[ "$response" == [nN]?(o) ]]; then
+			exit 0
+		fi
+	fi
+fi
+
+scripts_dir=`find $PWD/scripts -mindepth 1 -maxdepth 1 -executable`
+
+for s in $scripts_dir; do
+    if basename $s | grep -vq "$pattern"; then
+        log "ignoring: $s"
+        continue
+    fi
+
+    log "running script: $s"
+
+    if [[ $dry_run -eq 0 ]]; then
+        $s
+    fi
+done
+
+hash -r
+log "install script finished"
+

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+paru -S --noconfirm --needed zsh
+paru -S --noconfirm --needed thefuck bat eza fzf fd tree
+
+hash -r
+sudo chsh -s $(which zsh)
+plugins_dir="$HOME/.local/share/zsh/plugins"
+functions_dir="$HOME/.local/share/zsh/site-functions"
+
+mkdir -p $plugins_dir
+mkdir -p $functions_dir
+
+clone() {
+	outdir=$plugins_dir/$(basename ${1%.git})
+	if [[ -d $outdir ]]; then
+		pushd $outdir &> /dev/null
+		git pull --rebase -q
+		popd &> /dev/null
+		return
+	fi
+	git clone "https://github.com/${1%.git}.git" $outdir
+}
+clone 'zsh-users/zsh-autosuggestions'
+clone 'zdharma-continuum/fast-syntax-highlighting'
+clone 'Aloxaf/fzf-tab'
+clone 'jeffreytse/zsh-vi-mode'
+clone 'wfxr/forgit'
+
+ln -sf $plugins_dir/forgit/completions/_git-forgit $functions_dir/
+

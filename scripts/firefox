@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+paru -S --noconfirm --needed firefox firefox-i18n-pt-br firefox-tridactyl thunderbird

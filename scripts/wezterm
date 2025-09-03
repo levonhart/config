@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+paru -S wezterm-git fd
