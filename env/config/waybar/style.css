@@ -59,7 +59,7 @@
 #custom-power {
   background-color: @base;
   padding: 0.5rem 1rem;
-  margin: 2px 0px 4px 0px;
+  margin: 2px 0px 2px 0px;
 }
 
 #idle_inhibitor:hover,
@@ -158,12 +158,22 @@
   /* border-radius: 1rem 0px 0px 1rem; */
 }
 
+#custom-launcher {
+  background-color: transparent;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  margin: 2px 2px 2px 3px;
+}
+
+#custom-launcher:hover {
+    color: @teal;
+}
+
 #bluetooth,
 #custom-micmonitor,
 #custom-dropdown {
   background-color: @base;
   padding: 0.5rem 0.7rem;
-  margin: 2px 0px 4px 0px;
+  margin: 2px 0px 2px 0px;
 }
 
 #custom-dropdown {
@@ -178,7 +188,7 @@
 
 #gamemode {
 	padding: 0.5rem 0.7rem;
-	margin: 4px 0px 4px 0px;
+	margin: 2px 0px 2px 0px;
 }
 
 #custom-hyprsunset {

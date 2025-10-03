@@ -30,7 +30,7 @@ return {
 		end),
 
 		-- sessionizer.DefaultWorkspace { name_overwrite = 'default' },
-		sessionizer.FdSearch(sessions.repos_dir),
+		sessionizer.FdSearch{ sessions.repos_dir, include_latex = true },
 	},
 	config = {
         options = {
@@ -46,7 +46,14 @@ return {
 			entry.label = entry.label:gsub(wezterm.home_dir, '~')
 		end),
         sessions.config_dir,
-		sessionizer.FdSearch { sessions.config_dir, max_depth = 8 },
+		sessionizer.FdSearch {
+			sessions.config_dir,
+			filter = ".",
+			prune = false,
+			max_depth = 8,
+			format = "{}",
+			extra_args = { "--no-hidden" },
+		},
     },
 	default = {
 		options = {

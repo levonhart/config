@@ -30,7 +30,7 @@ print_status() {
 		tooltip_text+=" ${default_temp} K"
 		tooltip_text+="\t\t\t\t "
 		tooltip_text+=" ${default_gamma}%\n"
-		tooltip_text+="<i>󰀨  clique para ativar o modo noite</i>"
+		tooltip_text+="󰀨 <i>clique para ativar o modo noite</i>"
 	elif [[ $current_temp = ${temp[0]} ]]; then
         text_output="󰈈"
         alt_text="evening"
@@ -40,7 +40,7 @@ print_status() {
 		tooltip_text+=" ${current_temp} K"
 		tooltip_text+="\t\t\t"
 		tooltip_text+=" ${gamma}%\n"
-		tooltip_text+="<i>󰀨  clique p/ modo madrugada</i>"
+		tooltip_text+="󰀨 <i>clique p/ modo madrugada</i>"
     else
         text_output="󰈈"
         alt_text="midnight"
@@ -50,7 +50,7 @@ print_status() {
 		tooltip_text+=" ${current_temp} K"
 		tooltip_text+="\t\t\t\t   "
 		tooltip_text+=" ${gamma}%\n"
-		tooltip_text+="<i>󰀨  clique para desativar</i>"
+		tooltip_text+="󰀨 <i>clique para desativar</i>"
     fi
     cat <<JSON
 {"text":"$text_output", "alt":"$alt_text", "tooltip":"$tooltip_text" }

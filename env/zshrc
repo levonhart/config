@@ -45,6 +45,11 @@ plug() {
 	return 0
 }
 
+forgit_checkout_file='grf'
+forgit_checkout_branch='gsb'
+forgit_checkout_tag='gst'
+forgit_checkout_commit='gsc'
+
 plug 'zdharma-continuum/fast-syntax-highlighting'
 plug 'zsh-users/zsh-autosuggestions'
 plug 'Aloxaf/fzf-tab'
@@ -60,10 +65,6 @@ ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
 
 export FORGIT_FZF_DEFAULT_OPTS=" --exact --border --cycle --reverse --height '80%' "
 PATH="$PATH:$ZSH_PLUGIN_DIR/forgit/bin"
-alias forgit_checkout_file='grf'
-alias forgit_checkout_branch='gsb'
-alias forgit_checkout_tag='gst'
-alias forgit_checkout_commit='gso'
 # }}} plugins #
 
 # fzf {{{ #

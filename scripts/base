@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-paru -S --noconfirm --needed zsh man man-pages man-pages-pt_br tldr starship fd ripgrep \
-	fzf rofi-wayland btop nvtop bc ffmpeg rsync rclone dex zenity lf eza \
+paru -S --noconfirm --needed zsh man man-pages man-pages-pt_br starship fd ripgrep \
+	pacman-contrib fzf rofi-wayland btop nvtop bc ffmpeg rsync rclone dex zenity lf eza \
 	7zip gzip unzip unrar fuse-zip alsa-tools alsa-utils git git-lfs
 
 
@@ -9,10 +9,10 @@ paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
 	hypridle hyprcursor hyprgraphics hyprland-qt-support hyprland-qtutils \
 	hyprlang hyprpicker hyprpolkitagent hyprshot hyprsunset hyprutils \
 	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard \
-	pavucontrol nm-connection-editor nmtui blueman mako gnome-keyring
+	pavucontrol nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
 
 paru -S --noconfirm --needed loupe qt6ct gnome-themes-extra bibata-cursor-theme-bin \
-	seahorse libsecret amberol
+	seahorse libsecret amberol tlrc-bin gnome-online-accounts
 
 if ! grep '^Path askpass' /etc/sudo.conf; then
 	sudo sed -i '/Path askpass \/usr\/lib/ a Path askpass \/usr\/lib\/seahorse\/ssh-askpass' /etc/sudo.conf
@@ -48,3 +48,6 @@ if ! test -f /etc/systemd/system/numlock.service; then
 	EOF
 	sudo systemctl enable numlock.service
 fi
+
+xdg-mime default thunar.desktop inode/directory
+

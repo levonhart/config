@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+paru -S --noconfirm --asdeps speech-dispatcher
 paru -S --noconfirm --needed firefox firefox-i18n-pt-br firefox-tridactyl thunderbird

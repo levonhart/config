@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 paru -S --noconfirm --needed thunar thunar-archive-plugin thunar-media-tags-plugin thunar-volman \
-	thunar-vcs-plugin file-roller
+	thunar-vcs-plugin file-roller tumbler

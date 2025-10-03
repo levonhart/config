@@ -7,6 +7,7 @@
 	"spacing": 0, // Gaps between modules (4px)
 	// Choose the order of the modules
 	"modules-left": [
+		"custom/launcher",
 		"hyprland/workspaces",
 		"cpu",
 		"memory",
@@ -46,6 +47,16 @@
 		"tooltip": false
 	},
 	// Modules configuration
+	"custom/launcher": {
+		"format": "<span size=\"large\"> </span>",
+		"tooltip-format": "Iniciar",
+		"rotate": 0,
+		"on-click": "rofi -show combi",
+		// "on-click-middle": "",
+		// "on-click-right": "",
+		"tooltip": true
+	},
+
 	"hyprland/workspaces": {
 		"active-only": "false",
 		"persistent-workspaces": {
@@ -111,8 +122,29 @@
 	},
 	"clock": {
 		// "timezone": "America/New_York",
-		"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-		"format-alt": "{:%d/%m/%Y}"
+		"tooltip-format": "<tt><small>{calendar}</small></tt>",
+		"format-alt": "{:%d/%m/%Y}",
+		"timezones": ["America/Belem", "America/Fortaleza", "Etc/UTC", "Asia/Tokyo"],
+		"calendar": {
+			"mode"          : "month",
+			"mode-mon-col"  : 3,
+			"weeks-pos"     : "right",
+			"on-scroll"     : 1,
+			"format": {
+				"months":     "<span color='#cdd6f4'><b>{}</b></span>",
+				"days":       "<span color='#cdd6f4'><b>{}</b></span>",
+				"weeks":      "<span color='#6c7086'><b>{}</b></span>",
+				"weekdays":   "<span color='#a6e3a1'><b>{}</b></span>",
+				"today":      "<span color='#f38ba8'><b>{}</b></span>"
+			},
+        "actions":  {
+                    "on-click-right": "mode",
+                    "on-click-forward": "tz_up",
+                    "on-click-backward": "tz_down",
+                    "on-scroll-up": "shift_up",
+                    "on-scroll-down": "shift_down"
+                    }
+		}
 	},
 	"cpu": {
 		"format": "{usage}% ",
@@ -188,8 +220,8 @@
 		"tooltip-format-connected": "{controller_alias}\n{num_connections} conectado\n\n{device_enumerate}",
 		"tooltip-format-enumerate-connected": "{device_alias}",
 		"tooltip-format-enumerate-connected-battery": "{device_alias}\t{icon} {device_battery_percentage}%",
-		"on-click": "blueman-manager",
-		"on-click-right": "blueman-adapters",
+		"on-click": "pkill -x blueman-manager || blueman-manager",
+		"on-click-right": "blueman-adapters && pkill -f blueman-adapters",
 		"on-click-middle": "$HOME/.config/waybar/scripts/bluetoothtoggle.sh"
 	},
 	"pulseaudio": {
@@ -198,7 +230,8 @@
 		"format-bluetooth": "{volume}% {icon} {format_source}",
 		"format-bluetooth-muted": "󰝟 {icon} {format_source}",
 		"format-muted": "󰝟 {format_source}",
-		"format-source": " {volume}% ",
+		"format-source": "",
+		// "format-source": " {volume}% ",
 		"format-source-muted": " ",
 		"tooltip-format": "{icon} {desc} // {volume}%",
 		"format-icons": {
@@ -210,9 +243,9 @@
 			"car": " ",
 			"default": ["  ", "  ", "  "]
 		},
-		"on-click": "pavucontrol -t 3",
+		"on-click": "pkill -x pavucontrol || pavucontrol -t 3",
 		"on-click-right": "$HOME/.config/waybar/scripts/volumecontrol.sh -s ''",
-		"on-click-middle": "$HOME/.config/waybar/scripts/volumecontrol.sh -o m",
+		"on-click-middle": "pkill -x pavucontrol || $HOME/.config/waybar/scripts/volumecontrol.sh -o m",
 		"on-scroll-up": "$HOME/.config/waybar/scripts/volumecontrol.sh -o i",
 		"on-scroll-down": "$HOME/.config/waybar/scripts/volumecontrol.sh -o d",
 		"rotate": 0
@@ -258,9 +291,11 @@
 	},
 	"custom/power": {
 		"format" : "⏻ ",
-		"tooltip": false,
+		"tooltip": true,
+		"tooltip-format": "󰍽¹ Desligar\n󰍽³ Fechar janela",
 	  // "on-click": "zenity --question --title='Confirm' --text='Quit Hyprland?' && hyprctl dispatch exit 0",
 	  "on-click": "wlogout",
+	  "on-click-middle": "hyprctl dispatch killactive",
 	  "menu": "on-click-right",
 	  "menu-file": "$HOME/.config/waybar/menus/power_menu.xml", // Menu file in resources folder
 	  "menu-actions": {

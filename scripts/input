@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+paru -S --needed --asdeps enchant hunspell hunspell-pt-br
 paru -S --needed --noconfirm fcitx5 fcitx5-mozc fcitx5-rime fcitx5-configtool
 
 git clone https://github.com/catppuccin/fcitx5.git /tmp/catppuccin-fcitx5
