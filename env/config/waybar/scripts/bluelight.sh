@@ -3,7 +3,7 @@
 default_temp=6500
 default_gamma=100
 temp=(5500 3000)
-gamma=(80 40)
+gamma=(80 60)
 
 get_temp() {
     hyprctl hyprsunset temperature 2>/dev/null || echo "$default_temp"

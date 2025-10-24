@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-paru -S --noconfirm --needed
+paru -S --noconfirm --needed             \
 	texlive-bibtexextra                  \
 	texlive-bin                          \
 	texlive-binextra                     \
@@ -20,5 +20,5 @@ paru -S --noconfirm --needed
 	texlive-publishers                   \
 	texlive-xetex
 
-paru -S --noconfirm --needed ltex-ls-plus-bin texlab biber
+paru -S --noconfirm --needed ltex-ls-plus-bin texlab biber bibutils
 
