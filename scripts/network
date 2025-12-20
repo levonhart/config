@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-paru -S --noconfirm --needed nss-mdns openssh gcr-4
+paru -S --noconfirm --needed nss-mdns openssh gcr-4 
 paru -S --needed iptables-nft
-paru -S --needed seahorse
+paru -S --needed seahorse kdeconnect sshfs
 
 # enable local dns resolution (hostname.local)
 grep -q "mdns" /etc/nsswitch.conf || sudo sed -i 's/\(resolve\)/mdns_minimal [NOTFOUND=return] \1/g' /etc/nsswitch.conf

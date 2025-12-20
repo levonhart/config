@@ -1,3 +1,27 @@
 #!/usr/bin/env bash
 
-paru -S wezterm-git fd
+paru -S --needed wezterm-git fd
+
+if ! test -f /usr/bin/xdg-terminal-exec; then
+	cat <<-"EOF" | sudo tee /usr/bin/xdg-terminal-exec > /dev/null
+	#!/usr/bin/env sh
+	ARGS=()
+	while [[ "$#" -gt 0 ]]; do
+		case "$1" in
+			--working-directory)
+				ARGS+=('--cwd' "$2")
+				shift 2
+				;;
+			*)
+				break
+				;;
+		esac
+	done
+	if [[ ${#ARGS[@]} -gt 0 ]]; then
+		ARGS+=($@)
+		set -- ${ARGS[@]}
+	fi
+	wezterm start "$@"
+	EOF
+fi
+

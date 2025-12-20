@@ -158,6 +158,8 @@ bind <S-Insert> mode ignore
 bind <AC-Escape> mode ignore
 bind <AC-`> mode ignore
 bind <S-Escape> mode ignore
+bind I --mode=normal mode ignore
+bind <A-Z> mode ignore
 bind <Escape> composite mode normal ; hidecmdline
 bind <C-[> composite mode normal ; hidecmdline
 bind a focusinput -n
@@ -174,9 +176,10 @@ bind zO zoom 0.3
 bind . repeat
 bind m gobble 1 markadd
 bind ` gobble 1 markjump
-bind <A-Z> mode ignore
 bind i focusinput -l
 bind <C-u> scrollpage -0.5
+bind --mode=ignore <A-l> mode normal
+bind --mode=ignore <A-\> mode normal
 bind --mode=ignore <A-Z> mode normal
 bind --mode=ignore <S-Insert> mode normal
 bind --mode=ignore <AC-Escape> mode normal

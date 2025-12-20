@@ -116,13 +116,13 @@ map('n', 'ç', '`.', { desc = 'Jump to last change/yank' })
 map('n', 'n', 'nzzzv')
 map('n', 'N', 'Nzzzv')
 map('i', '<C-c>', '<Esc>')
-map('n', '[q', "<cmd>cnext<cr>zz",
+map('n', '[q', "<cmd>cprev<cr>zz",
 	{ desc = 'Go to previous error message' })
-map('n', ']q', "<cmd>cprev<cr>zz",
+map('n', ']q', "<cmd>cnext<cr>zz",
 	{ desc = 'Go to next error message' })
-map('n', '[g', "<cmd>lnext<cr>zz",
+map('n', '[l', "<cmd>lprev<cr>zz",
 	{ desc = 'Go to previous jump location' })
-map('n', ']g', "<cmd>lprev<cr>zz",
+map('n', ']l', "<cmd>lnext<cr>zz",
 	{ desc = 'Go to next jump location' })
 map('n', '<space>e', vim.diagnostic.open_float)
 map('n', '[d', function() vim.diagnostic.jump {count=-1, float=true} end,
@@ -288,9 +288,10 @@ map('n', '<space>b', fzf_lua.buffers)
 map('n', '<space>t', fzf_lua.tabs)
 map('n', '<space>p', fzf_lua.git_files)
 map('n', '<space>f', fzf_lua.grep)
+map('n', '<space><c-f>', function() fzf_lua.grep{ resume=true } end)
 map('n', '<space>F', fzf_lua.live_grep)
 map('n', '<space>gg', fzf_lua.grep)
-map('n', '<space>G', fzf_lua.live_grep)
+map('n', '<space>G', fzf_lua.live_grep_resume)
 map('n', '<space>gw', fzf_lua.grep_cword)
 map('n', '<space>gW', fzf_lua.grep_cWORD)
 map('n', '<space>l', fzf_lua.lines)
@@ -648,9 +649,9 @@ map("n", "<leader>tl", '<cmd>Trouble diagnostics toggle loclist<cr>',
 	{ desc = 'Trouble location list' })
 map("n", "<leader>ts", '<cmd>Trouble diagnostics toggle lsp_document_symbols<cr>',
 	{ desc = 'Lsp document symbols (Trouble)' })
-map("n", "[t", function() require("trouble").next({skip_groups = true, jump = true}); end,
+map("n", "]g", function() require("trouble").next({skip_groups = true, jump = true}); end,
 	{ desc = 'Go to next Trouble' })
-map("n", "]t", function() require("trouble").previous({skip_groups = true, jump = true}); end,
+map("n", "[g", function() require("trouble").previous({skip_groups = true, jump = true}); end,
 	{ desc = 'Go to previous Trouble' })
 -- }}} Trouble
 

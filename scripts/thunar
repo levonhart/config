@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
-paru -S --noconfirm --needed thunar thunar-archive-plugin thunar-media-tags-plugin thunar-volman \
-	thunar-vcs-plugin file-roller tumbler
+paru -S --noconfirm --needed thunar thunar-archive-plugin \
+	thunar-media-tags-plugin thunar-volman \
+	thunar-vcs-plugin file-roller tumbler 
+paru -S --noconfirm --needed --asdeps ffmpegthumbnailer poppler-glib \
+	libgepub libgsf libopenraw freetype2
