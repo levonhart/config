@@ -4,22 +4,35 @@ is_active() {
 	pgrep -x pw-loopback > /dev/null
 }
 
+is_muted() {
+	pamixer --default-source --get-mute
+}
+
 print_status() {
     local text_output alt_text tooltip_text
 
-    if is_active; then
-        text_output=""
-        alt_text="on"
+
+	if [[ $(is_muted) = "true" ]]; then
+		text_output="󰍭"
+		alt_text="muted"
 		tooltip_text=" <b>Monitor do microfone</b>\n"
-		tooltip_text+="Ouvindo o microfone\n"
-		tooltip_text+="<i>󰀨  clique para desativar</i>"
+		tooltip_text+="<i>Microfone mudo</i>\n"
+		tooltip_text+="󰀨  󰍽² para ativar"
 	else
-        text_output=""
-        alt_text="off"
-		tooltip_text=" <b>Monitor do microfone</b>\n"
-		tooltip_text+="Desativado\n"
-		tooltip_text+="<i>󰀨  clique para ouvir</i>"
-    fi
+		if is_active; then
+			text_output=""
+			alt_text="on"
+			tooltip_text=" <b>Monitor do microfone</b>\n"
+			tooltip_text+="<i>Ouvindo o microfone</i>\n"
+			tooltip_text+="󰀨  󰍽²  para desativar"
+		else
+			text_output=""
+			alt_text="off"
+			tooltip_text=" <b>Monitor do microfone</b>\n"
+			tooltip_text+="<i>Desativado</i>\n"
+			tooltip_text+="󰀨  󰍽²  para ouvir"
+		fi
+	fi
     cat <<JSON
 {"text":"$text_output", "alt":"$alt_text", "tooltip":"$tooltip_text"}
 JSON
@@ -34,6 +47,7 @@ case $1 in
 		if is_active; then
 			pkill -x pw-loopback
 		else
+			[[ $(is_muted) = false ]] || pamixer --default-source --unmute
 			pw-loopback & > /dev/null 2>&1
 		fi
 		exit 0

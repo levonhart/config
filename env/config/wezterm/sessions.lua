@@ -1,24 +1,18 @@
 local wezterm = require('wezterm')
 
+local local_cfg = dofile(wezterm.home_dir .. '/.wezterm-sessions.lua') or {
+	work_dirs = {}, personal_dirs = {}, config_dir = wezterm.home_dir .. '/.config' }
+
 local repos = wezterm.home_dir .. '/repos/'
 
-local work_dirs = {
-	repos .. 'FNDE-Goal-Programming',
-	repos .. 'k-mbis',
-}
-
-local personal_dirs = {
-	repos .. 'pargo-lab-ansible-pull',
-}
-
 M = {
+	default_name = 'default',
+	config_name = '~/repos/config',
 	repos_dir = repos,
-	config = '~/repos/config',
-	config_dir = wezterm.home_dir .. '/repos/config',
-	default = 'default',
 	default_dir = repos,
-	work = work_dirs,
-	personal = personal_dirs,
+	config_dir = local_cfg.config_dir,
+	work = local_cfg.work_dirs,
+	personal = local_cfg.personal_dirs,
 }
 
 M.session_name = function(window)

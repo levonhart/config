@@ -12,7 +12,7 @@
 		"cpu",
 		"memory",
 		"temperature",
-		"custom/hyprsunset",
+		"hyprland/window",
 		"gamemode"
 	],
 	"modules-center": [
@@ -22,10 +22,11 @@
 		"custom/media",
 		"mpd",
 		"idle_inhibitor",
-		"custom/micmonitor",
+		"custom/hyprsunset",
 		"group/hide-tray",
 		"bluetooth",
-		"pulseaudio",
+		"group/pulseaudio-volume",
+		"custom/micmonitor",
 		"network",
 	  // "power-profiles-daemon",
 	  // "backlight",
@@ -42,6 +43,16 @@
 		},
 		"modules": ["custom/dropdown#arrow", "tray"]
 	},
+	"group/pulseaudio-volume": {
+		"orientation": "inherit",
+		"drawer": {
+			"transition-duration": 200,
+			"children-class": "hide-pulseaudio-slider",
+			"transition-left-to-right": false,
+			"click-to-reveal": false
+		},
+		"modules": [ "pulseaudio", "pulseaudio/slider" ]
+	},
 	"custom/dropdown#arrow": {
 		"format": "",
 		"tooltip": false
@@ -49,14 +60,13 @@
 	// Modules configuration
 	"custom/launcher": {
 		"format": "<span size=\"large\"> </span>",
-		"tooltip-format": "Iniciar",
+		"tooltip-format": "Iniciar\n󰍽² Mostrar janelas escondidas",
 		"rotate": 0,
 		"on-click": "rofi -show combi",
+		"on-click-right": "hyprctl dispatch togglespecialworkspace hidden",
 		// "on-click-middle": "",
-		// "on-click-right": "",
 		"tooltip": true
 	},
-
 	"hyprland/workspaces": {
 		"active-only": "false",
 		"persistent-workspaces": {
@@ -78,6 +88,22 @@
 			"focused": "",
 			"default": ""
 		}
+	},
+	"hyprland/window": {
+		"format": "{}",
+		"max-length": 30,
+		"on-click": "hyprctl dispatch movetoworkspacesilent special:hidden; hyprctl dispatch movetoworkspace +0",
+		"on-click-right": "hyprctl dispatch togglefloating",
+		"on-click-middle": "hyprctl dispatch killactive",
+		"on-scroll-up": "hyprctl dispatch fullscreen 1",
+		"on-scroll-down": "hyprctl dispatch cyclenext hist; hyprctl dispatch movecursor 500 15",
+		"tooltip": true,
+		"tooltip-format": "󰍽¹ Minimizar/restaurar\n󰍽² Alternar flutuar\n󰍽³ Fechar janela",
+		"rewrite": {
+			"(.*) — Mozilla Firefox": "󰖟  $1",
+			"(.*) - fish": "> [$1]"
+		},
+		"separate-outputs": true
 	},
 	"mpd": {
 		"format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
@@ -124,7 +150,7 @@
 		// "timezone": "America/New_York",
 		"tooltip-format": "<tt><small>{calendar}</small></tt>",
 		"format-alt": "{:%d/%m/%Y}",
-		"timezones": ["America/Belem", "America/Fortaleza", "Etc/UTC", "Asia/Tokyo"],
+		"timezones": ["America/Belem", "Europe/Paris", "Etc/UTC", "Asia/Tokyo"],
 		"calendar": {
 			"mode"          : "month",
 			"mode-mon-col"  : 3,
@@ -139,8 +165,8 @@
 			},
         "actions":  {
                     "on-click-right": "mode",
-                    "on-click-forward": "tz_up",
-                    "on-click-backward": "tz_down",
+                    "on-scroll-up": "tz_up",
+                    "on-scroll-down": "tz_down",
                     "on-scroll-up": "shift_up",
                     "on-scroll-down": "shift_down"
                     }
@@ -212,7 +238,7 @@
 		"rotate": 0,
 		"format-disabled": "<span color=\"#f38ba8\">󰂲</span>",
 		"format-connected": " {num_connections}",
-		"format-connected-battery": "{icon} {device_alias}",
+		"format-connected-battery": " {icon}",
 		// "format-connected-battery": "{icon} {device_alias}-{device_battery_percentage}%",
 		"format-icons": ["󰥇 ", "󰤾 ", "󰤿 ", "󰥀 ", "󰥁 ", "󰥂 ", "󰥃 ", "󰥄 ", "󰥅 ", "󰥆 ", "󰥈 "],
 		// "format-device-preference": [ "device1", "device2" ], // fall back to showing the last connected device.
@@ -226,11 +252,12 @@
 	},
 	"pulseaudio": {
 		"scroll-step": 5,
-		"format": "{icon} {volume}% {format_source}",
-		"format-bluetooth": "{volume}% {icon} {format_source}",
-		"format-bluetooth-muted": "󰝟 {icon} {format_source}",
-		"format-muted": "󰝟 {format_source}",
+		"format": "{volume}% {icon}",
+		"format-bluetooth": "{volume}% {icon}",
+		"format-bluetooth-muted": "󰝟 {icon}",
+		"format-muted": "󰝟 ",
 		"format-source": "",
+		// "format-source-muted": "",
 		// "format-source": " {volume}% ",
 		"format-source-muted": " ",
 		"tooltip-format": "{icon} {desc} // {volume}%",
@@ -244,11 +271,16 @@
 			"default": ["  ", "  ", "  "]
 		},
 		"on-click": "pkill -x pavucontrol || pavucontrol -t 3",
-		"on-click-right": "$HOME/.config/waybar/scripts/volumecontrol.sh -s ''",
+		"on-click-right": "$HOME/.config/waybar/scripts/volumecontrol.sh -t",
 		"on-click-middle": "pkill -x pavucontrol || $HOME/.config/waybar/scripts/volumecontrol.sh -o m",
 		"on-scroll-up": "$HOME/.config/waybar/scripts/volumecontrol.sh -o i",
 		"on-scroll-down": "$HOME/.config/waybar/scripts/volumecontrol.sh -o d",
 		"rotate": 0
+	},
+	"pulseaudio/slider": {
+		"min": 0,
+		"max": 100,
+		"orientation": "horizontal"
 	},
 	"keyboard-state": {
 		"numlock": true,
@@ -296,6 +328,8 @@
 	  // "on-click": "zenity --question --title='Confirm' --text='Quit Hyprland?' && hyprctl dispatch exit 0",
 	  "on-click": "wlogout",
 	  "on-click-middle": "hyprctl dispatch killactive",
+	  "on-scroll-up": "hyprctl dispatch fullscreen 1",
+	  "on-scroll-down": "hyprctl dispatch togglefloating",
 	  "menu": "on-click-right",
 	  "menu-file": "$HOME/.config/waybar/menus/power_menu.xml", // Menu file in resources folder
 	  "menu-actions": {
@@ -332,11 +366,13 @@
 		"return-type": "json",
 		"format": "<span size=\"large\">{text}</span>",
 		// "tooltip-format": "Microphone monitor",
-		"on-click": "$HOME/.config/waybar/scripts/micmonitor.sh -t",
-		"on-click-middle": "$HOME/.config/waybar/scripts/micmonitor.sh -d",
-		"on-click-right": "pavucontrol -t 2",
+		"on-click": "pkill -x pavucontrol || pavucontrol -t 4",
+		"on-click-right": "$HOME/.config/waybar/scripts/micmonitor.sh -t",
+		"on-click-middle": "pkill -x pavucontrol || ($HOME/.config/waybar/scripts/micmonitor.sh -d; pamixer --default-source -t)",
+		"on-scroll-up": "$HOME/.config/waybar/scripts/volumecontrol.sh -i i",
+		"on-scroll-down": "$HOME/.config/waybar/scripts/volumecontrol.sh -i d",
 		"exec": "$HOME/.config/waybar/scripts/micmonitor.sh -s",
-		"interval": "once",
+		"interval": 1,
 		"tooltip": true
 	},
 	"gamemode": {

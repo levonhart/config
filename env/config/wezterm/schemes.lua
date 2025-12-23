@@ -39,7 +39,7 @@ return {
 			callback = history.Wrapper(function(window, pane, id, label)
 				if not id then return end
 				window:perform_action(act.SwitchToWorkspace({
-					name = sessions.config, spawn = { cwd = id } }), pane)
+					name = sessions.config_name, spawn = { cwd = id } }), pane)
 			end)
         },
 		processing = sessionizer.for_each_entry(function(entry)

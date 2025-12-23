@@ -2,11 +2,6 @@ local wezterm = require('wezterm')
 local mappings = require('mappings')
 local config = {}
 
-local act = wezterm.action
-local mux = wezterm.mux
-
-local sessions = require('sessions')
-
 config = wezterm.config_builder()
 
 local colorscheme = require('farol')

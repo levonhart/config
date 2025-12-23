@@ -1,17 +1,6 @@
 #!/usr/bin/env bash
 
-# Source global control script
-scrDir=$(dirname "$(realpath "$0")")
-# shellcheck disable=SC1091
-source "$scrDir/globalcontrol.sh"
-confDir=${confDir:-$XDG_CONFIG_HOME}
-
-# Check if SwayOSD is installed
-use_swayosd=false
 isNotify=${VOLUME_NOTIFY:-true}
-if command -v swayosd-client >/dev/null 2>&1 && pgrep -x swayosd-server >/dev/null; then
-    use_swayosd=true
-fi
 isVolumeBoost="${VOLUME_BOOST:-false}"
 # Define functions
 
@@ -54,8 +43,7 @@ notify_vol() {
     # cap the icon at 100 if vol > 100
     [ "$angle" -gt 100 ] && angle=100
     ico="${icodir}/${iconStyle}-${angle}.svg"
-    bar=$(seq -s "." $((vol / 15)) | sed 's/[0-9]//g')
-    [[ "${isNotify}" == true ]] && notify-send -a "volumecontrol" -r 8 -t 800 -i "${ico}" "${vol}${bar}" "${nsink}"
+    [[ "${isNotify}" == true ]] && notify-send -a "volumecontrol" -r 8 -t 800 -i "${ico}" "${vol} %" "${nsink}"
 }
 
 notify_mute() {
@@ -80,10 +68,8 @@ change_volume() {
     case $device in
     "pamixer")
         if [ "${isVolumeBoost}" = true ]; then
-            $use_swayosd && swayosd-client ${mode} "${delta}${step}" --max-volume "${VOLUME_BOOST_LIMIT:-150}" && exit 0
             pamixer "$srce" "${allow_boost:-}" --allow-boost --set-limit "${VOLUME_BOOST_LIMIT:-150}" -"${action}" "$step"
         else
-            $use_swayosd && swayosd-client ${mode} "${delta}${step}" && exit 0
             pamixer "$srce" -"${action}" "$step"
         fi
         vol=$(pamixer "$srce" --get-volume)
@@ -103,7 +89,6 @@ toggle_mute() {
     [ "${srce}" = "--default-source" ] && mode="--input-volume"
     case $device in
     "pamixer")
-        $use_swayosd && swayosd-client "${mode}" mute-toggle && exit 0
         pamixer "$srce" -t
         notify_mute
         ;;
@@ -163,7 +148,8 @@ while getopts "iop:stq" opt; do
     i)
         device="pamixer"
         srce="--default-source"
-        nsink=$(pamixer --list-sources | awk -F '"' 'END {print $(NF - 1)}')
+		default_source=$(pactl get-default-source)
+		nsink=$(pamixer --list-sources | grep $default_source | awk -F '"' '{print $(NF-1)}')
         ;;
     o)
         device="pamixer"

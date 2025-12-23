@@ -236,32 +236,30 @@ M = {
 		{ key = 'f', mods = 'LEADER|CTRL', action = sessionizer.show(schemes.default) },
 		{ key = 'r', mods = 'LEADER|CTRL', action = sessionizer.show(schemes.repos) },
 		{ key = '.', mods = 'LEADER|CTRL', action = sessionizer.show(schemes.config) },
-		{ key = 'Y', mods ='LEADER|SHIFT', action = act.SwitchToWorkspace { name = sessions.default, }, },
-		{ key = '.', mods = 'LEADER',
-			action = wezterm.action_callback(function(window, pane)
-				sessionizer.DefaultCallback(window, pane, sessions.config)
-			end),
-		},
+		{ key = 'Y', mods ='LEADER|SHIFT', action = act.SwitchToWorkspace {
+			name = sessions.default_name, spawn = { cwd = sessions.default_dir }, }, },
+		{ key = '.', mods = 'LEADER', action = act.SwitchToWorkspace {
+			name = sessions.config_name, spawn = { cwd = sessions.config_dir }, }, },
 		{
-			key = 'J', mods = 'LEADER|SHIFT',
+			key = 'H', mods = 'LEADER|SHIFT',
 			action = wezterm.action_callback(function(window, pane)
 				sessionizer.DefaultCallback(window, pane, sessions.personal[1])
 			end),
 		},
 		{
-			key = 'K', mods = 'LEADER|SHIFT',
+			key = 'J', mods = 'LEADER|SHIFT',
 			action = wezterm.action_callback(function(window, pane)
 				sessionizer.DefaultCallback(window, pane, sessions.personal[2])
 			end),
 		},
 		{
-			key = 'L', mods = 'LEADER|SHIFT',
+			key = 'K', mods = 'LEADER|SHIFT',
 			action = wezterm.action_callback(function(window, pane)
 				sessionizer.DefaultCallback(window, pane, sessions.personal[3])
 			end),
 		},
 		{
-			key = 'H', mods = 'LEADER|SHIFT',
+			key = 'L', mods = 'LEADER|SHIFT',
 			action = wezterm.action_callback(function(window, pane)
 				sessionizer.DefaultCallback(window, pane, sessions.personal[4])
 			end),

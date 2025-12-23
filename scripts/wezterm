@@ -25,3 +25,25 @@ if ! test -f /usr/bin/xdg-terminal-exec; then
 	EOF
 fi
 
+if ! test -f $HOME/.wezterm-sessions.lua; then
+	cat <<-"EOF" | tee $HOME/.wezterm-sessions.lua > /dev/null
+	local wezterm = require('wezterm')
+	local repos = wezterm.home_dir .. '/repos/'
+
+	return {
+		work_dirs = {
+			-- [1] = repos .. 'work/project-1',
+			-- [2] = repos .. 'work/project-2',
+			-- [3] = repos .. 'work/project-3',
+			-- [4] = repos .. 'work/project-4',
+		},
+		personal_dirs = {
+			-- [1] = repos .. 'personal/project-1',
+			-- [2] = repos .. 'personal/project-2',
+			-- [3] = repos .. 'personal/project-3',
+			-- [4] = repos .. 'personal/project-4',
+		},
+		config_dir = repos .. 'config',
+	}
+	EOF
+fi

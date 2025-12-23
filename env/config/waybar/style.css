@@ -17,7 +17,8 @@
   border-radius: 1rem;
   margin: 2px;
   background-color: @base;
-  margin-left: 2px;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   padding: 0 0.5rem 0 0.5rem;
 }
 
@@ -35,6 +36,18 @@
 #workspaces button:hover {
   color: @sapphire;
   border-radius: 1rem;
+}
+
+#window {
+  border-radius: 1rem;
+  margin: 2px 0.5rem 2px 0.5rem;
+  background-color: rgba(17,17,27,0.0);
+  padding: 0 1rem 0 1rem;
+}
+
+#window:hover {
+  /* background-color: @surface0; */
+    color: @teal;
 }
 
 #cpu {
@@ -55,6 +68,8 @@
 #power-profiles-daemon,
 #backlight,
 #pulseaudio,
+#pulseaudio-slider,
+#custom-hyprsunset,
 #custom-lock,
 #custom-power {
   background-color: @base;
@@ -75,6 +90,7 @@
 #backlight:hover,
 #bluetooth:hover,
 #pulseaudio:hover,
+#custom-hyprsunset:hover,
 #custom-lock:hover,
 #custom-dropdown:hover,
 #custom-micmonitor:hover,
@@ -131,9 +147,38 @@
   margin-left: 1rem;
 }
 
+#custom-micmonitor,
+#pulseaudio-slider,
 #pulseaudio {
   color: @maroon;
   border-radius: 0px;
+  padding: 0.5rem 0.5rem;
+}
+
+#pulseaudio-slider:hover highlight {
+	background: @pink;
+}
+
+#pulseaudio-slider slider {
+    min-height: 0px;
+    min-width: 0px;
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+#pulseaudio-slider trough {
+    min-height: 8px;
+    min-width: 5rem;
+    border-radius: 5px;
+    background: black;
+}
+
+#pulseaudio-slider highlight {
+    min-width: 10px;
+    border-radius: 1rem;
+    background: @maroon;
 }
 
 #custom-music {
@@ -170,6 +215,7 @@
 
 #bluetooth,
 #custom-micmonitor,
+#custom-hyprsunset,
 #custom-dropdown {
   background-color: @base;
   padding: 0.5rem 0.7rem;
@@ -192,6 +238,7 @@
 }
 
 #custom-hyprsunset {
+	padding: 0.5rem 0.25rem 0.5rem 0.7rem;
 	color: @red;
 }
 

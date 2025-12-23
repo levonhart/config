@@ -158,7 +158,7 @@ bind <S-Insert> mode ignore
 bind <AC-Escape> mode ignore
 bind <AC-`> mode ignore
 bind <S-Escape> mode ignore
-bind I --mode=normal mode ignore
+bind --mode=normal I mode ignore
 bind <A-Z> mode ignore
 bind <Escape> composite mode normal ; hidecmdline
 bind <C-[> composite mode normal ; hidecmdline
