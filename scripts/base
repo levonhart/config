@@ -9,7 +9,7 @@ paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
 	hypridle hyprcursor hyprgraphics hyprland-qt-support hyprland-qtutils \
 	hyprlang hyprpicker hyprpolkitagent hyprshot hyprsunset hyprutils \
 	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard cliphist \
-	pavucontrol nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
+	pavucontrol nmgui-bin nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
 
 paru -S --noconfirm --needed loupe qt6ct gnome-themes-extra bibata-cursor-theme-bin \
 	seahorse libsecret amberol tlrc-bin gnome-online-accounts

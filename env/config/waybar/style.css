@@ -111,8 +111,22 @@
 
 #network {
   color: @teal;
+  padding: 0.5rem 1rem 0.5rem 0.7rem;
   /* border-radius: 0px 1rem 1rem 0px; */
   /* margin-right: 4px; */
+}
+
+#network.ethernet,
+#network.wifi {
+  color: @teal;
+}
+
+#network.disconnected {
+  color: @teal;
+}
+
+#network.disabled {
+  color: @yellow;
 }
 
 #bluetooth {

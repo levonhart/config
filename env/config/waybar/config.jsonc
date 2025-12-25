@@ -223,14 +223,21 @@
 	},
 	"network": {
 		// "interface": "wlp2*", // (Optional) To force the use of this interface
-		"format-wifi": "{essid} ({signalStrength}%) ",
-		"format-ethernet": "Conectado 󰈀",
-		"tooltip-format": "{ifname} via {gwaddr} 󱂇\nDown: {bandwidthDownBits}  Up: {bandwidthUpBits}",
-		"format-linked": "{ifname} (No IP) 󰈁",
-		"format-disconnected": "Desconectado 󰌙",
-		"format-alt": "{ifname}: {ipaddr}/{cidr}",
+		"format-wifi": "{icon}",
+		"format-icons": ["󰤫", "󰤯", "󰤟", "󰤢", "󰤥", "󰤨" ],
+		// "format-device-preference": [ "device1", "device2" ], // fall back to showing the last connected device.
+		"format-ethernet": "󰈀",
+		"tooltip-format": "Conectado\n{ifname}: {ipaddr}/{cidr}\nvia {gwaddr} 󱂇\nDown: {bandwidthDownBits}  Up: {bandwidthUpBits}",
+		"tooltip-format-wifi": "Conectado\n{essid} ({signalStrength}%)     {frequency}\n{ifname}: {ipaddr}/{cidr}\nvia {gwaddr} 󱂇\nDown: {bandwidthDownBits}  Up: {bandwidthUpBits}",
+		"tooltip-format-disconnected": "Sem conexão\nwifi: Habilitado",
+		"tooltip-format-disabled": "Sem conexão\nwifi: Desabilitado",
+		"format-linked": "󰈁 ",
+		"format-disconnected": "󰌙",
+		"format-disabled": "󰤮",
 		// "on-click": "wezterm start nmtui",
-		"on-click-right": "wezterm start sh -c 'sleep 0.2 && nmtui'",
+		"on-click": "pkill -x nmgui || nmgui",
+		"on-click-right": "pkill -x nm-connection-e || nm-connection-editor",
+		// "on-click-right": "pkill nmtui || hyprctl dispatch exec \"[float; move 100%-w-4 40; size 40% 60%; animation slide top] wezterm start sh -c 'sleep 0.2 && nmtui'\"",
 		"on-click-middle": "$HOME/.config/waybar/scripts/wifitoggle.sh"
 	},
 	"bluetooth": {
