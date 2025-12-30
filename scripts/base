@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+paru -S --noconfirm --needed zsh man man-pages man-pages-pt_br starship fd ripgrep \
+	pacman-contrib fzf rofi-wayland btop nvtop bc ffmpeg rsync rclone dex zenity lf eza \
+	sbctl 7zip gzip unzip unrar fuse-zip alsa-tools alsa-utils git git-lfs
+
+
+paru -S --noconfirm --needed ttf-firacode-nerd ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono
+paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
+	hypridle hyprcursor hyprgraphics hyprland-qt-support hyprland-qtutils \
+	hyprlang hyprpicker hyprpolkitagent hyprshot hyprsunset hyprutils \
+	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard cliphist \
+	pavucontrol nmgui-bin nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
+
+paru -S --noconfirm --needed loupe qt6ct gnome-themes-extra bibata-cursor-theme-bin \
+	seahorse libsecret amberol tlrc-bin gnome-online-accounts
+
+if ! grep '^Path askpass' /etc/sudo.conf; then
+	sudo sed -i '/Path askpass \/usr\/lib/ a Path askpass \/usr\/lib\/seahorse\/ssh-askpass' /etc/sudo.conf
+fi
+
+paru -S --noconfirm --needed numlockx
+
+if ! test -f /usr/local/bin/numlock; then
+	test -d /usr/local/bin || mkdir -p /usr/local/bin
+	cat <<-"EOF" | sudo tee /usr/local/bin/numlock
+	#!/bin/bash
+
+	for tty in /dev/tty{1..6}
+	do
+		/usr/bin/setleds -D +num < "$tty";
+	done
+	EOF
+	sudo chmod +x /usr/local/bin/numlock
+fi
+
+if ! test -f /etc/systemd/system/numlock.service; then
+	cat <<-"EOF" | sudo tee /etc/systemd/system/numlock.service
+	[Unit]
+	Description=numlock
+
+	[Service]
+	ExecStart=/usr/local/bin/numlock
+	StandardInput=tty
+	RemainAfterExit=yes
+
+	[Install]
+	WantedBy=multi-user.target
+	EOF
+	sudo systemctl enable numlock.service
+fi
+
+xdg-mime default thunar.desktop inode/directory
+

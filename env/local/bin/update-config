@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+(
+cd $HOME/repos/config
+./setup "$@"
+hash -r
+)

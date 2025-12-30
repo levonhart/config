@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+paru -S --noconfirm --needed           \
+	ttf-arphic-ukai                \
+	ttf-arphic-uming               \
+	ttf-babelstone-han             \
+	ttf-babelstone-roman           \
+	ttf-cm-unicode                 \
+	ttf-croscore                   \
+	ttf-dejavu                     \
+	ttf-dejavu-nerd                \
+	ttf-fantasque-nerd             \
+	ttf-fantasque-sans-mono        \
+	ttf-fira-code                  \
+	ttf-fira-mono                  \
+	ttf-fira-sans                  \
+	ttf-firacode-nerd              \
+	ttf-hack                       \
+	ttf-hanazono                   \
+	ttf-ibm-plex                   \
+	ttf-inconsolata                \
+	ttf-jetbrains-mono             \
+	ttf-linux-libertine            \
+	ttf-ms-fonts                   \
+	ttf-selawik                    \
+	ttf-sourcecodepro-nerd         \
+	ttf-twemoji-color              \
+	ttf-unifont                    \
+	otf-latin-modern               \
+	otf-latinmodern-math           \
+	ttf-nerd-fonts-symbols         \
+	ttf-nerd-fonts-symbols-mono

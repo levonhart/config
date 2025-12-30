@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+paru -S --noconfirm --needed             \
+	texlive-bibtexextra                  \
+	texlive-bin                          \
+	texlive-binextra                     \
+	texlive-fontsextra                   \
+	texlive-fontsrecommended             \
+	texlive-fontutils                    \
+	texlive-formatsextra                 \
+	texlive-games                        \
+	texlive-langenglish                  \
+	texlive-langportuguese               \
+	texlive-latex                        \
+	texlive-latexextra                   \
+	texlive-latexrecommended             \
+	texlive-mathscience                  \
+	texlive-pictures                     \
+	texlive-pstricks                     \
+	texlive-publishers                   \
+	texlive-xetex
+
+paru -S --noconfirm --needed ltex-ls-plus-bin texlab biber bibutils
+

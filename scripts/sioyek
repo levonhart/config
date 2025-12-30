@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+paru -S --asdeps --noconfirm libmupdf tesseract tesseract-data-por tesseract-data-eng
+echo "installing sioyek-git..."
+paru -S --needed --noconfirm sioyek-git >/dev/null 2>&1

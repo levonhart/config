@@ -1,0 +1,142 @@
+# vim: foldmethod=marker
+# geral {{{ #
+
+# previne C-S de bloquear entrada de caracteres
+unsetopt flow_control
+
+HISTSIZE=500000
+SAVEHIST=100000
+HISTFILE="$HOME/.zsh_history"
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+
+fpath=($fpath $HOME/.local/share/zsh/site-functions)
+# }}} geral #
+
+# completion {{{ #
+zstyle :compinstall filename '/home/leon/.zshrc'
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+
+setopt menu_complete
+setopt complete_in_word
+setopt always_to_end
+
+autoload -U +X bashcompinit && bashcompinit
+# }}} completion #
+
+# plugins {{{ #
+ZSH_PLUGIN_DIR=$HOME/.local/share/zsh/plugins
+
+plug() {
+	plugin_name=${1#*/}
+	plugin_init="${ZSH_PLUGIN_DIR%/}/$plugin_name/$plugin_name.plugin.zsh"
+	if test -f $plugin_init; then
+		source $plugin_init
+		return 1
+	fi
+	echo "$(basename $1) not found."
+	return 0
+}
+
+forgit_checkout_file='grf'
+forgit_checkout_branch='gsb'
+forgit_checkout_tag='gst'
+forgit_checkout_commit='gsc'
+
+plug 'zdharma-continuum/fast-syntax-highlighting'
+plug 'zsh-users/zsh-autosuggestions'
+plug 'Aloxaf/fzf-tab'
+plug 'jeffreytse/zsh-vi-mode'
+plug 'wfxr/forgit'
+
+function zvm_after_init() {
+	source /usr/share/fzf/key-bindings.zsh
+}
+ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_DEFAULT
+ZVM_OPPEND_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+
+export FORGIT_FZF_DEFAULT_OPTS=" --exact --border --cycle --reverse --height '80%' "
+PATH="$PATH:$ZSH_PLUGIN_DIR/forgit/bin"
+# }}} plugins #
+
+# fzf {{{ #
+copycmd='wl-copy'
+#test $XDG_SESSION_TYPE != 'wayland' && copycmd='xclip -s clipboard'
+export FZF_ALT_C_OPTS="
+  --walker-skip .git,node_modules,target,.local,.cache,.wine,.steam,pfx
+  --preview 'eza --tree --level=3 {}'
+  --bind 'ctrl-/:toggle-preview'"
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | $copycmd --)+abort'"
+export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target,.cache,.wine,.steam,pfx
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:toggle-preview'"
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
+# }}} fzf #
+
+# keybindings {{{ #
+bindkey -v
+bindkey -M vicmd '^?' backward-delete-char
+bindkey -M vicmd "${terminfo[kdch1]}" delete-char
+
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+bindkey -M vicmd '^p' up-line-or-beginning-search
+bindkey -M viins '^p' up-line-or-beginning-search
+bindkey -M vicmd '^n' down-line-or-beginning-search
+bindkey -M viins '^n' down-line-or-beginning-search
+
+bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
+bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
+bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-beginning-search
+bindkey -M viins "${terminfo[kcud1]}" down-line-or-beginning-search
+
+bindkey -M menuselect '^o' accept-and-infer-next-history
+bindkey -M menuselect '^j' vi-down-line-or-history
+bindkey -M menuselect '^k' vi-up-line-or-history
+
+bindkey '^ ' autosuggest-accept
+
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^e' edit-command-line
+# }}} keybindings #
+
+# alias {{{ #
+alias ls="eza"
+alias ll="eza -l"
+alias la="eza -la"
+alias nano="nvim"
+alias nv="nvim"
+alias vim="nvim"
+alias cat="bat -pp"
+alias syr="sioyek-remote"
+alias lab="glab"
+alias gl="glab"
+# }}} alias #
+
+# autosuggestions {{{ #
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
+# }}} autosuggestions #
+
+# fim {{{ #
+eval "$(starship init zsh)"
+eval $(thefuck --alias f)
+# }}} fim #

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+paru -S --needed steam gamescope mangohud-git lib32-mangohud wine-staging wine-mono \
+	gamemode lib32-gamemode winetricks protontricks
+paru -S --needed vkd3d-proton-bin dxvk-bin
+paru -S --needed umu-launcher faugus-launcher
+
+mkdir $HOME/.config/protonfixes

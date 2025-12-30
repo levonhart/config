@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+sudo pacman -S --noconfirm --needed base-devel git python cmake
+sudo pacman -S --noconfirm --needed --asdeps fontconfig freetype2 libglvnd sndio \
+	gtk3 sdl2 vulkan-intel libxkbcommon-x11 
+
+# rust is needed
+echo "running rust install"
+$(dirname $0)/rust
+
+echo "installing neovide..."
+sudo mkdir -p /usr/local/bin &> /dev/null
+rootdir=/tmp/cargo-neovide
+mkdir $rootdir
+cargo install --root $rootdir --git https://github.com/neovide/neovide
+sudo cp -ru -t /usr/local/ $rootdir/bin 
+
+#sudo ln -s $HOME/.cargo/bin/neovide /usr/local/bin/neovide > /dev/null 2>&1
+

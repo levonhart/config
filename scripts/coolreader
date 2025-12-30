@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# cxwr-ng and cxqt-ng are e-book readers (forked from CoolReader)
+sudo pacman -S --noconfirm --needed base-devel git curl cmake
+paru -S --noconfirm --needed --asdeps qt5-base qt5-tools qt5ct
+
+if ! test -f '/usr/local/lib/libcrengine-ng.so'; then
+	echo "installing crengine-ng..."
+	git clone https://gitlab.com/coolreader-ng/crengine-ng.git /tmp/crengine-ng
+	pushd /tmp/crengine-ng &> /dev/null
+	rm -rf build &> /dev/null
+	mkdir build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=/usr/local \
+		  -DCMAKE_BUILD_TYPE=Release        \
+		  -DCRE_BUILD_SHARED=ON             \
+		  -DCRE_BUILD_STATIC=OFF            \
+		  ../ &> /dev/null
+	echo "building crengine-ng..."
+	make -j8 &> /dev/null
+	sudo make install &> /dev/null
+	popd &> /dev/null
+else
+	echo "libcrengine-ng.so found"
+fi
+
+if ! test -f '/usr/local/bin/crqt'; then
+	echo "installing crqt-ng..."
+	git clone https://gitlab.com/coolreader-ng/crqt-ng.git /tmp/crqt-ng
+	pushd /tmp/crqt-ng &> /dev/null
+	rm -rf build &> /dev/null
+	mkdir build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ../ &>/dev/null
+	echo "building crqt-ng..."
+	make -j8 &> /dev/null
+	sudo make install
+	popd &> /dev/null
+else
+	echo "crqt is already installed"
+fi
+
+if [[ -z $(find /etc/ld.so.conf.d/ -type f -name 'local.conf') ]]; then
+	sudo sh -c "echo '/usr/local/lib' > /etc/ld.so.conf.d/local.conf"
+fi

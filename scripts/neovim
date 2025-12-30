@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+paru -S --needed --noconfirm neovim lua51 luarocks tree-sitter-cli  \
+	lua-language-server nodejs pnpm python python-pynvim
+
+sudo luarocks install luacheck

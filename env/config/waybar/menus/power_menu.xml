@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<interface>
+
+	<object class="GtkMenu" id="menu">
+
+		<child>
+			<object class="GtkMenuItem" id="lock">
+				<property name="label">󰍁  Bloquear</property>
+			</object>
+		</child>
+
+		<child>
+			<object class="GtkMenuItem" id="logout">
+				<property name="label">󰍃  Sair</property>
+			</object>
+		</child>
+
+		<child>
+			<object class="GtkMenuItem" id="suspend">
+				<property name="label">󰏦  Suspender</property>
+			</object>
+		</child>
+
+
+		<child>
+			<object class="GtkMenuItem" id="hibernate">
+				<property name="label">󰒲  Hibernar</property>
+			</object>
+		</child>
+
+
+		<child>
+			<object class="GtkSeparatorMenuItem" id="delimiter1" />
+		</child>
+
+
+		<child>
+			<object class="GtkMenuItem" id="shutdown_sub">
+				<property name="label">󰚦  Desligar</property>
+
+
+				<child type="submenu">
+					<object class="GtkMenu">
+						<child>
+							<object class="GtkMenuItem" id="shutdown-now">
+								<property name="label">󰚦  Desligar agora</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkMenuItem" id="shutdown-wait">
+								<property name="label">󰚦  Desligar (1 min)</property>
+							</object>
+						</child>
+					</object>
+				</child>
+
+
+			</object>
+		</child>
+
+
+		<child>
+			<object class="GtkMenuItem" id="reboot_sub">
+				<property name="label">󰜉  Reboot</property>
+
+				<child type="submenu">
+					<object class="GtkMenu">
+						<child>
+							<object class="GtkMenuItem" id="reboot-now">
+								<property name="label">󰜉  Reboot</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkMenuItem" id="reboot-firmware">
+								<property name="label">󰮫  Reboot to UEFI</property>
+							</object>
+						</child>
+					</object>
+				</child>
+			</object>
+		</child>
+
+
+	</object>
+
+
+</interface> 

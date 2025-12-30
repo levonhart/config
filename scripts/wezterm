@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+paru -S --needed wezterm-git fd
+
+if ! test -f /usr/bin/xdg-terminal-exec; then
+	cat <<-"EOF" | sudo tee /usr/bin/xdg-terminal-exec > /dev/null
+	#!/usr/bin/env sh
+	ARGS=()
+	while [[ "$#" -gt 0 ]]; do
+		case "$1" in
+			--working-directory)
+				ARGS+=('--cwd' "$2")
+				shift 2
+				;;
+			*)
+				break
+				;;
+		esac
+	done
+	if [[ ${#ARGS[@]} -gt 0 ]]; then
+		ARGS+=($@)
+		set -- ${ARGS[@]}
+	fi
+	wezterm start "$@"
+	EOF
+fi
+sudo chmod 755 /usr/bin/xdg-terminal-exec
+
+if ! test -f $HOME/.wezterm-sessions.lua; then
+	cat <<-"EOF" | tee $HOME/.wezterm-sessions.lua > /dev/null
+	local wezterm = require('wezterm')
+	local repos = wezterm.home_dir .. '/repos/'
+
+	return {
+		work_dirs = {
+			-- [1] = repos .. 'work/project-1',
+			-- [2] = repos .. 'work/project-2',
+			-- [3] = repos .. 'work/project-3',
+			-- [4] = repos .. 'work/project-4',
+		},
+		personal_dirs = {
+			-- [1] = repos .. 'personal/project-1',
+			-- [2] = repos .. 'personal/project-2',
+			-- [3] = repos .. 'personal/project-3',
+			-- [4] = repos .. 'personal/project-4',
+		},
+		config_dir = repos .. 'config',
+	}
+	EOF
+fi

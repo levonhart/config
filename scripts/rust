@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+echo "installing rust..."
+if ! command -v rustup >/dev/null 2>&1; then
+	sudo pacman -S --noconfirm --needed rustup
+fi
+
+rustup -q install
+
+envd=$HOME/.config/environment.d/
+if [[ -z $(find $envd -type f -name cargo-env.conf) ]]; then
+	mkdir -p $envd
+	echo 'PATH=$PATH:$HOME/.cargo/bin' > $envd/cargo-env.conf
+fi

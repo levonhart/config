@@ -1,0 +1,4 @@
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
+.thunar > grid > toolbar * {
+	-gtk-icon-transform: scale(0.75); 
+}

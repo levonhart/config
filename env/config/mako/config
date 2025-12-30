@@ -1,0 +1,28 @@
+# Settings
+max-history=20
+default-timeout=3000
+border-radius=8
+width=400
+height=150
+font=Fira Sans 9
+
+# Colors
+
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#94e2d5
+progress-color=over #313244
+
+[urgency=high]
+border-color=#fab387
+
+[app-name="Input Method"]
+history=0
+group-by=app-name
+
+[app-name="volumecontrol"]
+history=0
+group-by=app-name
+
+[mode=do-not-disturb]
+invisible=1
