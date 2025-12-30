@@ -18,6 +18,11 @@ border-color=#fab387
 
 [app-name="Input Method"]
 history=0
+group-by=app-name
 
 [app-name="volumecontrol"]
 history=0
+group-by=app-name
+
+[mode=do-not-disturb]
+invisible=1

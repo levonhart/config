@@ -24,6 +24,7 @@ if ! test -f /usr/bin/xdg-terminal-exec; then
 	wezterm start "$@"
 	EOF
 fi
+sudo chmod 755 /usr/bin/xdg-terminal-exec
 
 if ! test -f $HOME/.wezterm-sessions.lua; then
 	cat <<-"EOF" | tee $HOME/.wezterm-sessions.lua > /dev/null

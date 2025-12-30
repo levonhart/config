@@ -16,7 +16,7 @@
 		"gamemode"
 	],
 	"modules-center": [
-		"clock"
+		"group/time"
 	],
 	"modules-right": [
 		"custom/media",
@@ -24,15 +24,19 @@
 		"idle_inhibitor",
 		"custom/hyprsunset",
 		"group/hide-tray",
-		"bluetooth",
 		"group/pulseaudio-volume",
 		"custom/micmonitor",
+		"bluetooth",
 		"network",
-	  // "power-profiles-daemon",
-	  // "backlight",
-	  // "battery",
-	  "custom/power"
+		// "power-profiles-daemon",
+		// "backlight",
+		// "battery",
+		"custom/power"
 	],
+	"group/time": {
+		"orientation": "inherit",
+		"modules": [ "clock", "custom/notification" ]
+	},
 	"group/hide-tray": {
 		"orientation": "inherit",
 		"drawer": {
@@ -163,14 +167,32 @@
 				"weekdays":   "<span color='#a6e3a1'><b>{}</b></span>",
 				"today":      "<span color='#f38ba8'><b>{}</b></span>"
 			},
-        "actions":  {
-                    "on-click-right": "mode",
-                    "on-scroll-up": "tz_up",
-                    "on-scroll-down": "tz_down",
-                    "on-scroll-up": "shift_up",
-                    "on-scroll-down": "shift_down"
-                    }
+			"actions":  {
+				"on-click-right": "mode",
+				"on-scroll-up": "tz_up",
+				"on-scroll-down": "tz_down",
+				"on-scroll-up": "shift_up",
+				"on-scroll-down": "shift_down"
+			}
 		}
+	},
+	"custom/notification": {
+		"format": "{icon}",
+		"format-icons": {
+			"default": "<span size=\"small\">󰂚 </span>",
+			"do-not-disturb": "<span size=\"small\">󰂛 </span>"
+		},
+		"on-click": "makoctl menu -- rofi -dmenu -p mako",
+		"on-click-middle": "makoctl mode -t do-not-disturb",
+		"on-click-right": "makoctl dismiss -a",
+		"on-scroll-down": "makoctl restore",
+		"on-scroll-up": "makoctl dismiss",
+		"tooltip": true,
+		"tooltip-format": "{text}",
+		// "exec": "makoctl mode | tail -1",
+		"exec": "makoctl mode | tail -1 | sed 's/\\(.*\\)/{ \"text\": \"\\1\", \"class\": \"custom-notification\", \"alt\":\"\\1\"}/'",
+		"return-type": "json",
+		"interval": 1
 	},
 	"cpu": {
 		"format": "{usage}% ",
@@ -259,15 +281,16 @@
 	},
 	"pulseaudio": {
 		"scroll-step": 5,
-		"format": "{volume}% {icon}",
-		"format-bluetooth": "{volume}% {icon}",
-		"format-bluetooth-muted": "󰝟 {icon}",
+		// "format": "{volume}% {icon}",
+		"format": "{icon}",
+		"format-bluetooth": "{icon}",
+		"format-bluetooth-muted": "󰝟 ",
 		"format-muted": "󰝟 ",
 		"format-source": "",
 		// "format-source-muted": "",
 		// "format-source": " {volume}% ",
 		"format-source-muted": " ",
-		"tooltip-format": "{icon} {desc} // {volume}%",
+		"tooltip-format": "{icon}  {desc} // {volume}%",
 		"format-icons": {
 			"headphone": " ",
 			"hands-free": "󱡏 ",
@@ -275,7 +298,7 @@
 			"phone": " ",
 			"portable": " ",
 			"car": " ",
-			"default": ["  ", "  ", "  "]
+			"default": [" ", " ", " "]
 		},
 		"on-click": "pkill -x pavucontrol || pavucontrol -t 3",
 		"on-click-right": "$HOME/.config/waybar/scripts/volumecontrol.sh -t",

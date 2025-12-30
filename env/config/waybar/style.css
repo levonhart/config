@@ -59,7 +59,7 @@
 #custom-music,
 #tray,
 #backlight,
-#clock,
+#time,
 #network,
 #battery,
 #temperature,
@@ -80,7 +80,7 @@
 #idle_inhibitor:hover,
 #custom-music:hover,
 #backlight:hover,
-#clock:hover,
+#time:hover,
 #network:hover,
 #battery:hover,
 #temperature:hover,
@@ -98,11 +98,22 @@
   background-color: @surface0;
 }
 
+#time {
+  border-radius: 1rem;
+}
+
 #clock {
   color: @blue;
-  border-radius: 1rem;
-  margin-right: 1rem;
+  margin-right: 0.3rem;
+  margin-left: 0.5rem;
 }
+
+#custom-notification {
+  color: @blue;
+  margin-right: 0;
+  padding-right: 0;
+}
+
 #power-profiles-daemon {
   color: @blue;
   border-radius: 0px 0px 0px 0px;

@@ -400,6 +400,7 @@ vim.api.nvim_create_autocmd( 'User' , {
 
 		map( 'n', '<leader>lT', '<plug>(vimtex-toc-open)',   { buffer = ev.buf })
 		map( 'n', '<leader>lt', '<plug>(vimtex-toc-toggle)', { buffer = ev.buf })
+		map( 'n', '<leader>L', '<cmd>update<cr><plug>(vimtex-compile-ss)', { buffer = ev.buf })
 	end,
 })
 -- }}} Vimtex
