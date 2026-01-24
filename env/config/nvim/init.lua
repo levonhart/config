@@ -163,7 +163,7 @@ require('lazy').setup {
 				end
 			end },
 		{ 'nvim-lualine/lualine.nvim',
-			dependencies =  { 'nvim-tree/nvim-web-devicons', 'AndreM222/copilot-lualine' },
+			dependencies =  { 'nvim-tree/nvim-web-devicons' },
 		},
 		{ "mbbill/undotree", config = function()
 			map("n", "<leader>u", vim.cmd.UndotreeToggle) end },
@@ -189,7 +189,7 @@ require('lazy').setup {
 				'hrsh7th/cmp-nvim-lua',
 				-- 'quangnguyen30192/cmp-nvim-ultisnips',
 				'petertriho/cmp-git',
-				'zbirenbaum/copilot-cmp',
+				'micangl/cmp-vimtex',
 			}
 		},
 		{ 'mfussenegger/nvim-lint' },
@@ -203,9 +203,6 @@ require('lazy').setup {
 		{ 'MeanderingProgrammer/render-markdown.nvim', opts = {}, -- require python-pylatexenc
 			dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, },
 		{ 'folke/trouble.nvim', opts = {} },
-		{ 'zbirenbaum/copilot.lua', event = 'InsertEnter' },
-		{ "zbirenbaum/copilot-cmp", config = function ()
-			require("copilot_cmp").setup() end },
 		{ "epwalsh/obsidian.nvim", version = "*", lazy = true, event = {
 			  'BufReadPre ' .. vim.uv.os_homedir() .. '/Documentos/Obsidian/*.md',
 			  'BufNewFile ' .. vim.uv.os_homedir() .. '/Documentos/Obsidian/*.md',
@@ -288,10 +285,10 @@ map('n', '<space>b', fzf_lua.buffers)
 map('n', '<space>t', fzf_lua.tabs)
 map('n', '<space>p', fzf_lua.git_files)
 map('n', '<space>f', fzf_lua.grep)
-map('n', '<space><c-f>', function() fzf_lua.grep{ resume=true } end)
+map('n', '<space><c-f>', function() fzf_lua.grep{ resume = true } end)
 map('n', '<space>F', fzf_lua.live_grep)
 map('n', '<space>gg', fzf_lua.grep)
-map('n', '<space>G', fzf_lua.live_grep_resume)
+map('n', '<space>G', function() fzf_lua.live_grep{ resume = true } end)
 map('n', '<space>gw', fzf_lua.grep_cword)
 map('n', '<space>gW', fzf_lua.grep_cWORD)
 map('n', '<space>l', fzf_lua.lines)
@@ -340,7 +337,6 @@ require('lualine').setup {
 		lualine_b = { 'branch', 'diff', 'diagnostics' },
 		lualine_c = { 'filename' },
 		lualine_x = {
-			{ 'copilot', symbols = { status = { icons = { unknown = '' } } } },
 			'encoding',
 			'fileformat',
 			'filetype',
@@ -398,6 +394,13 @@ vim.api.nvim_create_autocmd( 'User' , {
 		map( { 'n', 'o', 'x' }, ']e', '<plug>(vimtex-]m)', { buffer = ev.buf })
 		map( { 'n', 'o', 'x' }, ']E', '<plug>(vimtex-]M)', { buffer = ev.buf })
 
+		map( 'n', '<leader>S', '<plug>(vimtex-env-surround-operator)', { buffer = ev.buf })
+		map( 'n', '<leader>SS', '<plug>(vimtex-env-surround-line)', { buffer = ev.buf })
+		map( 'x', '<leader>SS', '<plug>(vimtex-env-surround-visual)', { buffer = ev.buf })
+		map( 'n', 'ysc', '<plug>(vimtex-cmd-create)', { buffer = ev.buf })
+		map( 'x', '<leader>Ss', '<plug>(vimtex-cmd-create)', { buffer = ev.buf })
+		map( 'n', 'tsp', '<plug>(vimtex-delim-add-modifiers)', { buffer = ev.buf })
+
 		map( 'n', '<leader>lT', '<plug>(vimtex-toc-open)',   { buffer = ev.buf })
 		map( 'n', '<leader>lt', '<plug>(vimtex-toc-toggle)', { buffer = ev.buf })
 		map( 'n', '<leader>L', '<cmd>update<cr><plug>(vimtex-compile-ss)', { buffer = ev.buf })
@@ -439,13 +442,13 @@ cmp.setup {
 		end, { 'i', 's' }),
 	}),
 	sources = cmp.config.sources({
-		{ name = 'nvim_lsp' },
-		{ name = 'git' },
-		{ name = 'path' },
-		-- { name = 'ultisnips' },
-	}, {
-		{ name = 'copilot' },
-		{ name = 'buffer' },
+			{ name = 'nvim_lsp' },
+			{ name = 'git' },
+			{ name = 'path' },
+			{ name = 'vimtex' },
+			-- { name = 'ultisnips' },
+		}, {
+			{ name = 'buffer' },
 	}),
 	completion = {
 		autocomplete = false,
@@ -467,13 +470,6 @@ cmp.setup.filetype('gitcommit', {
 	})
 })
 
--- cmp.event:on('menu_opened', function()
--- 	vim.b.copilot_suggestion_hidden = true
--- end)
---
--- cmp.event:on('menu_closed', function()
--- 	vim.b.copilot_suggestion_hidden = false
--- end)
 -- }}} Nvim-Cmp
 
 -- Nvim-Lint {{{
@@ -655,19 +651,6 @@ map("n", "]g", function() require("trouble").next({skip_groups = true, jump = tr
 map("n", "[g", function() require("trouble").previous({skip_groups = true, jump = true}); end,
 	{ desc = 'Go to previous Trouble' })
 -- }}} Trouble
-
--- Copilot {{{
-require('copilot').setup {
-	suggestion = { enabled = false, },
-	panel = { enabled = false, keymap = { open = '<c-/>' }, },
-	filetypes = {
-		-- python = true, -- allow specific filetype
-		-- ['*'] = false,
-		tex = false,
-	},
-}
-vim.cmd("silent! Copilot disable")
--- }}} Copilot
 
 -- Zen-Mode {{{
 map('n', '<a-f>', '<cmd>ZenMode<cr>')

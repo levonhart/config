@@ -8,11 +8,11 @@ paru -S --noconfirm --needed ttf-firacode-nerd ttf-nerd-fonts-symbols ttf-nerd-f
 paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
 	hypridle hyprcursor hyprgraphics hyprland-qt-support hyprland-qtutils \
 	hyprlang hyprpicker hyprpolkitagent hyprshot hyprsunset hyprutils \
-	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard cliphist \
+	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard clipvault wtype \
 	pavucontrol nmgui-bin nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
 
 paru -S --noconfirm --needed loupe qt6ct gnome-themes-extra bibata-cursor-theme-bin \
-	seahorse libsecret amberol tlrc-bin gnome-online-accounts
+	seahorse libsecret amberol tlrc-bin gnome-online-accounts gnome-online-accounts-gtk
 
 if ! grep '^Path askpass' /etc/sudo.conf; then
 	sudo sed -i '/Path askpass \/usr\/lib/ a Path askpass \/usr\/lib\/seahorse\/ssh-askpass' /etc/sudo.conf
@@ -50,4 +50,10 @@ if ! test -f /etc/systemd/system/numlock.service; then
 fi
 
 xdg-mime default thunar.desktop inode/directory
+
+if ! grep 'pam_gnome_keyring' /etc/pam.d/system-local-login > /dev/null; then
+	sudo sed -i /etc/pam.d/system-local-login  \
+		-e '/auth\s\+include\s\+\(system-\)\?login/a auth      optional     pam_gnome_keyring.so' \
+		-e '/session\s\+include\s\+\(system-\)\?login/a session   optional     pam_gnome_keyring.so auto_start'
+fi
 

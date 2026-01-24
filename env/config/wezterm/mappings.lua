@@ -128,6 +128,8 @@ M = {
 		{ key = 'PageDown',   mods = 'SHIFT|ALT',   action = act.ScrollByPage(1) },
 		{ key = 'PageDown',   mods = 'CTRL',        action = act.ActivateTabRelative(1) },
 		{ key = 'PageDown',   mods = 'SHIFT|ALT',   action = act.MoveTabRelative(1) },
+		{ key = 'Home',       mods = 'SHIFT',       action = act.ScrollToTop },
+		{ key = 'End',        mods = 'SHIFT',       action = act.ScrollToBottom },
 		{ key = 'Insert',     mods = 'SHIFT',       action = act.PasteFrom 'PrimarySelection' },
 		{ key = 'Insert',     mods = 'CTRL',        action = act.CopyTo 'PrimarySelection' },
 		{ key = 'Copy',       mods = 'NONE',        action = act.CopyTo 'Clipboard' },

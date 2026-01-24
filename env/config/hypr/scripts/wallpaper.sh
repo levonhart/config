@@ -4,8 +4,7 @@ wdir="${WALLPAPERS_DIR:-$(xdg-user-dir PICTURES)}"
 set_random() {
 	w="$(find $wdir -type f -iname '*.jpg' -o -iname '*.png' -o  -iname '*.jpeg' | shuf -n 1)"
 
-	hyprctl hyprpaper preload "$w"
-	hyprctl hyprpaper wallpaper ",$w"
+	hyprctl hyprpaper wallpaper ",$w,cover"
 }
 
 case "$1" in

@@ -1,0 +1,412 @@
+@import "mocha.css";
+
+* {
+  font-family: Fira Sans, DejaVu Sans, FiraCode Nerd Font, FantasqueSansM Nerd Font, sans-serif;
+  min-height: 0;
+  padding: 0;
+}
+
+#bar {
+	background: #11111bdd;
+}
+
+.container {
+    font-size: 12px;
+}
+
+.launcher,
+.workspaces,
+.clock,
+.power,
+.sysinfo .item,
+.gpuinfo .item {
+    background: @base;
+    padding: 0.3em;
+	margin: 0.1em 1em;
+    border-radius: 1em;
+    opacity: 1;
+    font-size: 12px;
+    color: @text;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.launcher:hover,
+.workspaces:hover,
+.clock:hover,
+.power:hover,
+.sysinfo .item:hover,
+.gpuinfo .item:hover {
+    color: @teal;
+    background: @crust;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.cava {
+    padding: 0px 20px;
+    margin: 0.1em;
+    border-radius: 10px;
+    color: @sapphire;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.background {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.wlogout {
+    padding: 0px 15px 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    color: #ff757f;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+.wlogout:hover {
+    color: #7dcfff;
+    background: @base;
+    border-radius: 10px;
+    min-width: 30px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0.8;
+}
+.airpod {
+    padding: 0px 15px 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    color: #ff757f;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+.airpod:hover {
+    color: #7dcfff;
+    background: @base;
+    border-radius: 10px;
+    min-width: 30px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0.8;
+}
+
+.sysinfo .item,
+.gpuinfo .item {
+    background: @base;
+    padding: 0.1em;
+	margin: 0em;
+    border-radius: 1em;
+    opacity: 1;
+    font-size: 12px;
+    color: @text;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+/* cpu */
+.sysinfo .item:nth-child(1) {
+    padding: 0 1em;
+	margin: 0.1em;
+    color: @peach;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+/* memory */
+.sysinfo .item:nth-child(2) {
+    padding: 0 1em;
+	margin: 0.1em;
+    color: @sapphire;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+/* temp */
+.sysinfo .item:nth-child(3) {
+    padding: 0 1em;
+	margin: 0.1em;
+    color: @yellow;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+/* disk */
+.sysinfo .item:nth-child(4) {
+    padding: 0 1em;
+	margin: 0.1em;
+    color: @maroon;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.gpuinfo {
+	margin-left: 1em;
+}
+.gpuinfo .item:nth-child(1) {
+    padding: 0 1em;
+	margin: 0.1em;
+    color: @red;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.pacman {
+    padding: 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    color: #c3e88d;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+.zellij {
+    padding: 0px 7px 0px 9px;
+	margin: 0.1em;
+    border-radius: 10px;
+    color: #c3e88d;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+.zellij:hover {
+    color: #7dcfff;
+    background: @base;
+    border-radius: 10px;
+    min-width: 30px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0.8;
+}
+.volume {
+    padding: 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+    color: #9abdf5;
+    background: @base;
+    opacity: 0.8;
+}
+
+.popup-volume {
+    padding: 20px 20px 20px 20px;
+    border-radius: 5px;
+    color: #c0caf5;
+    /* background: #1a1b26; */
+    background-color: rgba(26, 27, 38, 0.8);
+    border: 2px solid #bb9af7;
+}
+
+.weather,
+.kbdd {
+    padding: 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    color: #ff9e64;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.clock {
+    font-family: CaskaydiaCove Nerd Font;
+	margin: 0.1em;
+    padding: 0.1em 1em 0px 1em;
+    border-radius: 10px;
+    color: @blue;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.clock_date {
+    color: rgb(94, 129, 172);
+}
+
+.popup-clock {
+    font-weight: bolder;
+    background-color: rgba(26, 27, 38, 0.8);
+    border-radius: 10px;
+    border: 2px solid #bb9af7;
+}
+
+.popup-clock .calendar-clock {
+    color: #c0caf5;
+    /*  font-size: 2.5em; */
+    padding-bottom: 0.1em;
+}
+
+.popup-clock .calendar {
+    background-color: rgba(26, 27, 38, 0.8);
+    color: #c0caf5;
+    border-radius: 10px;
+}
+
+.popup-clock .calendar .header {
+    padding-top: 1em;
+    border-top: 1px solid #424242;
+    font-size: 1.5em;
+}
+
+.popup-clock .calendar:selected {
+    background-color: #3d59a1;
+}
+
+.focused {
+    padding: 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+    color: #c3e88d;
+    background: @base;
+    opacity: 0.8;
+    /* top right bottom left */
+}
+
+.clipboard {
+    padding: 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+    color: #9abdf5;
+    background: @base;
+    opacity: 0.8;
+}
+
+.popup-clipboard {
+    margin: 0.1em;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5px;
+    color: #c0caf5;
+    background: @base;
+    background-color: rgba(26, 27, 38, 0.8);
+    border: 2px solid #bb9af7;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.launcher {
+    padding: 0px 1em;
+	margin: 0.1em 0.2em 0.1em 0.4em;
+    border-radius: 1em;
+    color: @text;
+    opacity: 1;
+    background: @base;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.launcher:hover {
+    color: @sky;
+}
+
+.script {
+    padding: 0px 10px 0px 10px;
+	margin: 0.1em;
+    border-radius: 10px;
+    color: #9abdf5;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.script:hover {
+    color: #7dcfff;
+    background: @base;
+    border-radius: 10px;
+    min-width: 30px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0.8;
+}
+
+.zscroll {
+    border-radius: 10px;
+    padding: 0px 10px;
+	margin: 0.1em;
+    color: #bb9af7;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+.music {
+    border-radius: 10px;
+    padding: 0px 10px;
+	margin: 0.1em;
+    color: #bb9af7;
+    background: @base;
+    opacity: 0.8;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+.popup-music {
+    margin-left: 5px;
+    padding: 10px 10px 10px 10px;
+    border-radius: 5px;
+    color: #c0caf5;
+    background: @base;
+    background-color: rgba(26, 27, 38, 0.8);
+    border: 2px solid #bb9af7;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.popup-music.volume {
+}
+.popup-music .volume .slider {
+    padding: 2px 2px 2px 2px;
+	margin: 0.1em;
+}
+.popup-music .volume .icon {
+}
+
+tooltip.background {
+    background-color: rgba(00, 00, 00, 0.5);
+    font-size: 18px;
+    border-radius: 10px;
+    color: #fdfdfd;
+}
+
+tooltip * {
+    padding: 4px;
+    background-color: transparent;
+    color: white;
+}
+
+.host tooltip {
+    background-color: rgba(255, 00, 00, 0.5);
+}
+
+.workspaces {
+    font-weight: bold;
+    font-style: normal;
+}
+
+.workspaces button {
+    padding: 0em 0.5em 0.1em 0.25em;
+    margin: 0px 0.1em;
+    background: @base;
+	color: @lavender;
+    border-radius: 1em;
+    border: 0px;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.workspaces .item.focused {
+    color: @sky;
+    background: @surface0;
+    border-radius: 1em;
+    min-width: 3em;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.workspaces button:hover {
+    color: @sapphire;
+    background: @surface1;
+    border-radius: 1em;
+    min-width: 3em;
+    opacity: 1;
+}
+
+.power {
+    padding: 0.1em 1.5em 0.1em 1.5em;
+	margin: 0.1em;
+    border-radius: 1em;
+    color: @red;
+    opacity: 1;
+    background: @base;
+    /* box-shadow: rgba(0, 0, 0, 0.288) 2px 2px 5px 2px; */
+}
+
+.power:hover {
+    color: @peach;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}

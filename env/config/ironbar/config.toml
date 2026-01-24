@@ -1,0 +1,67 @@
+icon_theme = "Adwaita"
+position = "top"
+anchor_to_edges = true
+height = 36
+
+[[start]]
+type = "custom"
+on_click_left = "rofi -show combi"
+on_click_right = "hyprctl dispatch togglespecialworkspace hidden"
+[[start.bar]]
+name = "launcher"
+class = "launcher"
+type = "button"
+label = "<span size=\"large\"> </span>"
+# tooltip-format = "Iniciar\n󰍽² Mostrar janelas escondidas"
+
+[[start]]
+name = "workspaces"
+type = "workspaces"
+name_map = { 1 = "󰈹", 2 = "󰆍", 3 = "󱁤", 4 = "", 5 = "", 6 = "󰊗" }
+favorites = [ "1", "2", "3", "4", "5", "6" ]
+
+[[start]]
+name = "sys_info"
+type = "sys_info"
+interval.temps = 3
+interval.disks = 999999
+interval.memory = 30
+interval.cpu = 1
+interval.networks = 3
+format = [
+	"<span rise=\"1400\"> </span> {cpu_percent}%",
+	"<span rise=\"1000\"> </span> {memory_available} G",
+	"<span rise=\"1000\"></span> {temp_c:Tccd1}°C",
+	# "   {memory_percent}%",
+]
+on_click_left = "pkill -x btop || wezterm start btop"
+
+[[start]]
+name = "gpu_info"
+class = "gpuinfo"
+type = "sys_info"
+interval.temps = 3
+interval.disks = 999999
+interval.memory = 30
+interval.cpu = 1
+interval.networks = 3
+format = [ "<span rise=\"1000\"></span> {temp_c:edge}°C", ]
+on_click_left = "pkill -x nvtop || wezterm start nvtop"
+
+[[center]]
+name = "clock"
+type = "clock"
+format = "<span rise=\"1300\"> </span> %H:%M"
+format_popup = "  %d de %B  \t  %H:%M:%S"
+
+[[end]]
+type = "custom"
+[[end.bar]]
+name = "power"
+class = "power"
+type = "button"
+label = "⏻ "
+on_click_left = "wlogout"
+on_click_middle = "hyprctl dispatch killactive"
+on_scroll_up = "hyprctl dispatch fullscreen 1"
+on_scroll_down = "hyprctl dispatch togglefloating"
