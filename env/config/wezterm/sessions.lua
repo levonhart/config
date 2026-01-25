@@ -1,7 +1,10 @@
 local wezterm = require('wezterm')
+local wezterm_sessions = loadfile(wezterm.home_dir .. '/.wezterm-sessions.lua')
 
-local local_cfg = dofile(wezterm.home_dir .. '/.wezterm-sessions.lua') or {
-	work_dirs = {}, personal_dirs = {}, config_dir = wezterm.home_dir .. '/.config' }
+local local_cfg =  {
+	work_dirs = {}, personal_dirs = {}, config_dir = wezterm.home_dir .. '/.config'
+}
+if wezterm_sessions then local_cfg = wezterm_sessions() end
 
 local repos = wezterm.home_dir .. '/repos/'
 
