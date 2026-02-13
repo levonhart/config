@@ -197,7 +197,8 @@ bindurl overleaf.com/project --mode=insert <C-\>n unfocus
 bindurl overleaf.com/project --mode=input <Tab> focusinput -n
 bindurl overleaf.com/project --mode=input <S-Tab> focusinput -N
 bindurl www.google.com gi composite focusinput -l ; text.end_of_line
-bindurl duckduckgo.com gi composite focusinput -l ; text.end_of_line
+bindurl ^https://duckduckgo.com gi composite scrollto 0; focusinput 1 ; text.end_of_line
+unbindurl ^https://duckduckgo.com h j k l o v ' m s
 bindurl ^https://web.whatsapp.com f hint -c [tabindex]:not(.two)>div,a
 bindurl ^https://web.whatsapp.com F hint -bc [tabindex]:not(.two)>div,a
 
@@ -208,6 +209,7 @@ seturl ^https://teams.microsoft.com modeindicator false
 seturl ^https://teams.live.com modeindicator false
 
 " Autocmds
+" autocmd DocStart ^https://duckduckgo.com/ mode ignore
 autocmd DocStart overleaf.com/project mode ignore
 autocmd DocLoad ^https://github.com/tridactyl/tridactyl/issues/new$ 
 autocmd DocLoad overleaf.com/project unfocus
