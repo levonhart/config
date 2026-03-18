@@ -1,29 +1,64 @@
 #!/usr/bin/env bash
 
+dp_res=1280x720@60
+hdmi_res=1280x720@60
+external_only=
+
+
+while [[ "$#" -gt 0 ]]; do
+	case "$1" in
+		-h|--hdmi)
+			hdmi_res="$2"
+			shift 2
+			;;
+		-d|--dp)
+			dp_res="$2"
+			shift 2
+			;;
+		-d|--dp)
+			dp_res="$2"
+			shift 2
+			;;
+		-e|--external-only)
+			external_only=true
+			shift 1
+			;;
+		*)
+			break
+			;;
+	esac
+done
+
+if [[ -z $external_only ]]; then
+    hyprctl keyword monitor "HDMI-A-1, ${hdmi_res}, auto, 1"
+    hyprctl keyword monitor "eDP-1, ${dp_res}, auto, 1"
+	exit 0
+fi
+
 if [[ $(hyprctl monitors | grep -c 'HDMI-A-1') -eq 1 ]]; then
-    hyprctl keyword monitor 'HDMI-A-1, 1920x1080@75, 0x0, 1'
-    hyprctl keyword monitor 'eDP-1, disable'
+    hyprctl keyword monitor "HDMI-A-1, ${hdmi_res}, 0x0, 1"
+    hyprctl keyword monitor "eDP-1, disable"
 else
-    hyprctl keyword monitor 'eDP-1, 1920x1080@60, 0x0, 1'
+    hyprctl keyword monitor "eDP-1, ${dp_res}, 0x0, 1"
 fi
 
 function handle {
 	if [[ "$USE_LAPTOP_MONITOR" -eq 1 ]]; then
-			hyprctl keyword monitor 'eDP-1, 1920x1080@60, auto, 1'
+			hyprctl keyword monitor "eDP-1, ${dp_res}, auto, 1"
 	fi
 	if [[ ${1:0:12} == 'monitoradded' ]]; then
 		if [[ ${1:14:8} == 'HDMI-A-1' ]]; then
-			hyprctl keyword monitor 'HDMI-A-1, 1920x1080@75, 0x0, 1'
+			hyprctl keyword monitor "HDMI-A-1, ${hdmi_res}, 0x0, 1"
 			hyprctl keyword monitor 'eDP-1, disable'
 		fi
 	elif [[ ${1:0:14} == 'monitorremoved' ]]; then
 		if [[ ${1:16:8} == 'HDMI-A-1' ]]; then
-			hyprctl keyword monitor 'eDP-1, 1920x1080@60, auto, 1'
+			hyprctl keyword monitor "eDP-1, ${dp_res}, auto, 1"
 		fi
 	elif [[ ${1:0:10} == 'focusedmon' ]]; then
 		if [[ ${1:12:8} == 'HDMI-A-1' ]]; then
-			hyprctl keyword monitor 'HDMI-A-1, 1920x1080@75, 0x0, 1'
-			hyprctl keyword monitor 'eDP-1, disable'
+			hyprctl keyword monitor "HDMI-A-1, ${hdmi_res}, 0x0, 1"
+			hyprctl keyword monitor "eDP-1, disable"
 		fi
 	fi
 }

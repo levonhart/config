@@ -14,6 +14,10 @@ paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
 paru -S --noconfirm --needed loupe qt6ct gnome-themes-extra bibata-cursor-theme-bin \
 	seahorse libsecret amberol tlrc-bin gnome-online-accounts gnome-online-accounts-gtk
 
+if v4l2-ctl --list-devices | grep WebCam; then
+	paru -S --needed snapshot
+fi
+
 if ! grep '^Path askpass' /etc/sudo.conf; then
 	sudo sed -i '/Path askpass \/usr\/lib/ a Path askpass \/usr\/lib\/seahorse\/ssh-askpass' /etc/sudo.conf
 fi
