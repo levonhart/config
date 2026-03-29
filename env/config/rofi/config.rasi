@@ -1,12 +1,12 @@
 @theme "theme"
 
 configuration {
-	modes: "window,drun,run,filebrowser,ssh,calc,combi";
+	modes: "drun,run,window,filebrowser,ssh,calc,combi";
 	show-icons: true;
 	font: "Fira Sans, FiraCode Nerd Font Medium 11";
 	drun-display-format: "{name}";
 	hover-select: true;
-	combi-modes: "drun,window,run";
+	combi-modes: "window,drun,run";
 	matching: "fuzzy";
 	window-format: "{w}{n}{t}";
 	combi-display-format: "{text} <span alpha=\"50%\" size=\"xx-small\" rise=\"4pt\">{mode}</span>";
