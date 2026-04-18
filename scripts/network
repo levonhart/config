@@ -13,4 +13,5 @@ systemctl is-active --quiet sshd || echo "[WARN] sshd is turned off. Start sshd.
 systemctl --user enable --now gcr-ssh-agent.socket
 
 paru -S --needed proton-vpn-cli proton-vpn-daemon proton-vpn-gtk-app
+paru -S --needed librespeed-cli
 
