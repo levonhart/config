@@ -12,6 +12,9 @@ systemctl is-active --quiet sshd || echo "[WARN] sshd is turned off. Start sshd.
 #systemctl --user enable --now ssh-agent.service
 systemctl --user enable --now gcr-ssh-agent.socket
 
-paru -S --needed proton-vpn-cli proton-vpn-daemon proton-vpn-gtk-app
+paru -S --needed proton-vpn-cli proton-vpn-daemon proton-vpn-gtk-app openresolv
+sudo wget "https://raw.githubusercontent.com/ProtonVPN/scripts/master/update-resolv-conf.sh" -O "/etc/openvpn/update-resolv-conf"
+sudo chmod +x "/etc/openvpn/update-resolv-conf"
+
 paru -S --needed librespeed-cli
 
