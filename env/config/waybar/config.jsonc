@@ -75,7 +75,7 @@
 		"active-only": "false",
 		"persistent-workspaces": {
 			"*": 5,
-			"HDMI-A-1": 6
+			"HDMI-A-1": 1
 		},
 		"disable-scroll": false,
 		"all-outputs": true,
@@ -154,7 +154,7 @@
 		// "timezone": "America/New_York",
 		"tooltip-format": "<tt><small>{calendar}</small></tt>",
 		"format-alt": "{:%d/%m/%Y}",
-		"timezones": ["America/Belem", "Europe/Paris", "Etc/UTC", "Asia/Tokyo"],
+		"timezones": ["Europe/Paris", "America/Belem", "Etc/UTC", "Asia/Tokyo"],
 		"calendar": {
 			"mode"          : "month",
 			"mode-mon-col"  : 3,
