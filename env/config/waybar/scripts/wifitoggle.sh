@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-LANG=C
+LC_ALL=C
 if rfkill -ro Soft list wifi | grep -q "^blocked"
 then
 	rfkill unblock wifi
