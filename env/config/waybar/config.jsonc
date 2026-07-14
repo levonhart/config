@@ -75,7 +75,7 @@
 		"active-only": "false",
 		"persistent-workspaces": {
 			"*": 5,
-			"HDMI-A-1": 1
+			// "HDMI-A-1": 1
 		},
 		"disable-scroll": false,
 		"all-outputs": true,
