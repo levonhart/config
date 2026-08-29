@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-paru -S --noconfirm --needed zsh man man-pages man-pages-pt_br starship fd ripgrep \
+paru -S --noconfirm --needed zsh man man-pages man-pages-pt_br starship fd ripgrep fastfetch \
 	pacman-contrib fzf rofi-wayland btop nvtop bc ffmpeg rsync rclone dex zenity lf eza \
-	sbctl 7zip gzip unzip unrar fuse-zip alsa-tools alsa-utils git git-lfs
+	mpv mpv-mpris sbctl 7zip gzip unzip unrar fuse-zip alsa-tools alsa-utils git git-lfs
 
 
 paru -S --noconfirm --needed ttf-firacode-nerd ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono
@@ -9,7 +9,7 @@ paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
 	hypridle hyprcursor hyprgraphics hyprland-qt-support hyprland-qtutils \
 	hyprlang hyprpicker hyprpolkitagent hyprshot hyprsunset hyprutils \
 	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard clipvault wtype \
-	pavucontrol nmgui-bin nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
+	pavucontrol networkmanager-dmenu nm-connection-editor nmtui blueman mako gnome-keyring xdg-utils
 
 paru -S --noconfirm --needed loupe qt6ct gnome-themes-extra bibata-cursor-theme-bin \
 	seahorse libsecret amberol tlrc-bin gnome-online-accounts gnome-online-accounts-gtk

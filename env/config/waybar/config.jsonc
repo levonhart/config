@@ -259,7 +259,7 @@
 		"format-disconnected": "󰌙",
 		"format-disabled": "󰤮",
 		// "on-click": "wezterm start nmtui",
-		"on-click": "pkill -x nmgui || nmgui",
+		"on-click": "pkill -x rofi || networkmanager_dmenu",
 		"on-click-right": "pkill -x nm-connection-e || nm-connection-editor",
 		// "on-click-right": "pkill nmtui || hyprctl dispatch exec \"[float; move 100%-w-4 40; size 40% 60%; animation slide top] wezterm start sh -c 'sleep 0.2 && nmtui'\"",
 		"on-click-middle": "$HOME/.config/waybar/scripts/wifitoggle.sh"
