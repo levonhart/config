@@ -171,6 +171,7 @@ require('lazy').setup {
 			map("n", "<leader>g", vim.cmd.Git)
 		end },
 		{ 'SirVer/ultisnips' },
+		{ 'nvim-mini/mini.ai', version = false },
 		{ 'kylechui/nvim-surround', opts = {}, event = 'VeryLazy' },
 		{ 'lewis6991/gitsigns.nvim' },
 		{ 'NvChad/nvim-colorizer.lua', opts = {} },
@@ -226,7 +227,7 @@ local plugins = require('plugins')
 
 -- Mason {{{
 require('mason').setup()
-require('mason-lspconfig').setup()
+require('mason-lspconfig').setup { automatic_enable = false, }
 -- }}} Mason
 
 -- Gitsigns {{{
@@ -243,8 +244,8 @@ gitsigns.setup {
 	on_attach = function(bufnr)
 		map('n', '<leader>hv', gitsigns.select_hunk, { buffer = bufnr, desc = 'Visual select git hunk' })
 		map('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
-		map('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'Stage git hunk' })
-		map('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'Undo last stage' })
+		map('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = '(Un)stage git hunk' })
+		map('n', '<leader>hu', gitsigns.stage_hunk, { buffer = bufnr, desc = '(Un)stage git hunk' })
 		map('n', '<leader>hX', gitsigns.reset_hunk, { buffer = bufnr, desc = 'Reset git hunk' })
 
 		-- don't override the built-in and fugitive keymaps
@@ -253,7 +254,7 @@ gitsigns.setup {
 				return ']c'
 			end
 			vim.schedule(function()
-				gitsigns.next_hunk()
+				gitsigns.nav_hunk('next')
 			end)
 			return '<Ignore>'
 		end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
@@ -262,7 +263,7 @@ gitsigns.setup {
 				return '[c'
 			end
 			vim.schedule(function()
-				gitsigns.prev_hunk()
+				gitsigns.nav_hunk('prev')
 			end)
 			return '<Ignore>'
 		end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
@@ -485,45 +486,102 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 -- }}} Nvim-Lint
 
 -- LSP {{{
-local on_attach = function(_, bufnr)
-	vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+vim.api.nvim_create_autocmd('LspAttach', {
+	group = vim.api.nvim_create_augroup('mappings-lsp-attach', { clear = true }),
+	callback = function(ev)
+		vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-	map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Go to declaration (Lsp)' } )
-	map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Go to definition (Lsp)' } )
-	map('n', 'gY', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Go to implementation (Lsp)' } )
-	map('n', 'gy', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Go to type definition (Lsp)' } )
-	map('n', 'gR', vim.lsp.buf.references, { buffer = bufnr, desc = 'Go to references (Lsp)' } )
-	map('n', 'gS', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols (Lsp)' } )
-	map('n', '<leader>k', vim.lsp.buf.hover, { buffer = bufnr, desc = 'Display symbol information (Lsp)' } )
-	map('n', '<leader><C-k>', vim.lsp.buf.signature_help, { buffer = bufnr, desc = 'Display signature (Lsp)' } )
-	map('i', '<C-s>', vim.lsp.buf.signature_help, { buffer = bufnr, desc = 'Display signature (Lsp)' } )
-	map({ 'n', 'v' }, '<leader>f', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code action (Lsp)' } )
-	map('n', '<leader>rn', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Rename (Lsp)' } )
-	map('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, { buffer = bufnr, desc = 'Add workspace directory (Lsp)' } )
-	map('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, { buffer = bufnr, desc = 'Remove workspace directory (Lsp)' } )
-	map('n', '<leader>wl', function()
-		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, { buffer = bufnr, desc = 'List workspace folders (Lsp)' } )
-	map('n', '<space>=', function() vim.lsp.buf.format { async = true } end, { buffer = bufnr, desc = 'Format document (Lsp)' } )
-end
+		map('n', 'gD', vim.lsp.buf.declaration, { buffer = ev.buf, desc = 'Go to declaration (Lsp)' } )
+		map('n', 'gd', vim.lsp.buf.definition, { buffer = ev.buf, desc = 'Go to definition (Lsp)' } )
+		map('n', 'gY', vim.lsp.buf.implementation, { buffer = ev.buf, desc = 'Go to implementation (Lsp)' } )
+		map('n', 'gy', vim.lsp.buf.type_definition, { buffer = ev.buf, desc = 'Go to type definition (Lsp)' } )
+		map('n', 'gR', vim.lsp.buf.references, { buffer = ev.buf, desc = 'Go to references (Lsp)' } )
+		map('n', 'gS', vim.lsp.buf.document_symbol, { buffer = ev.buf, desc = 'Document Symbols (Lsp)' } )
+		map('n', '<leader>k', vim.lsp.buf.hover, { buffer = ev.buf, desc = 'Display symbol information (Lsp)' } )
+		map('n', '<leader><C-k>', vim.lsp.buf.signature_help, { buffer = ev.buf, desc = 'Display signature (Lsp)' } )
+		map('i', '<C-s>', vim.lsp.buf.signature_help, { buffer = ev.buf, desc = 'Display signature (Lsp)' } )
+		map({ 'n', 'v' }, '<leader>f', vim.lsp.buf.code_action, { buffer = ev.buf, desc = 'Code action (Lsp)' } )
+		map('n', '<leader>rn', vim.lsp.buf.rename, { buffer = ev.buf, desc = 'Rename (Lsp)' } )
+		map('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, { buffer = ev.buf, desc = 'Add workspace directory (Lsp)' } )
+		map('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, { buffer = ev.buf, desc = 'Remove workspace directory (Lsp)' } )
+		map('n', '<leader>wl', function()
+			print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+		end, { buffer = ev.buf, desc = 'List workspace folders (Lsp)' } )
+		map('n', '<space>=', function() vim.lsp.buf.format { async = true } end, { buffer = ev.buf, desc = 'Format document (Lsp)' } )
+	end
+})
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local lspconfig = require('lspconfig')
-lspconfig.lua_ls.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.pyright.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.rust_analyzer.setup { { capabilities = capabilities, on_attach = on_attach },
-	settings = { ['rust-analyzer'] = {} }
-}
-lspconfig.texlab.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.clangd.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.cmake.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.r_language_server.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.ts_ls.setup { capabilities = capabilities, on_attach = on_attach }
+---@type table<string, vim.lsp.Config>
+local servers = {
+	pyright = { capabilities = capabilities, },
+	rust_analyzer = { capabilities = capabilities, },
+	texlab = { capabilities = capabilities, },
+	clangd = { capabilities = capabilities, },
+	cmake = { capabilities = capabilities, },
+	r_language_server = { capabilities = capabilities, },
+	ts_ls = { capabilities = capabilities, },
 
-vim.g.latex_commands = { -- Ltex {{{
+	stylua = {},
+	lua_ls = {
+		capabilities = capabilities,
+		on_init = function(client)
+			client.server_capabilities.documentFormattingProvider = false
+
+			if client.workspace_folders then
+				local path = client.workspace_folders[1].name
+				if path ~= vim.fn.stdpath 'config' and
+					not path:match('env/config/nvim') and
+					(vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+					return
+				end
+			end
+
+			cmp.setup.filetype({ 'lua' }, {
+				sources = cmp.config.sources({
+					{ name = 'nvim_lua' },
+					{ name = 'nvim_lsp' },vim.api.nvim_open_term
+				}, {
+					{ name = 'buffer' },
+				})
+			})
+
+			local current_settings = client.config.settings --[[@as lspconfig.settings.lua_ls]]
+			client.config.settings.Lua = vim.tbl_deep_extend('force', current_settings.Lua, {
+				runtime = {
+					version = 'LuaJIT',
+					path = { 'lua/?.lua', 'lua/?/init.lua' },
+				},
+				workspace = {
+					checkThirdParty = false,
+					-- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+					--  See https://github.com/neovim/nvim-lspconfig/issues/3189
+					library = vim.tbl_filter(function(path)
+						return not path:match(vim.fn.stdpath('config') .. '[/%a-.]*')
+					end, vim.api.nvim_get_runtime_file('', true)),
+				},
+				diagnostics = { globals = { 'vim' },},
+			})
+		end,
+		---@type lspconfig.settings.lua_ls
+		settings = {
+			Lua = {
+				format = { enable = false }, -- Disable formatting (formatting is done by stylua)
+			},
+		},
+	},
+}
+
+for name, server in pairs(servers) do
+	vim.lsp.config(name, server)
+	vim.lsp.enable(name)
+end
+
+-- Ltex {{{
+vim.g.latex_commands = {
 	['\\nocite{}'] = 'ignore',
 	['\\todo'] = 'ignore',
 	['\\NP'] = 'vowelDummy',
@@ -532,6 +590,7 @@ vim.g.latex_commands = { -- Ltex {{{
 	['\\P'] = 'Dummy',
 	['\\W'] = 'Dummy',
 }
+---@type lspconfig.settings.ltex_plus
 local ltex_settings = {
 	ltex = {
 		checkFrequency = 'save',
@@ -567,44 +626,14 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
 		end
 	end,
 })
-lspconfig.ltex_plus.setup { capabilities = capabilities, on_attach = on_attach,
-	filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
+vim.lsp.config( 'ltex_plus', {
+	capabilities = capabilities,
 	settings = ltex_settings,
-}
+	-- filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
+})
 vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
 	{ desc = 'Print out Ltex Server loaded Settings' }) -- }}} Ltex
 -- }}} LSP
-
--- init.lua autocommand {{{
-vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter' }, {
-	pattern = { '*.lua' },
-	callback = function(ev)
-		local filepath=vim.fs.normalize(ev.file)
-		if filepath:match('%.config/nvim/') or filepath:match('env/config/nvim') ~= nil then
-			cmp.setup.filetype({ 'lua' }, {
-				sources = cmp.config.sources({
-					{ name = 'nvim_lua' },
-					{ name = 'nvim_lsp' },
-				}, {
-					{ name = 'buffer' },
-				})
-			})
-			lspconfig.lua_ls.setup { capabilities = capabilities, on_attach = on_attach,
-				settings = {
-					Lua = {
-						diagnostics = { globals = { 'vim' },},
-						workspace = {
-							-- Make the server aware of Neovim runtime files
-							library = vim.api.nvim_get_runtime_file('', true),
-							checkThirdParty = false,
-						},
-					}
-				}
-			}
-		end
-	end,
-})
--- }}} init.lua autocommand
 
 -- Diagnostics {{{
 vim.diagnostic.config {
