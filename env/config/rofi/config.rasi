@@ -23,11 +23,15 @@ configuration {
 	kb-accept-entry: "Control+y,Return,KP_Enter,!Super+Tab";
 	kb-element-next: "Tab,Control+j";
 	kb-element-prev: "ISO_Left_Tab,Control+k";
-	kb-cancel: "Escape,Control+g,Control+bracketleft,Control+c,MouseSecondary";
+	kb-cancel: "Escape,Control+g,Control+bracketleft,Control+c,!MouseSecondary";
 	kb-delete-entry: "Shift+Delete,Control+x";
 	me-select-entry: "";
 	me-accept-entry: "MousePrimary";
 	me-accept-custom: "Control+MousePrimary";
+	ml-row-up: "";
+	ml-row-down: "";
+	kb-page-prev: "Page_Up,ScrollUp";
+	kb-page-next: "Page_Down,ScrollDown";
 	click-to-exit: true;
   timeout {
       action: "kb-cancel";
