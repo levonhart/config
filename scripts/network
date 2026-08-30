@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
+if [ -z "$SUBNET" ]; then
+    LAN_SUBNET="192.168.1.0/24"
+fi
+export LAN_SUBNET="$LAN_SUBNET"
 
 paru -S --noconfirm --needed nss-mdns openssh gcr-4 
-paru -S --needed iptables-nft
+paru -S --needed iptables-nft ufw
 paru -S --needed seahorse kdeconnect sshfs
 
 # enable local dns resolution (hostname.local)
@@ -17,4 +21,33 @@ sudo wget "https://raw.githubusercontent.com/ProtonVPN/scripts/master/update-res
 sudo chmod +x "/etc/openvpn/update-resolv-conf"
 
 paru -S --needed librespeed-cli
+
+sudo systemctl enable --now ufw.service
+
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw default deny routed
+
+#sudo ufw limit 22/tcp # SSH
+sudo ufw allow from $LAN_SUBNET to any port 22 proto tcp
+
+# Samba
+sudo ufw allow from $LAN_SUBNET to any port 445 proto tcp
+# Uncomment if you need legacy NetBIOS functionality:
+#sudo ufw allow from "$LAN_SUBNET" to any port 137:138 proto udp
+#sudo ufw allow from "$LAN_SUBNET" to any port 139 proto tcp
+
+# Kde Connect
+sudo ufw allow from $LAN_SUBNET to any port 1714:1764 proto tcp
+sudo ufw allow from $LAN_SUBNET to any port 1714:1764 proto udp
+
+# RDP
+sudo ufw allow from $LAN_SUBNET to any port 3389 proto tcp
+sudo ufw allow from $LAN_SUBNET to any port 3389 proto udp
+
+# To host some Steam game:
+# Find out which port (usually between 27000:27100), then
+#sudo ufw allow 27000 accept
+
+sudo ufw enable
 
