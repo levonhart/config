@@ -61,3 +61,20 @@ if ! grep 'pam_gnome_keyring' /etc/pam.d/system-local-login > /dev/null; then
 		-e '/session\s\+include\s\+\(system-\)\?login/a session   optional     pam_gnome_keyring.so auto_start'
 fi
 
+paru -S --noconfirm --needed keyd
+sudo mkdir -p /etc/keyd
+
+if ! test -f /etc/keyd/default.conf; then
+	cat <<-"EOF" | sudo tee /etc/keyd/default.conf
+	[ids]
+
+	*
+
+	[main]
+
+	capslock = katakanahiragana
+	f23 = ro
+	leftshift+leftmeta+f23 = ro
+	EOF
+fi
+
