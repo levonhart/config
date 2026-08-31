@@ -5,7 +5,7 @@ paru -S --noconfirm --needed zsh man man-pages man-pages-pt_br starship fd ripgr
 
 
 paru -S --noconfirm --needed ttf-firacode-nerd ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono
-paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock \
+paru -S --noconfirm --needed hyprland hyprland-protocols hyprcursor hyprlock hyprpaper \
 	hypridle hyprcursor hyprgraphics hyprland-qt-support hyprland-qtutils \
 	hyprlang hyprpicker hyprpolkitagent hyprshot hyprsunset hyprutils \
 	hyprwayland-scanner xdg-desktop-portal-hyprland grim satty wl-clipboard clipvault wtype \
