@@ -4,7 +4,7 @@ local M = {}
 -- Treesitter configuration {{{
 vim.defer_fn(function()
 	---@diagnostic disable-next-line: missing-fields
-	require('nvim-treesitter.config').setup {
+	require('nvim-treesitter').setup {
 		ensure_installed = {
 			'c', 'cpp', 'go', 'lua', 'python', 'rust', 'latex',
 			'javascript', 'typescript', 'vimdoc', 'vim', 'cmake',

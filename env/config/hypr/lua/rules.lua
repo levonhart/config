@@ -142,6 +142,24 @@ hl.window_rule({
     animation = "slide top",
 })
 
+-- Orbolay
+hl.window_rule({
+	match = { class = "^(orbolay)$" },
+	no_initial_focus = true,
+	suppress_event = "activatefocus",
+	float = true,
+	pin = true,
+	center = true,
+	no_blur = true,
+	no_dim = true,
+	no_follow_mouse = true,
+	no_shadow = true,
+	border_size = 0,
+	no_focus = true,
+	move = { "monitor_w", "monitor_h" },
+	size = { "monitor_w - 5", "monitor_h - 5" }
+})
+
 --# Always maximize
 -- windowrule = maximize on, match:class firefox, match:initial_title (Mozilla Firefox)
 -- windowrule = maximize on, match:class .*[Tt]hunderbird, match:initial_title (Mozilla Thunderbird)
@@ -262,5 +280,4 @@ hl.window_rule({
     },
     fullscreen = true,
 })
-
 

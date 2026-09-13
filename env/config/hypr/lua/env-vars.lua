@@ -23,7 +23,7 @@ hl.env("NEOVIDE_MULTIGRID", "true")
 
 --# User
 hl.env("EDITOR", "nvim")
-hl.env("TERMINAL", s.terminal)
+hl.env("TERMINAL", s.terminal or "kitty")
 hl.env("TerminalEmulator", s.terminal .. " -e")
 hl.env("PATH", home .. "/.local/bin:" .. path)
 hl.env("WALLPAPERS_DIR", home .. "/Imagens/Papeis-de-Parede")

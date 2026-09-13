@@ -146,9 +146,7 @@ require('bootstrap')
 require('lazy').setup {
 	spec = {
 		{ 'nvim-lua/plenary.nvim' },
-		{ 'nvim-treesitter/nvim-treesitter',
-			dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', },
-			build = ':TSUpdate', },
+		{ 'nvim-treesitter/nvim-treesitter', branch = 'main', lazy = false, build = ':TSUpdate', },
 		{ 'nvim-tree/nvim-web-devicons' },
 		{ 'prichrd/netrw.nvim', opts = {} },
 		{ 'glepnir/dashboard-nvim', event = 'VimEnter',

@@ -6,7 +6,7 @@ return {
 
 	mod = "SUPER",
 
-	scrpath = os.getenv("XDG_CONFIG_HOME") .. "/hypr/scripts",
+	scrpath = os.getenv("HOME") .. "/.config/hypr/scripts",
 	screenshots_dir = "~/Imagens/Capturas\\ de\\ tela",
 	screenshots_format = "$(date '+%Y-%m-%d_%H:%M:%S').png",
 
