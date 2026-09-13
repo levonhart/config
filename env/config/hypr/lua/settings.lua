@@ -1,0 +1,43 @@
+return {
+	hdmi_res = "1920x1080@60",
+	hdmi_75 = "1920x1080@75",
+	dp_res = "1920x1080@60",
+	edp_pos = "0x0",
+
+	mod = "SUPER",
+
+	scrpath = os.getenv("XDG_CONFIG_HOME") .. "/hypr/scripts",
+	screenshots_dir = "~/Imagens/Capturas\\ de\\ tela",
+	screenshots_format = "$(date '+%Y-%m-%d_%H:%M:%S').png",
+
+	font = "Fira Sans",
+	font_size = 11,
+	monospace_font = "Fira Code Nerd Font",
+	monospace_font_size = 11,
+	cursor_size = 24,
+	font_antialiasing = "rgba",
+	font_hinting = "full",
+	cursor_theme = "Bibata-Original-Classic",
+	gtk_theme = "Adwaita-dark",
+	icon_theme = "Adwaita",
+
+	--# Defaut Apps
+	terminal = "wezterm ",
+	popin_terminal = "[                         float;                              \tmove monitor_w*0.2 monitor_h*.05;   \tsize monitor_w*0.6 monitor_h*0.6;   \tanimation slide top                 \t] wezterm",
+	editor = "neovide",
+	document_reader = "sioyek --new-instance",
+	file_manager = "thunar",
+	browser = "firefox",
+	menu = "rofi",
+	launch = "-show combi",
+	clients = "-show window",
+	network = "networkmanager_dmenu",
+	alt_tab = "hyprctl dispatch focuswindow address:$(hyprctl -j clients  \t| jq -r 'sort_by(.focusHistoryID) | .[] | select(.workspace.id >= 0) | \"\\(.address)\\t\\(.title)\\u0000icon\\u001f\\(.class)\"'  \t| rofi -dmenu -display-columns '2' -selected-row 1 -show-icons -kb-accept-entry 'space,Control+y,Return,KP_Enter'  \t| awk -F\"\\t\" '{print $1}')",
+	email_client = "thunderbird",
+	sys_monitor = "wezterm start btop",
+	gpu_monitor = "wezterm start nvtop",
+
+	--# Screenshot
+	screenshot = "hyprshot -m output -m active -r1 | satty -f-",
+	screenshot_all = "grim - | satty -f-",
+}

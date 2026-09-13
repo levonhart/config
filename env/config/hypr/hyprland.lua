@@ -1,0 +1,8 @@
+require('lua.env-vars')
+require('lua.settings')
+require('lua.variables')
+require('lua.keybindings')
+require('lua.autostart')
+require('lua.monitors')
+require('lua.permissions')
+require('lua.rules')

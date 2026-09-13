@@ -1,0 +1,35 @@
+-- Autostart
+local s = require('lua.settings')
+hl.on("hyprland.start", function()
+    hl.exec_cmd("systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+    hl.exec_cmd("systemctl start --user hyprpolkitagent")
+    hl.exec_cmd("gnome-keyring-daemon --start --components=pkcs11,secrets,ssh &")
+    hl.exec_cmd("hyprctl setcursor ".. s.cursor_theme .. " " .. s.cursor_size)
+    hl.exec_cmd("hyprpaper")
+    hl.exec_cmd("hypridle")
+    hl.exec_cmd("hyprsunset")
+    hl.exec_cmd(s.scrpath .. "/wallpaper.sh --daemon")
+    hl.exec_cmd("mako")
+    hl.exec_cmd("waybar")
+    hl.exec_cmd("blueman-applet")
+    hl.exec_cmd("fcitx5-remote")
+    hl.exec_cmd("wl-paste --type text --watch clipvault store")
+    hl.exec_cmd("wl-paste --type image --watch clipvault store")
+    hl.exec_cmd("dex -a")
+    hl.exec_cmd("thunar --gapplication-service")
+    hl.exec_cmd("kdeconnectd")
+    -- hl.exec_cmd("protonvpn-app --start-minimized
+
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme ".. s.gtk_theme)
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface icon-theme " .. s.icon_theme)
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme " .. s.cursor_theme)
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface font-name " .. '"' .. s.font .. ' ' .. s.font_size .. '"')
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface monospace-font-name " .. '"' ..
+		s.monospace_font .. ' ' .. s.monospace_font_size .. '"')
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface font-antialiasing " .. s.font_antialiasing)
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface font-hinting " .. s.font_hinting)
+end)
+
+

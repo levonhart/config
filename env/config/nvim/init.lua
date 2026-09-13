@@ -65,7 +65,7 @@ if vim.g.neovide then
 	vim.opt.guifont= { 'FiraCode Nerd Font', 'DejaVuSansM Nerd Font', 'Fira Code', ':h10' }
 	map('n', '<c-s-v>', '"+p')
 	map('i', '<c-s-v>', '<c-r><c-o>+')
-	vim.opt.guicursor:prepend('n-v-c:block-Cursor/lCursor')
+	vim.o.guicursor = 'n-v-c:block-Cursor/lCursor' .. vim.o.guicursor
 
 	local default_font = vim.o.guifont
 	map({ 'n', 'i' }, '<c-=>', function()
@@ -533,8 +533,9 @@ local servers = {
 
 			if client.workspace_folders then
 				local path = client.workspace_folders[1].name
+				local filepath = vim.api.nvim_buf_get_name(0)
 				if path ~= vim.fn.stdpath 'config' and
-					not path:match('env/config/nvim') and
+					not filepath:match('/env/config/') and
 					(vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
 					return
 				end
@@ -542,8 +543,8 @@ local servers = {
 
 			cmp.setup.filetype({ 'lua' }, {
 				sources = cmp.config.sources({
-					{ name = 'nvim_lua' },
-					{ name = 'nvim_lsp' },vim.api.nvim_open_term
+					-- { name = 'nvim_lua' },
+					{ name = 'nvim_lsp' },
 				}, {
 					{ name = 'buffer' },
 				})
