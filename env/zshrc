@@ -130,6 +130,7 @@ alias syr="sioyek-remote"
 alias lab="glab"
 alias gl="glab"
 alias speedtest="librespeed-cli"
+alias cd..="cd .."
 # }}} alias #
 
 # autosuggestions {{{ #
