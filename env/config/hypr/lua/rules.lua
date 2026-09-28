@@ -144,7 +144,7 @@ hl.window_rule({
 
 -- Orbolay
 hl.window_rule({
-	match = { class = "^(orbolay)$" },
+	match = { title = "^(orbolay)$" },
 	no_initial_focus = true,
 	suppress_event = "activatefocus",
 	float = true,
