@@ -512,6 +512,57 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+--
+-- Ltex {{{
+vim.g.latex_commands = {
+	['\\nocite{}'] = 'ignore',
+	['\\todo'] = 'ignore',
+	['\\NP'] = 'vowelDummy',
+	['\\NPC'] = 'vowelDummy',
+	['\\NPH'] = 'vowelDummy',
+	['\\FPT'] = 'vowelDummy',
+	['\\P'] = 'Dummy',
+	['\\W'] = 'Dummy',
+}
+---@type lspconfig.settings.ltex_plus
+local ltex_settings = {
+	ltex = {
+		checkFrequency = 'save',
+		language = 'auto',
+		enabled = { 'latex', 'tex', 'bib', 'markdown', },
+		diagnosticSeverity = 'information',
+		sentenceCacheSize = 2000,
+		use_spellfile = true,
+		enabledRules = {
+			['en-GB'] = { 'OXFORD_SPELLING_NOUNS' }
+		},
+		latex = {
+			commands = vim.g.latex_commands,
+		},
+		additionalRules = {
+			enablePickyRules = true,
+			motherTongue = 'pt-BR',
+		},
+		disabledRules = {
+			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
+			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
+		},
+	},
+}
+
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
+	pattern = { '*.tex' },
+	callback = function(ev)
+		local client =  vim.lsp.get_clients({ bufnr = ev.buf, name = 'ltex' })[1]
+		if client ~= nil then
+			-- plugins.ltex_wdirs = nil
+			client.config.settings = ltex_settings
+		end
+	end,
+})
+
+vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
+	{ desc = 'Print out Ltex Server loaded Settings' }) -- }}} Ltex
 
 ---@type table<string, vim.lsp.Config>
 local servers = {
@@ -522,6 +573,7 @@ local servers = {
 	cmake = { capabilities = capabilities, },
 	r_language_server = { capabilities = capabilities, },
 	ts_ls = { capabilities = capabilities, },
+	ltex_plus = { capabilities = capabilities, settings = ltex_settings, },
 
 	stylua = {},
 	lua_ls = {
@@ -579,59 +631,6 @@ for name, server in pairs(servers) do
 	vim.lsp.enable(name)
 end
 
--- Ltex {{{
-vim.g.latex_commands = {
-	['\\nocite{}'] = 'ignore',
-	['\\todo'] = 'ignore',
-	['\\NP'] = 'vowelDummy',
-	['\\NPC'] = 'vowelDummy',
-	['\\NPH'] = 'vowelDummy',
-	['\\P'] = 'Dummy',
-	['\\W'] = 'Dummy',
-}
----@type lspconfig.settings.ltex_plus
-local ltex_settings = {
-	ltex = {
-		checkFrequency = 'save',
-		language = 'auto',
-		enabled = { 'latex', 'tex', 'bib', 'markdown', },
-		diagnosticSeverity = 'information',
-		sentenceCacheSize = 2000,
-		use_spellfile = true,
-		enabledRules = {
-			['en-GB'] = { 'OXFORD_SPELLING_NOUNS' }
-		},
-		latex = {
-			commands = vim.g.latex_commands,
-		},
-		additionalRules = {
-			enablePickyRules = true,
-			motherTongue = 'pt-BR',
-		},
-		disabledRules = {
-			['en-US'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
-			['en-GB'] = { 'TOO_LONG_SENTENCE', 'INSTANCE' },
-		},
-	},
-}
-
-vim.api.nvim_create_autocmd({ 'BufRead', 'BufWinEnter', 'LspAttach' }, {
-	pattern = { '*.tex' },
-	callback = function(ev)
-		local client =  vim.lsp.get_clients({ bufnr = ev.buf, name = 'ltex' })[1]
-		if client ~= nil then
-			-- plugins.ltex_wdirs = nil
-			client.config.settings = ltex_settings
-		end
-	end,
-})
-vim.lsp.config( 'ltex_plus', {
-	capabilities = capabilities,
-	settings = ltex_settings,
-	-- filetypes = { 'latex', 'plaintex', 'tex', 'bib', 'markdown', 'text', 'rst' },
-})
-vim.api.nvim_create_user_command('LtexSettings', plugins.ltex_getsettings,
-	{ desc = 'Print out Ltex Server loaded Settings' }) -- }}} Ltex
 -- }}} LSP
 
 -- Diagnostics {{{

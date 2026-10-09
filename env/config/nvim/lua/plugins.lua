@@ -1,6 +1,5 @@
 -- vim: foldmethod=marker
 local M = {}
-
 -- Treesitter configuration {{{
 vim.defer_fn(function()
 	---@diagnostic disable-next-line: missing-fields
@@ -199,9 +198,9 @@ M.ltex_falsepositives = function(defaults)
 	end
 	return files
 end
-M.ltex_getsettings = function(bufnr)
-	bufnr = bufnr or 0
-	local ltex_server = vim.lsp.get_clients({ bufnr = bufnr, name = 'ltex' })[1]
+M.ltex_getsettings = function(_)
+	bufnr = 0
+	local ltex_server = vim.lsp.get_clients({ bufnr = bufnr, name = 'ltex_plus' })[1]
 	if ltex_server ~= nil then
 		print(vim.inspect(ltex_server.config.settings))
 	else
