@@ -181,7 +181,7 @@ hl.window_rule({
 
 hl.window_rule({
     match = {
-        class = "(^discord$)|(^com\\.rtosta\\.zapzap$)|(^org\\.telegram\\.desktop$)|(^Spotify$)|(^Mattermost$)|(^mattermost-desktop$)",
+        class = "(^discord$)|(^com\\.rtosta\\.zapzap$)|(^org\\.telegram\\.desktop$)|(^Spotify$)|(^Mattermost$)|(^mattermost-desktop$)|(^Element$)|(^Cinny$)",
     },
     workspace = "5",
 })
