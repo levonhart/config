@@ -48,14 +48,6 @@ hl.window_rule({
 hl.window_rule({
     match = {
         class = "firefox",
-        title = "(Biblioteca)|(Bitwarden)|(Extensão)|(Extension)",
-    },
-    float = true,
-})
-
-hl.window_rule({
-    match = {
-        class = "firefox",
         title = "Biblioteca",
     },
     persistent_size = true,
@@ -167,7 +159,7 @@ hl.window_rule({
 --# Move windows
 hl.window_rule({
     match = {
-        class = "(^firefox$)|(^.*[Tt]hunderbird$)",
+        class = "(^firefox$)",
     },
     workspace = "1",
 })
@@ -181,9 +173,10 @@ hl.window_rule({
 
 hl.window_rule({
     match = {
-        class = "(^discord$)|(^com\\.rtosta\\.zapzap$)|(^org\\.telegram\\.desktop$)|(^Spotify$)|(^Mattermost$)|(^mattermost-desktop$)|(^Element$)|(^Cinny$)",
+        class = "(^discord$)|(^com\\.rtosta\\.zapzap$)|(^org\\.telegram\\.desktop$)|(^Spotify$)|(^Element$)|(^Cinny$)|(^.*[Tt]hunderbird$)",
     },
     workspace = "5",
+	group = "set",
 })
 
 hl.window_rule({
@@ -280,4 +273,13 @@ hl.window_rule({
     },
     fullscreen = true,
 })
+
+hl.on("window.title", function(w)
+	if w == nil then return end
+	local class = "firefox"
+	local title = "(Biblioteca)|(Bitwarden)|(Extensão)|(Extension)"
+    if w.class == class and w.title:match(title) then
+        hl.dispatch(hl.dsp.window.float({ action = "set" }))
+    end
+end)
 
