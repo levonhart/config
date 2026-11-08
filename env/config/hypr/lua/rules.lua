@@ -176,6 +176,13 @@ hl.window_rule({
         class = "(^discord$)|(^com\\.rtosta\\.zapzap$)|(^org\\.telegram\\.desktop$)|(^Spotify$)|(^Element$)|(^Cinny$)|(^.*[Tt]hunderbird$)",
     },
     workspace = "5",
+})
+
+hl.window_rule({
+    match = {
+		title = "Cinny",
+    },
+    workspace = "5",
 	group = "set",
 })
 
