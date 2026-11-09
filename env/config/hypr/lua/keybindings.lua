@@ -256,16 +256,34 @@ hl.bind(mod .. " + mouse:272", hl.dsp.window.move({ workspace = "+0" }), { relea
 hl.bind(mod .. " + mouse:273", hl.dsp.window.float({ action = "toggle" }), { release = true, click = true })
 
 -- Zoom
-hl.bind(mod .. " + SHIFT + mouse_down", hl.dsp.exec_cmd("hyprctl -q      keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j \t| jq '.float * 1.41421')"))
-hl.bind(mod .. " + SHIFT + mouse_up", hl.dsp.exec_cmd("hyprctl -q        keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j \t| jq '(.float * 0.707107) | if . < 1 then 1 else . end')"))
+local MAX_ZOOM = 4
+local MIN_ZOOM = 1
+local ZOOM_MORE = 1.41421
+local ZOOM_LESS = 0.707107
 
-hl.bind(mod .. " + CONTROL + equal", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '.float * 1.41421')"), { repeating = true })
-hl.bind(mod .. " + CONTROL + minus", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float * 0.707107) | if . < 1 then 1 else . end')"), { repeating = true })
+local function zoom(factor)
+	local current = hl.get_config("cursor.zoom_factor")
+    if factor ~= nil then
+        current = current * factor
+    elseif current ~= MIN_ZOOM then
+        current = MIN_ZOOM
+    else
+        current = 1
+    end
+    current = math.max(MIN_ZOOM, math.min(MAX_ZOOM, current))
+    hl.config({ cursor = { zoom_factor = current } })
+end
 
-hl.bind(mod .. " + CONTROL + mouse_up", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor 1"))
-hl.bind(mod .. " + CONTROL + mouse_down", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor 1"))
-hl.bind(mod .. " + SHIFT + minus", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor 1"))
-hl.bind(mod .. " + CONTROL + 0", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor 1"))
+hl.bind(mod .. " + SHIFT + mouse_down", function() zoom(ZOOM_MORE) end)
+hl.bind(mod .. " + SHIFT + mouse_up", function() zoom(ZOOM_LESS) end)
+
+hl.bind(mod .. " + CONTROL + equal", function() zoom(ZOOM_MORE) end, { repeating = true })
+hl.bind(mod .. " + CONTROL + minus", function() zoom(ZOOM_LESS) end, { repeating = true })
+
+hl.bind(mod .. " + CONTROL + mouse_up", zoom)
+hl.bind(mod .. " + CONTROL + mouse_down", zoom)
+hl.bind(mod .. " + SHIFT + minus", zoom)
+hl.bind(mod .. " + CONTROL + 0", zoom)
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
