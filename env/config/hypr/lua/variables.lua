@@ -195,7 +195,7 @@ hl.config({
         },
     },
     group = {
-        auto_group = false,
+        auto_group = true,
         col = {
             border_active = { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
             border_inactive = "rgba(595959aa)",

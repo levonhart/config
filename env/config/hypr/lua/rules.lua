@@ -48,8 +48,9 @@ hl.window_rule({
 hl.window_rule({
     match = {
         class = "firefox",
-        title = "Biblioteca",
+        title = "(Library)|(Biblioteca)|(Bitwarden)|(Extensão)|(Extension)",
     },
+	float = true,
     persistent_size = true,
 })
 
@@ -284,7 +285,7 @@ hl.window_rule({
 hl.on("window.title", function(w)
 	if w == nil then return end
 	local class = "firefox"
-	local title = "(Biblioteca)|(Bitwarden)|(Extensão)|(Extension)"
+	local title = "(Library)|(Biblioteca)|(Bitwarden)|(Extensão)|(Extension)"
     if w.class == class and w.title:match(title) then
         hl.dispatch(hl.dsp.window.float({ action = "set" }))
     end
