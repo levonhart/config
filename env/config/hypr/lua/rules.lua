@@ -88,6 +88,7 @@ hl.window_rule({
     rounding = 0,
     pseudo = true,
     border_size = 0,
+	focus_on_activate = false,
 })
 
 -- windowrule = fullscreenstate 2 2, match:class ^(steam_app_.*)$
