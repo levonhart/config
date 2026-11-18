@@ -1,5 +1,6 @@
 -- Monitors
 -- ref: https://wiki.hypr.land/Configuring/Monitors/
+--- @diagnostic disable:undefined-global
 local s = require('lua.settings')
 
 -- Display control script

@@ -1,5 +1,6 @@
 -- Permissions
 -- ref: https://wiki.hypr.land/Configuring/Permissions/
+--- @diagnostic disable:undefined-global
 
 hl.permission({ binary = "/usr/(bin|local/bin)/grim", type = "screencopy", mode = "allow" })
 hl.permission({ binary = "/usr/(bin|local/bin)/hyprpicker", type = "screencopy", mode = "allow" })

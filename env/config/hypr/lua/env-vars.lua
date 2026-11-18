@@ -1,4 +1,5 @@
 -- Environmental Variables
+--- @diagnostic disable:undefined-global
 
 local home = (os.getenv("HOME") or "~")
 local config = os.getenv("XDG_CONFIG_HOME") or (home .. "/.config")

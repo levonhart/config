@@ -1,5 +1,6 @@
 -- Windows and Workspaces
 -- ref: https://wiki.hypr.land/Configuring/Workspace-Rules/
+--- @diagnostic disable:undefined-global
 
 hl.workspace_rule({
     workspace = "1",

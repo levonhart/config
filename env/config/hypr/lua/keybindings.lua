@@ -1,5 +1,6 @@
 -- ref: https://wiki.hypr.land/Configuring/Keywords/
 -- Keycodes: https://github.com/xkbcommon/libxkbcommon/blob/master/include/xkbcommon/xkbcommon-keysyms.h
+--- @diagnostic disable:undefined-global
 
 local s = require('lua.settings')
 local mod = s.mod

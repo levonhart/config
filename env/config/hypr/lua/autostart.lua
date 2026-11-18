@@ -1,4 +1,5 @@
 -- Autostart
+--- @diagnostic disable:undefined-global
 local s = require('lua.settings')
 hl.on("hyprland.start", function()
     hl.exec_cmd("hyprlock ; hyprctl dispatch exit")
