@@ -2,6 +2,7 @@
 hl.env("LC_MESSAGES", "en_US.UTF-8")
 hl.env("LANG", "pt_BR.UTF-8")
 hl.env("LC_ALL", "pt_BR.UTF-8")
+hl.env("LC_TIME", "pt_BR.UTF-8")
 hl.env("XKB_DEFAULT_LAYOUT", "br")
 hl.env("XKB_DEFAULT_MODEL", "abnt2")
 
