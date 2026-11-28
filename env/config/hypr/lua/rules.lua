@@ -26,7 +26,7 @@ hl.window_rule({
 
 hl.window_rule({
     match = {
-        title = "(^Open files$)|(^Abrir arquivos$)|(^Envio de arquivos$)|(^Select Document$)|(^Renomear.*$)",
+        title = "(^Open files$)|(^Abrir arquivos$)|(^Envio de arquivos$)|(^Select Document$)|(^Rename.*$)|(^Renomear.*$)",
     },
     float = true,
 })
@@ -41,7 +41,7 @@ hl.window_rule({
 
 hl.window_rule({
     match = {
-        class = "(^satty$)|(^org.pulseaudio.pavucontrol$)|(^blueman-.*$)|(^nm-connection-editor$)|(^com.network.manager$)|(^nmtui$)",
+        class = "(^satty$)|(^org.pulseaudio.pavucontrol$)|(^blueman-.*$)|(^nm-connection-editor$)|(^com.network.manager$)|(^nmtui$)|(^org.kde.kdeconnect.handler$)",
     },
     float = true,
 })
