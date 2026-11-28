@@ -312,7 +312,7 @@ hl.on("window.open", function(w)
 
         sub:remove()
 
-        if tw.title:match("(^Extension:)|(^Extensão:)") then
+        if tw.title:match("^(Extension:)") or tw.title:match("^(Extensão:)") then
             -- hl.dispatch(hl.dsp.window.resize({ x = 800, y = 600, window = tw }))
             hl.dispatch(hl.dsp.window.center({ window = tw }))
             hl.dispatch(hl.dsp.focus({ window = tw }))
